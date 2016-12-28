@@ -1,48 +1,39 @@
-/*
- * Copyright 2015 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.util.tasks;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract;
-import com.uwetrottmann.trakt.v2.entities.ShowIds;
-import com.uwetrottmann.trakt.v2.entities.SyncEpisode;
-import com.uwetrottmann.trakt.v2.entities.SyncItems;
-import com.uwetrottmann.trakt.v2.entities.SyncResponse;
-import com.uwetrottmann.trakt.v2.entities.SyncSeason;
-import com.uwetrottmann.trakt.v2.entities.SyncShow;
-import com.uwetrottmann.trakt.v2.enums.Rating;
-import com.uwetrottmann.trakt.v2.exceptions.OAuthUnauthorizedException;
-import com.uwetrottmann.trakt.v2.services.Sync;
-import retrofit.RetrofitError;
-import timber.log.Timber;
+import com.uwetrottmann.trakt5.entities.ShowIds;
+import com.uwetrottmann.trakt5.entities.SyncEpisode;
+import com.uwetrottmann.trakt5.entities.SyncItems;
+import com.uwetrottmann.trakt5.entities.SyncSeason;
+import com.uwetrottmann.trakt5.entities.SyncShow;
+import com.uwetrottmann.trakt5.enums.Rating;
 
 public class RateEpisodeTask extends BaseRateItemTask {
 
     private final int episodeTvdbId;
 
-    public RateEpisodeTask(Context context, Rating rating, int episodeTvdbId) {
-        super(context, rating);
+    /**
+     * Stores the rating for the given episode in the database and sends it to trakt.
+     */
+    public RateEpisodeTask(SgApp app, Rating rating, int episodeTvdbId) {
+        super(app, rating);
         this.episodeTvdbId = episodeTvdbId;
     }
 
+    @NonNull
     @Override
-    protected SyncResponse doTraktAction(Sync traktSync) throws OAuthUnauthorizedException {
+    protected String getTraktAction() {
+        return "rate episode";
+    }
+
+    @Nullable
+    @Override
+    protected SyncItems buildTraktSyncItems() {
         int season = -1;
         int episode = -1;
         int showTvdbId = -1;
@@ -65,18 +56,11 @@ public class RateEpisodeTask extends BaseRateItemTask {
             return null;
         }
 
-        SyncItems ratedItems = new SyncItems()
+        return new SyncItems()
                 .shows(new SyncShow().id(ShowIds.tvdb(showTvdbId))
                         .seasons(new SyncSeason().number(season)
                                 .episodes(new SyncEpisode().number(episode)
                                         .rating(getRating()))));
-
-        try {
-            return traktSync.addRatings(ratedItems);
-        } catch (RetrofitError e) {
-            Timber.e(e, "doTraktAction: rating episode failed");
-            return null;
-        }
     }
 
     @Override

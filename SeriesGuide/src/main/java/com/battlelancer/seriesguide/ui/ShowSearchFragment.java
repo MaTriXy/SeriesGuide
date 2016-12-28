@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
 import android.app.SearchManager;
@@ -36,13 +20,16 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.adapters.BaseShowsAdapter;
 import com.battlelancer.seriesguide.adapters.ShowResultsAdapter;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract;
 import com.battlelancer.seriesguide.settings.ShowsDistillationSettings;
 import com.battlelancer.seriesguide.util.ShowMenuItemClickListener;
 import com.battlelancer.seriesguide.util.TimeTools;
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Displays show search results.
@@ -73,7 +60,7 @@ public class ShowSearchFragment extends ListFragment {
     public void onStart() {
         super.onStart();
 
-        EventBus.getDefault().registerSticky(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -93,6 +80,7 @@ public class ShowSearchFragment extends ListFragment {
                         .toBundle());
     }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEventMainThread(SearchActivity.SearchQueryEvent event) {
         search(event.args);
     }
@@ -117,7 +105,7 @@ public class ShowSearchFragment extends ListFragment {
                                 + SeriesGuideContract.Shows.HIDDEN + "=0 AND "
                                 + SeriesGuideContract.Shows.NEXTAIRDATEMS + "<?",
                         new String[] { customTimeInOneHour },
-                        ShowsDistillationSettings.ShowsSortOrder.EPISODE_REVERSE);
+                        SeriesGuideContract.Shows.SORT_LATEST_EPISODE);
             } else {
                 Uri uri = SeriesGuideContract.Shows.CONTENT_URI_FILTER.buildUpon()
                         .appendPath(query)
@@ -158,7 +146,7 @@ public class ShowSearchFragment extends ListFragment {
             menu.findItem(R.id.menu_action_shows_watched_next).setVisible(false);
 
             popupMenu.setOnMenuItemClickListener(
-                    new ShowMenuItemClickListener(getActivity(),
+                    new ShowMenuItemClickListener(SgApp.from(getActivity()),
                             getFragmentManager(), viewHolder.showTvdbId, viewHolder.episodeTvdbId,
                             ListsActivity.TAG));
             popupMenu.show();

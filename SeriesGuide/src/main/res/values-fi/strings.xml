@@ -11,7 +11,6 @@
   <string name="help">Ohjeet</string>
   <string name="help_and_feedback">Ohje ja palaute</string>
   <string name="drawer_open">Avaa vetopaneeli</string>
-  <string name="drawer_close">Sulje vetopaneeli</string>
   <!-- Media items -->
   <string name="show">Ohjelma</string>
   <string name="episode">Jakso</string>
@@ -34,6 +33,9 @@
   <string name="web_search">Verkkohaku</string>
   <string name="add_to_homescreen">Pikakuvake</string>
   <string name="action_open">Avaa</string>
+  <string name="sync_manually">Synkronoi manuaalisesti</string>
+  <string name="sync_and_update">Synkronoi ja päivitä</string>
+  <string name="sync_and_download_all">Synkronoi ja lataa kaikki</string>
   <!-- Search -->
   <string name="clear_search_history">Tyhjennä hakuhistoria</string>
   <string name="search_hint">Hae jaksoja</string>
@@ -46,6 +48,8 @@
   <string name="app_not_available">Tähän toimintoon ei löydy sovellusta.</string>
   <string name="people_empty">Onko kukaan täällä?! Kosketa yrittääksesi uudelleen.</string>
   <string name="database_error">Tietojen muokkaaminen ei onnistunut.</string>
+  <string name="reinstall_info">Yritä varmuuskopioida asetuksista, asenna uudelleen ja palauta.</string>
+  <string name="api_error_generic">Kommunikointi %s kanssa ei onnistu. Yritä myöhemmin uudelleen.</string>
   <!-- Sharing -->
   <string name="share">Jaa</string>
   <string name="share_show">Jaa ohjelma</string>
@@ -54,6 +58,7 @@
   <string name="share_checkout">Tsekkaa %s</string>
   <string name="addtocalendar">Lisää kalenteriin</string>
   <string name="addtocalendar_failed">Ei voitu luoda kalenteritapahtumaa.</string>
+  <string name="links">Linkit</string>
   <!-- Comments -->
   <string name="comments">Kommentit</string>
   <string name="shout_hint">Kirjoita kommentti (englanniksi, 5+ sanaa)</string>
@@ -72,11 +77,9 @@
   <string name="episode_firstaired">Julkaisupäivä</string>
   <string name="episode_firstaired_unknown">Tuntematon julkaisupäivä</string>
   <string name="episode_dvdnumber">DVD-jakso</string>
-  <string name="show_actors">Näyttelijät</string>
   <string name="original_release">Alkuperäinen julkaisu</string>
   <string name="show_on_network">kanavalla %s</string>
   <string name="show_genres">Genret</string>
-  <string name="show_runtime">Kesto</string>
   <string name="show_contentrating">Sisällön luokitus</string>
   <string name="show_release_times">Julkaisuajat</string>
   <string name="episode_directors">Ohjaajat</string>
@@ -85,10 +88,9 @@
   <string name="show_isalive">Jatkuu</string>
   <string name="show_isnotalive">Päättynyt</string>
   <string name="lastEdit">Viimeisin muokkaus // TVDb</string>
-  <string name="services_watch">Katso</string>
-  <string name="services_more">Enemmän</string>
-  <string name="no_translation">Ei ole saatavilla kuvausta kielelle %1$s palvelussa %2$s.</string>
+  <string name="no_translation">Kuvausta ei ole saatavilla %1$s palvelussa %2$s.</string>
   <string name="no_translation_title">Ei käännetty</string>
+  <string name="no_spoilers">Osa tiedoista on piilotettu juonipaljastuksien varalta. Voit poistaa tämän käytöstä asetuksista.</string>
   <!-- Date and Time -->
   <string name="today">tänään</string>
   <string name="now">nyt</string>
@@ -131,10 +133,11 @@
   <string name="action_shows_filter_hidden">Piilotetut</string>
   <string name="action_shows_sort">Lajittele ohjelmat</string>
   <string name="action_shows_sort_title">Nimi</string>
-  <string name="action_shows_sort_episode">Seuraava jakso</string>
+  <string name="action_shows_sort_latest_episode">Uusin jakso</string>
+  <string name="action_shows_sort_oldest_episode">Vanhin jakso</string>
+  <string name="action_shows_sort_last_watched">Viimeksi katsottu</string>
+  <string name="action_shows_sort_remaining">Loput jaksot</string>
   <string name="action_shows_sort_favorites">Suosikit ensin</string>
-  <string name="updateall_yes">Päivitä kaikki</string>
-  <string name="menu_update_delta">Päivitä vanhentuneet</string>
   <string name="context_updateshow">Päivitä</string>
   <string name="context_marknext">Seuraava jakso katsottu</string>
   <!-- Now -->
@@ -173,7 +176,7 @@
   <string name="no_results">Ei tuloksia, yritä kokonaisia sanoja.</string>
   <string name="action_try_any_language">Kokeile mitä tahansa kieltä</string>
   <string name="action_try_again">Yritä uudelleen</string>
-  <string name="search_error">Haku epäonnistui, yritä myöhemmin uudelleen.</string>
+  <string name="tvdb_error_does_not_exist">Ohjelma ei ole (vielä) TheTVDB:ssä. Yritä myöhemmin uudelleen.</string>
   <string name="add_all">Lisää kaikki</string>
   <string name="add_multiple">Kaikki ohjelmat ilmaantuvat pian ohjelmalistaasi.</string>
   <string name="add_started">%s ilmestyy pian ohjelmalistaasi.</string>
@@ -212,6 +215,7 @@
   <string name="action_movies_sort_title">Nimi</string>
   <string name="action_movies_sort_release">Julkaisupäivä</string>
   <!-- Statistics -->
+  <string name="statistics_failed">Ei pystytty määrittämään tilastoja.</string>
   <string name="statistics_shows">ohjelmaa</string>
   <string name="statistics_episodes">jaksoa</string>
   <string name="statistics_movies">elokuvaa</string>
@@ -237,7 +241,7 @@
   <string name="hexagon_warning">Kokeellista ja helposti syttyvää!</string>
   <string name="hexagon_description">Voit varmuuskopioida sekä synkronoida ohjelmasi ja elokuvasi yhdistämällä pilvipalveluun.</string>
   <string name="hexagon_warning_lists">Listoja ei sisällytetä.</string>
-  <string name="hexagon_warning_trakt">Käyttäessäsi SeriesGuide Cloud -palvelua, tekemäsi muutokset trakt-palvelussa eivät synkronoidu SeriesGuideen.</string>
+  <string name="hexagon_warning_trakt">Trakt-synkronointi poistetaan käytöstä, kun SeriesGuide Cloud on yhdistetty.</string>
   <string name="hexagon_signin">Kirjaudu sisään</string>
   <string name="hexagon_signed_in">Olet yhteydessä SeriesGuide Cloud -palveluun.</string>
   <string name="hexagon_signout">Kirjaudu ulos</string>
@@ -247,7 +251,6 @@
   <string name="hexagon_remove_account_success">Tili poistettu.</string>
   <string name="hexagon_remove_account_failure">Tiliä ei voitu poistaa.</string>
   <string name="hexagon_remove_account_confirmation">Tilin poistaminen poistaa kaikki ohjelmat ja elokuvat SeriesGuide Cloud -palvelimelta. Muista poistaa ne myös muista yhdistetyistä laitteista.</string>
-  <string name="hexagon_api_error">Ei voitu keskustella SeriesGuide Cloudin kanssa. Yritä myöhemmin uudelleen.</string>
   <string name="hexagon_api_queued">Lähetetään SeriesGuide Cloudiin.</string>
   <string name="hexagon_permission_missing">Salli pääsy tiliisi käyttääksesi SeriesGuide Cloudia.</string>
   <string name="hexagon_google_play_missing">SeriesGuide Cloudin käyttämiseen vaaditaan Google Play Palvelut.</string>
@@ -264,7 +267,6 @@
   <string name="traktcheckin_wait">Odotetaan</string>
   <string name="trakt_success">Lähetetty traktiin.</string>
   <string name="trakt_error_credentials">Jokin meni pieleen. Tarkista oikeutesi ja yritä uudelleen.</string>
-  <string name="trakt_error_general">Kommunikointi traktin kanssa ei onnistu. Yritä myöhemmin uudelleen.</string>
   <string name="trakt_error_not_exists">Ei (vielä) saatavilla traktissa. Yritä myöhemmin uudelleen.</string>
   <string name="trakt_notice_not_exists">Ei voida (vielä) kuitata traktissa.</string>
   <!-- Connect trakt -->
@@ -320,14 +322,13 @@
   <string name="pref_onlyseasonepssummary">Erikoisjaksot eivät näy, paitsi kausiluettelossa</string>
   <string name="pref_exactdates">Tarkat päivämäärät</string>
   <string name="pref_exactdates_summary">Käytä \"3 päivän kuluttua\" sijasta \"31. lokakuuta\"</string>
+  <string name="pref_nospoilers">Estä juonipaljastukset</string>
+  <string name="pref_nospoilers_summary">Piilota tiedot, kunnes jakso on katsottu</string>
   <string name="pref_seasonsorting">Lajittele kaudet&#8230;</string>
   <string name="pref_episodesorting">Lajittele jaksot&#8230;</string>
   <string name="pref_language">Ensisijainen sisällön kieli</string>
   <string name="pref_updatewifionly">Kuvat vain Wi-Fin kautta</string>
   <string name="pref_updatewifionlysummary">Pienentääksesi datamaksuja, älä lataa mobiiliverkon tai käytön mukaan laskutettavan yhteyden kautta</string>
-  <string name="about">Tietoja SeriesGuidesta</string>
-  <string name="pref_autoaddshows">Lisää uudet ohjelmat traktista</string>
-  <string name="pref_autoaddshowssummary">Automaattisesti lisää uudet ohjelmat traktin toimintavirrastasi</string>
   <!-- About screen -->
   <string name="licence_tvdb">Tämä sovellus käyttää TheTVDB:n tietoja ja kuvia, lisensoitu CC BY-NC 4.0.</string>
   <string name="licence_themoviedb">Tämä tuote käyttää TMDb:n API-rajapintaa, mutta se ei ole TMDb:n hyväksymä tai sertifioima.</string>
@@ -362,8 +363,7 @@
   <string name="pref_theme">Teema</string>
   <!-- Other advanced settings -->
   <string name="pref_other">Muu</string>
-  <string name="pref_autoupdate">Automaattinen päivitys</string>
-  <string name="pref_autoupdatesummary">Päivittää säännöllisesti ohjelmasi</string>
+  <string name="pref_autoupdatesummary">Automaattisesti synkronoi ja päivitä SeriesGuiden tiedot</string>
   <string name="pref_autobackup">Automaattinen varmuuskopiointi</string>
   <string name="pref_autobackupsummary">Viikoittainen varmuuskopio ohjelmistasi, listoistasi ja elokuvistasi</string>
   <string name="backup">Varmuuskopioi/Palauta</string>
@@ -373,7 +373,7 @@
   <string name="pref_offsetsummary">Siirrä lähetysaikoja %s tunnilla</string>
   <string name="clear_cache">Tyhjennä kuvavälimuisti</string>
   <string name="clear_cache_summary">Poistaa kaikki välimuistiin tallennetut kuvat</string>
-  <string name="pref_ganalyticssummary">Seuraa ominaisuuksien käyttöä, jonka avulla parannetaan SeriesGuidea</string>
+  <string name="pref_ganalyticssummary">Lähetä anonyymia käyttötilastoja Googlen palveluun</string>
   <!-- Backup and Restore -->
   <string name="backup_full_dump">Sisällytä kaikki metatiedot, kuten kuvaukset, näyttelijät ja arvosanat.</string>
   <string name="backup_path">Varmuuskopiokansio</string>
@@ -428,8 +428,6 @@
   <string name="notification_release_earlier_hour">1 tunti etukäteen</string>
   <!-- Legacy Widgets -->
   <string name="smallwidget">SeriesGuide (pieni)</string>
-  <string name="bigwidget">SeriesGuide (keski)</string>
-  <string name="largewidget">SeriesGuide (suuri)</string>
   <!-- List Widget -->
   <string name="hide_watched">Piilota katsotut jaksot</string>
   <string name="pref_widget_opacity">Widgetin tausta</string>
@@ -453,7 +451,7 @@
   <string name="billing_price_pass">kertaluontoinen osto</string>
   <string name="upgrade_description">Avaa kaikki ominaisuudet, kuten ilmoitukset, teemat ja lisää listawidgetin vaihtoehtoja. Auta minua tekemään tulevia päivityksiä.</string>
   <string name="upgrade_success">Kiitos SeriesGuiden tukemisesta! Voit käyttää kaikkia ominaisuuksia</string>
-  <string name="billing_learn_more">Miksi maksaisit? Opi lisää.</string>
+  <string name="billing_learn_more">Miksi maksaisit? Lue lisää.</string>
   <string name="subscription_expired">Tilaus vanhentunut</string>
   <string name="subscription_expired_details">X-ominaisuustilauksesi on vanhentunut.</string>
   <!-- Amazon In-App Billing -->
@@ -462,7 +460,6 @@
   <string name="subscription_failed">Ostos epäonnistui.</string>
   <string name="pass_unavailable">X Pass ei ole nyt käytettävissä.</string>
   <!-- Extensions -->
-  <string name="extensions">Laajennukset</string>
   <string name="action_extensions_configure">Muokkaa laajennuksia</string>
   <string name="action_extensions_add">Lisää laajennus</string>
   <string name="action_extensions_limit">Hanki X lisätäksesi enemmän laajennuksia</string>
@@ -472,10 +469,19 @@
   <string name="description_extension_amazon">Etsi paikalliselta Amazon-sivustoltasi</string>
   <string name="pref_amazon_domain">Amazon-sivusto</string>
   <string name="extension_google_play">Google Play -haku</string>
-  <string name="description_extension_google_play">Etsi Google Play -kaupasta</string>
+  <string name="description_extension_google_play">Etsi Google Play Kaupasta</string>
   <string name="extension_youtube">YouTube-haku</string>
   <string name="description_extension_youtube">Etsi videoita YouTubesta</string>
   <string name="description_extension_web_search">Etsi verkkosivustoja ja kuvia</string>
   <!-- People -->
   <string name="person_biography">Elämäkerta</string>
+  <!-- Feedback -->
+  <string name="feedback_question_enjoy">Pidätkö SeriesGuidesta?</string>
+  <string name="feedback_action_yes">Kyllä!</string>
+  <string name="feedback_action_notreally">En oikeastaan</string>
+  <string name="feedback_question_rate_google">Haluatko arvostella Google Playssa?</string>
+  <string name="feedback_question_rate_amazon">Haluatko arvostella Amazonissa?</string>
+  <string name="feedback_question_feedback">Haluatko kertoa, miten sitä voisi parantaa?</string>
+  <string name="feedback_action_ok">Kyllä</string>
+  <string name="feedback_action_nothanks">Ei kiitos</string>
 </resources>

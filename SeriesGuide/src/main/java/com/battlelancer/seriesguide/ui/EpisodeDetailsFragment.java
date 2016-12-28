@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
 import android.content.Intent;
@@ -21,8 +5,6 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -44,14 +26,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.api.Action;
 import com.battlelancer.seriesguide.backend.HexagonTools;
 import com.battlelancer.seriesguide.enums.EpisodeFlags;
-import com.battlelancer.seriesguide.extensions.ActionsFragmentContract;
-import com.battlelancer.seriesguide.extensions.EpisodeActionsHelper;
+import com.battlelancer.seriesguide.extensions.ActionsHelper;
+import com.battlelancer.seriesguide.extensions.EpisodeActionsContract;
 import com.battlelancer.seriesguide.extensions.ExtensionManager;
 import com.battlelancer.seriesguide.loaders.EpisodeActionsLoader;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract.Episodes;
@@ -60,9 +44,11 @@ import com.battlelancer.seriesguide.provider.SeriesGuideContract.Seasons;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract.Shows;
 import com.battlelancer.seriesguide.provider.SeriesGuideDatabase.Tables;
 import com.battlelancer.seriesguide.settings.DisplaySettings;
-import com.battlelancer.seriesguide.thetvdbapi.TheTVDB;
+import com.battlelancer.seriesguide.settings.TraktCredentials;
+import com.battlelancer.seriesguide.thetvdbapi.TvdbTools;
 import com.battlelancer.seriesguide.ui.dialogs.CheckInDialogFragment;
 import com.battlelancer.seriesguide.ui.dialogs.ManageListsDialogFragment;
+import com.battlelancer.seriesguide.ui.dialogs.RateDialogFragment;
 import com.battlelancer.seriesguide.util.EpisodeTools;
 import com.battlelancer.seriesguide.util.LanguageTools;
 import com.battlelancer.seriesguide.util.ServiceUtils;
@@ -73,17 +59,20 @@ import com.battlelancer.seriesguide.util.TraktRatingsTask;
 import com.battlelancer.seriesguide.util.TraktTools;
 import com.battlelancer.seriesguide.util.Utils;
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 import com.uwetrottmann.androidutils.CheatSheet;
-import de.greenrobot.event.EventBus;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import timber.log.Timber;
 
 /**
  * Displays details about a single episode like summary, ratings and episode image if available.
  */
-public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentContract {
+public class EpisodeDetailsFragment extends Fragment implements EpisodeActionsContract {
 
     private static final String TAG = "Episode Details";
 
@@ -102,38 +91,41 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
     private int mShowRunTime;
     private long mEpisodeReleaseTime;
 
-    @Bind(R.id.containerEpisode) View mEpisodeContainer;
-    @Bind(R.id.containerRatings) View mRatingsContainer;
-    @Bind(R.id.containerEpisodeActions) LinearLayout mActionsContainer;
+    @BindView(R.id.containerEpisode) View mEpisodeContainer;
+    @BindView(R.id.containerRatings) View mRatingsContainer;
+    @BindView(R.id.containerEpisodeActions) LinearLayout mActionsContainer;
 
-    @Bind(R.id.containerEpisodeImage) View mImageContainer;
-    @Bind(R.id.imageViewEpisode) ImageView mEpisodeImage;
+    @BindView(R.id.containerEpisodeImage) View mImageContainer;
+    @BindView(R.id.imageViewEpisode) ImageView mEpisodeImage;
 
-    @Bind(R.id.textViewEpisodeTitle) TextView mTitle;
-    @Bind(R.id.textViewEpisodeDescription) TextView mDescription;
-    @Bind(R.id.textViewEpisodeReleaseTime) TextView mReleaseTime;
-    @Bind(R.id.textViewEpisodeReleaseDate) TextView mReleaseDate;
-    @Bind(R.id.textViewEpisodeLastEdit) TextView mLastEdit;
-    @Bind(R.id.labelEpisodeGuestStars) View mLabelGuestStars;
-    @Bind(R.id.textViewEpisodeGuestStars) TextView mGuestStars;
-    @Bind(R.id.textViewEpisodeDirectors) TextView mDirectors;
-    @Bind(R.id.textViewEpisodeWriters) TextView mWriters;
-    @Bind(R.id.labelEpisodeDvd) View mLabelDvd;
-    @Bind(R.id.textViewEpisodeDvd) TextView mDvd;
-    @Bind(R.id.textViewRatingsValue) TextView mTextRating;
-    @Bind(R.id.textViewRatingsVotes) TextView mTextRatingVotes;
-    @Bind(R.id.textViewRatingsUser) TextView mTextUserRating;
+    @BindView(R.id.textViewEpisodeTitle) TextView mTitle;
+    @BindView(R.id.textViewEpisodeDescription) TextView mDescription;
+    @BindView(R.id.textViewEpisodeReleaseTime) TextView mReleaseTime;
+    @BindView(R.id.textViewEpisodeReleaseDate) TextView mReleaseDate;
+    @BindView(R.id.textViewEpisodeLastEdit) TextView mLastEdit;
+    @BindView(R.id.labelEpisodeGuestStars) View mLabelGuestStars;
+    @BindView(R.id.textViewEpisodeGuestStars) TextView mGuestStars;
+    @BindView(R.id.textViewEpisodeDirectors) TextView mDirectors;
+    @BindView(R.id.textViewEpisodeWriters) TextView mWriters;
+    @BindView(R.id.labelEpisodeDvd) View mLabelDvd;
+    @BindView(R.id.textViewEpisodeDvd) TextView mDvd;
+    @BindView(R.id.textViewRatingsValue) TextView mTextRating;
+    @BindView(R.id.textViewRatingsVotes) TextView mTextRatingVotes;
+    @BindView(R.id.textViewRatingsUser) TextView mTextUserRating;
 
-    @Bind(R.id.buttonEpisodeCheckin) Button mCheckinButton;
-    @Bind(R.id.buttonEpisodeWatched) Button mWatchedButton;
-    @Bind(R.id.buttonEpisodeCollected) Button mCollectedButton;
-    @Bind(R.id.buttonEpisodeSkip) Button mSkipButton;
+    @BindView(R.id.dividerEpisodeButtons) View dividerEpisodeButtons;
+    @BindView(R.id.buttonEpisodeCheckin) Button buttonCheckin;
+    @BindView(R.id.buttonEpisodeWatched) Button buttonWatch;
+    @BindView(R.id.buttonEpisodeCollected) Button buttonCollect;
+    @BindView(R.id.buttonEpisodeSkip) Button buttonSkip;
 
-    @Bind(R.id.buttonShowInfoIMDB) View mImdbButton;
-    @Bind(R.id.buttonTVDB) View mTvdbButton;
-    @Bind(R.id.buttonTrakt) View mTraktButton;
-    @Bind(R.id.buttonWebSearch) View mWebSearchButton;
-    @Bind(R.id.buttonShouts) View mCommentsButton;
+    @BindView(R.id.buttonShowInfoIMDB) View mImdbButton;
+    @BindView(R.id.buttonTVDB) View mTvdbButton;
+    @BindView(R.id.buttonTrakt) View mTraktButton;
+    @BindView(R.id.buttonWebSearch) View mWebSearchButton;
+    @BindView(R.id.buttonShouts) View mCommentsButton;
+
+    private Unbinder unbinder;
 
     /**
      * Data which has to be passed when creating this fragment.
@@ -167,7 +159,7 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_episode, container, false);
-        ButterKnife.bind(this, v);
+        unbinder = ButterKnife.bind(this, v);
 
         mEpisodeContainer.setVisibility(View.GONE);
 
@@ -191,6 +183,10 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
     public void onResume() {
         super.onResume();
 
+        BaseNavDrawerActivity.ServiceActiveEvent event = EventBus.getDefault()
+                .getStickyEvent(BaseNavDrawerActivity.ServiceActiveEvent.class);
+        setEpisodeButtonsEnabled(event == null);
+
         EventBus.getDefault().register(this);
         loadEpisodeActionsDelayed();
     }
@@ -213,8 +209,8 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
         // This ensures that the anonymous callback we have does not prevent the fragment from
         // being garbage collected. It also prevents our callback from getting invoked even after the
         // fragment is destroyed.
-        ServiceUtils.getPicasso(getActivity()).cancelRequest(mEpisodeImage);
-        ButterKnife.unbind(this);
+        Picasso.with(getContext()).cancelRequest(mEpisodeImage);
+        unbinder.unbind();
     }
 
     @Override
@@ -280,21 +276,39 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
 
     private void changeEpisodeFlag(int episodeFlag) {
         mEpisodeFlag = episodeFlag;
-        EpisodeTools.episodeWatched(getActivity(), mShowTvdbId, getEpisodeTvdbId(), mSeasonNumber,
-                mEpisodeNumber, episodeFlag);
+        EpisodeTools.episodeWatched(SgApp.from(getActivity()), mShowTvdbId, getEpisodeTvdbId(),
+                mSeasonNumber, mEpisodeNumber, episodeFlag);
     }
 
     private void onToggleCollected() {
         mCollected = !mCollected;
-        EpisodeTools.episodeCollected(getActivity(), mShowTvdbId, getEpisodeTvdbId(), mSeasonNumber,
-                mEpisodeNumber, mCollected);
+        EpisodeTools.episodeCollected(SgApp.from(getActivity()), mShowTvdbId, getEpisodeTvdbId(),
+                mSeasonNumber, mEpisodeNumber, mCollected);
     }
 
     @Override
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ExtensionManager.EpisodeActionReceivedEvent event) {
         if (getEpisodeTvdbId() == event.episodeTvdbId) {
             loadEpisodeActionsDelayed();
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventEpisodeTask(BaseNavDrawerActivity.ServiceActiveEvent event) {
+        setEpisodeButtonsEnabled(false);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventEpisodeTask(BaseNavDrawerActivity.ServiceCompletedEvent event) {
+        setEpisodeButtonsEnabled(true);
+    }
+
+    private void setEpisodeButtonsEnabled(boolean enabled) {
+        buttonWatch.setEnabled(enabled);
+        buttonCollect.setEnabled(enabled);
+        buttonSkip.setEnabled(enabled);
+        buttonCheckin.setEnabled(enabled);
     }
 
     private LoaderManager.LoaderCallbacks<Cursor> mEpisodeDataLoaderCallbacks
@@ -335,17 +349,29 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
         mEpisodeReleaseTime = cursor.getLong(DetailsQuery.FIRST_RELEASE_MS);
 
         // title and description
+        mEpisodeFlag = cursor.getInt(DetailsQuery.WATCHED);
         mEpisodeTitle = cursor.getString(DetailsQuery.TITLE);
-        mTitle.setText(mEpisodeTitle);
+        boolean hideDetails = EpisodeTools.isUnwatched(mEpisodeFlag)
+                && DisplaySettings.preventSpoilers(getContext());
+        if (hideDetails) {
+            // just show the episode number "1x02"
+            mTitle.setText(TextTools.getEpisodeNumber(getContext(), mSeasonNumber, mEpisodeNumber));
+        } else {
+            mTitle.setText(mEpisodeTitle);
+        }
         String overview = cursor.getString(DetailsQuery.OVERVIEW);
         if (TextUtils.isEmpty(overview)) {
             // no description available, show no translation available message
             mDescription.setText(getString(R.string.no_translation,
-                    LanguageTools.getLanguageStringForCode(getContext(),
+                    LanguageTools.getShowLanguageStringFor(getContext(),
                             cursor.getString(DetailsQuery.SHOW_LANGUAGE)),
                     getString(R.string.tvdb)));
         } else {
-            mDescription.setText(overview);
+            if (hideDetails) {
+                mDescription.setText(R.string.no_spoilers);
+            } else {
+                mDescription.setText(overview);
+            }
         }
 
         // show title
@@ -417,7 +443,6 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
                 rateEpisode();
             }
         });
-        mRatingsContainer.setFocusable(true);
         CheatSheet.setup(mRatingsContainer, R.string.action_rate);
 
         // trakt rating
@@ -437,20 +462,17 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
         mImageContainer.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent fullscreen = new Intent(getActivity(), FullscreenImageActivity.class);
-                fullscreen.putExtra(FullscreenImageActivity.InitBundle.IMAGE_PATH, imagePath);
-                ActivityCompat.startActivity(getActivity(), fullscreen,
-                        ActivityOptionsCompat
-                                .makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight())
-                                .toBundle()
-                );
+                Intent intent = new Intent(getActivity(), FullscreenImageActivity.class);
+                intent.putExtra(FullscreenImageActivity.EXTRA_IMAGE,
+                        TvdbTools.buildScreenshotUrl(imagePath));
+                Utils.startActivityWithAnimation(getActivity(), intent, v);
             }
         });
-        loadImage(imagePath);
+        loadImage(imagePath, hideDetails);
 
         // check in button
         final int episodeTvdbId = cursor.getInt(DetailsQuery._ID);
-        mCheckinButton.setOnClickListener(new OnClickListener() {
+        buttonCheckin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 // display a check-in dialog
@@ -462,81 +484,73 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
                 }
             }
         });
-        CheatSheet.setup(mCheckinButton);
+        CheatSheet.setup(buttonCheckin);
 
-        // prevent checking in if hexagon is enabled
-        mCheckinButton.setVisibility(
-                HexagonTools.isSignedIn(getActivity()) ? View.GONE : View.VISIBLE);
+        // hide check-in if not connected to trakt or hexagon is enabled
+        boolean isConnectedToTrakt = TraktCredentials.get(getActivity()).hasCredentials();
+        boolean displayCheckIn = isConnectedToTrakt && !HexagonTools.isSignedIn(getActivity());
+        buttonCheckin.setVisibility(displayCheckIn ? View.VISIBLE : View.GONE);
+        dividerEpisodeButtons.setVisibility(displayCheckIn ? View.VISIBLE : View.GONE);
 
         // watched button
-        mEpisodeFlag = cursor.getInt(DetailsQuery.WATCHED);
         boolean isWatched = EpisodeTools.isWatched(mEpisodeFlag);
-        Utils.setCompoundDrawablesRelativeWithIntrinsicBounds(mWatchedButton, 0,
+        Utils.setCompoundDrawablesRelativeWithIntrinsicBounds(buttonWatch, 0,
                 isWatched ? Utils.resolveAttributeToResourceId(getActivity().getTheme(),
                         R.attr.drawableWatched)
                         : Utils.resolveAttributeToResourceId(getActivity().getTheme(),
                                 R.attr.drawableWatch), 0, 0);
-        mWatchedButton.setOnClickListener(new OnClickListener() {
+        buttonWatch.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // disable button, will be re-enabled on data reload once action completes
-                v.setEnabled(false);
                 onToggleWatched();
                 Utils.trackAction(getActivity(), TAG, "Toggle watched");
             }
         });
-        mWatchedButton.setEnabled(true);
-        mWatchedButton.setText(isWatched ? R.string.action_unwatched : R.string.action_watched);
-        CheatSheet.setup(mWatchedButton, isWatched ? R.string.action_unwatched
+        buttonWatch.setText(isWatched ? R.string.action_unwatched : R.string.action_watched);
+        CheatSheet.setup(buttonWatch, isWatched ? R.string.action_unwatched
                 : R.string.action_watched);
 
         // collected button
         mCollected = cursor.getInt(DetailsQuery.COLLECTED) == 1;
-        Utils.setCompoundDrawablesRelativeWithIntrinsicBounds(mCollectedButton, 0,
+        Utils.setCompoundDrawablesRelativeWithIntrinsicBounds(buttonCollect, 0,
                 mCollected ? R.drawable.ic_collected
                         : Utils.resolveAttributeToResourceId(getActivity().getTheme(),
                                 R.attr.drawableCollect), 0, 0);
-        mCollectedButton.setOnClickListener(new OnClickListener() {
+        buttonCollect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // disable button, will be re-enabled on data reload once action completes
-                v.setEnabled(false);
                 onToggleCollected();
                 Utils.trackAction(getActivity(), TAG, "Toggle collected");
             }
         });
-        mCollectedButton.setEnabled(true);
-        mCollectedButton.setText(mCollected
+        buttonCollect.setText(mCollected
                 ? R.string.action_collection_remove : R.string.action_collection_add);
-        CheatSheet.setup(mCollectedButton, mCollected
+        CheatSheet.setup(buttonCollect, mCollected
                 ? R.string.action_collection_remove : R.string.action_collection_add);
 
         // skip button
         boolean isSkipped = EpisodeTools.isSkipped(mEpisodeFlag);
         if (isWatched) {
             // if watched do not allow skipping
-            mSkipButton.setVisibility(View.INVISIBLE);
+            buttonSkip.setVisibility(View.INVISIBLE);
         } else {
-            mSkipButton.setVisibility(View.VISIBLE);
-            Utils.setCompoundDrawablesRelativeWithIntrinsicBounds(mSkipButton, 0,
+            buttonSkip.setVisibility(View.VISIBLE);
+            Utils.setCompoundDrawablesRelativeWithIntrinsicBounds(buttonSkip, 0,
                     isSkipped
                             ? R.drawable.ic_skipped
                             : Utils.resolveAttributeToResourceId(getActivity().getTheme(),
                                     R.attr.drawableSkip), 0, 0);
-            mSkipButton.setOnClickListener(new OnClickListener() {
+            buttonSkip.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // disable button, will be re-enabled on data reload once action completes
-                    v.setEnabled(false);
                     onToggleSkipped();
                     Utils.trackAction(getActivity(), TAG, "Toggle skipped");
                 }
             });
-            mSkipButton.setText(isSkipped ? R.string.action_dont_skip : R.string.action_skip);
-            CheatSheet.setup(mSkipButton,
+            buttonSkip.setText(isSkipped ? R.string.action_dont_skip : R.string.action_skip);
+            CheatSheet.setup(buttonSkip,
                     isSkipped ? R.string.action_dont_skip : R.string.action_skip);
         }
-        mSkipButton.setEnabled(true);
 
         // service buttons
         ServiceUtils.setUpTraktEpisodeButton(mTraktButton, getEpisodeTvdbId(), TAG);
@@ -559,11 +573,8 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
                 intent.putExtras(TraktCommentsActivity.createInitBundleEpisode(mEpisodeTitle,
                         getEpisodeTvdbId()
                 ));
-                ActivityCompat.startActivity(getActivity(), intent,
-                        ActivityOptionsCompat
-                                .makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight())
-                                .toBundle()
-                );
+                Utils.startActivityWithAnimation(getActivity(), intent, v);
+                Utils.trackAction(v.getContext(), TAG, "Comments");
             }
         });
 
@@ -572,14 +583,15 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
 
     private void loadTraktRatings() {
         if (mTraktTask == null || mTraktTask.getStatus() == AsyncTask.Status.FINISHED) {
-            mTraktTask = new TraktRatingsTask(getActivity(), mShowTvdbId, getEpisodeTvdbId(),
-                    mSeasonNumber, mEpisodeNumber);
+            mTraktTask = new TraktRatingsTask(SgApp.from(getActivity()), mShowTvdbId,
+                    getEpisodeTvdbId(), mSeasonNumber, mEpisodeNumber);
             AsyncTaskCompat.executeParallel(mTraktTask);
         }
     }
 
     private void rateEpisode() {
-        EpisodeTools.displayRateDialog(getActivity(), getFragmentManager(), getEpisodeTvdbId());
+        RateDialogFragment.displayRateDialog(getActivity(), getFragmentManager(),
+                getEpisodeTvdbId());
         Utils.trackAction(getActivity(), TAG, "Rate (trakt)");
     }
 
@@ -592,30 +604,36 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
         Utils.trackAction(getActivity(), TAG, "Share");
     }
 
-    private void loadImage(String imagePath) {
+    private void loadImage(String imagePath, boolean hideDetails) {
         // immediately hide container if there is no image
         if (TextUtils.isEmpty(imagePath)) {
             mImageContainer.setVisibility(View.GONE);
             return;
         }
 
-        // try loading image
-        mImageContainer.setVisibility(View.VISIBLE);
-        ServiceUtils.loadWithPicasso(getActivity(), TheTVDB.buildScreenshotUrl(imagePath))
-                .error(R.drawable.ic_image_missing)
-                .into(mEpisodeImage,
-                        new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                mEpisodeImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            }
+        if (hideDetails) {
+            // show image placeholder
+            mEpisodeImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            mEpisodeImage.setImageResource(R.drawable.ic_image_missing);
+        } else {
+            // try loading image
+            mImageContainer.setVisibility(View.VISIBLE);
+            ServiceUtils.loadWithPicasso(getActivity(), TvdbTools.buildScreenshotUrl(imagePath))
+                    .error(R.drawable.ic_image_missing)
+                    .into(mEpisodeImage,
+                            new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    mEpisodeImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                }
 
-                            @Override
-                            public void onError() {
-                                mEpisodeImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                                @Override
+                                public void onError() {
+                                    mEpisodeImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                                }
                             }
-                        }
-                );
+                    );
+        }
     }
 
     private LoaderManager.LoaderCallbacks<List<Action>> mEpisodeActionsLoaderCallbacks =
@@ -632,14 +650,14 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
                         return;
                     }
                     if (data == null) {
-                        Timber.e("onLoadFinished: did not receive valid actions for "
-                                + getEpisodeTvdbId());
+                        Timber.e("onLoadFinished: did not receive valid actions for %s",
+                                getEpisodeTvdbId());
                     } else {
-                        Timber.d("onLoadFinished: received " + data.size() + " actions for "
-                                + getEpisodeTvdbId());
+                        Timber.d("onLoadFinished: received %s actions for %s", data.size(),
+                                getEpisodeTvdbId());
                     }
-                    EpisodeActionsHelper.populateEpisodeActions(getActivity().getLayoutInflater(),
-                            mActionsContainer, data);
+                    ActionsHelper.populateActions(getActivity().getLayoutInflater(),
+                            mActionsContainer, data, TAG);
                 }
 
                 @Override
@@ -665,7 +683,7 @@ public class EpisodeDetailsFragment extends Fragment implements ActionsFragmentC
     public void loadEpisodeActionsDelayed() {
         mHandler.removeCallbacks(mEpisodeActionsRunnable);
         mHandler.postDelayed(mEpisodeActionsRunnable,
-                ActionsFragmentContract.ACTION_LOADER_DELAY_MILLIS);
+                EpisodeActionsContract.ACTION_LOADER_DELAY_MILLIS);
     }
 
     interface DetailsQuery {

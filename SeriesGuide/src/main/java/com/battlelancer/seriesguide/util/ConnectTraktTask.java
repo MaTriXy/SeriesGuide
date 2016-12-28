@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.util;
 
 import android.annotation.SuppressLint;
@@ -22,25 +6,24 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import com.battlelancer.seriesguide.BuildConfig;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.enums.Result;
 import com.battlelancer.seriesguide.enums.TraktResult;
 import com.battlelancer.seriesguide.settings.TraktCredentials;
 import com.battlelancer.seriesguide.settings.TraktOAuthSettings;
 import com.battlelancer.seriesguide.settings.TraktSettings;
 import com.battlelancer.seriesguide.sync.SgSyncAdapter;
-import com.battlelancer.seriesguide.traktapi.SgTraktV2;
-import com.battlelancer.seriesguide.ui.BaseOAuthActivity;
+import com.battlelancer.seriesguide.traktapi.SgTrakt;
 import com.uwetrottmann.androidutils.AndroidUtils;
-import com.uwetrottmann.trakt.v2.TraktV2;
-import com.uwetrottmann.trakt.v2.entities.Settings;
-import com.uwetrottmann.trakt.v2.exceptions.OAuthUnauthorizedException;
-import de.greenrobot.event.EventBus;
-import org.apache.oltu.oauth2.client.response.OAuthAccessTokenResponse;
-import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
-import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
-import retrofit.RetrofitError;
-import timber.log.Timber;
+import com.uwetrottmann.trakt5.TraktV2;
+import com.uwetrottmann.trakt5.entities.AccessToken;
+import com.uwetrottmann.trakt5.entities.Settings;
+import com.uwetrottmann.trakt5.services.Users;
+import dagger.Lazy;
+import org.greenrobot.eventbus.EventBus;
+import java.io.IOException;
+import javax.inject.Inject;
+import retrofit2.Response;
 
 /**
  * Expects a valid trakt OAuth auth code. Retrieves the access token and username for the associated
@@ -59,17 +42,20 @@ public class ConnectTraktTask extends AsyncTask<String, Void, Integer> {
         }
     }
 
-    private final Context mContext;
+    private final Context context;
+    @Inject TraktV2 trakt;
+    @Inject Lazy<Users> traktUsers;
 
-    public ConnectTraktTask(Context context) {
-        mContext = context;
+    public ConnectTraktTask(SgApp app) {
+        context = app;
+        app.getServicesComponent().inject(this);
     }
 
     @SuppressLint("CommitPrefEdits")
     @Override
     protected Integer doInBackground(String... params) {
         // check for connectivity
-        if (!AndroidUtils.isNetworkConnected(mContext)) {
+        if (!AndroidUtils.isNetworkConnected(context)) {
             return TraktResult.OFFLINE;
         }
 
@@ -86,20 +72,16 @@ public class ConnectTraktTask extends AsyncTask<String, Void, Integer> {
         String refreshToken = null;
         long expiresIn = -1;
         try {
-            OAuthAccessTokenResponse response = TraktV2.getAccessToken(
-                    BuildConfig.TRAKT_CLIENT_ID,
-                    BuildConfig.TRAKT_CLIENT_SECRET,
-                    BaseOAuthActivity.OAUTH_CALLBACK_URL_CUSTOM,
-                    authCode
-            );
-            if (response != null) {
-                accessToken = response.getAccessToken();
-                refreshToken = response.getRefreshToken();
-                expiresIn = response.getExpiresIn();
+            Response<AccessToken> response = trakt.exchangeCodeForAccessToken(authCode);
+            if (response.isSuccessful()) {
+                accessToken = response.body().access_token;
+                refreshToken = response.body().refresh_token;
+                expiresIn = response.body().expires_in;
+            } else {
+                SgTrakt.trackFailedRequest(context, "get access token", response);
             }
-        } catch (OAuthSystemException | OAuthProblemException e) {
-            accessToken = null;
-            Timber.e(e, "Getting access token failed");
+        } catch (IOException e) {
+            SgTrakt.trackFailedRequest(context, "get access token", e);
         }
 
         // did we obtain all required data?
@@ -107,48 +89,47 @@ public class ConnectTraktTask extends AsyncTask<String, Void, Integer> {
             return TraktResult.AUTH_ERROR;
         }
 
-        // get user name
-        String username = null;
-        TraktV2 temporaryTrakt = new SgTraktV2(mContext)
-                .setApiKey(BuildConfig.TRAKT_CLIENT_ID)
-                .setAccessToken(accessToken);
-        try {
-            Settings settings = temporaryTrakt.users().settings();
-            if (settings != null && settings.user != null) {
-                username = settings.user.username;
-            }
-        } catch (RetrofitError e) {
-            Timber.e(e, "Getting user name failed");
-            return AndroidUtils.isNetworkConnected(mContext)
-                    ? TraktResult.API_ERROR : TraktResult.OFFLINE;
-        } catch (OAuthUnauthorizedException e) {
-            Timber.e(e, "Getting user name failed");
-            return TraktResult.AUTH_ERROR;
+        // store the access token, refresh token and expiry time
+        TraktCredentials.get(context).storeAccessToken(accessToken);
+        if (!TraktCredentials.get(context).hasCredentials()) {
+            return Result.ERROR; // saving access token failed, abort.
+        }
+        if (!TraktOAuthSettings.storeRefreshData(context, refreshToken, expiresIn)) {
+            return Result.ERROR; // saving refresh token failed, abort.
         }
 
-        // did we obtain a username?
+        // get user and display name
+        String username = null;
+        String displayname = null;
+        try {
+            Response<Settings> response = traktUsers.get().settings().execute();
+            if (response.isSuccessful()) {
+                if (response.body().user != null) {
+                    username = response.body().user.username;
+                    displayname = response.body().user.name;
+                }
+            } else {
+                SgTrakt.trackFailedRequest(context, "get user settings", response);
+                if (SgTrakt.isUnauthorized(response)) {
+                    // access token already is invalid, remove it :(
+                    TraktCredentials.get(context).removeCredentials();
+                    return TraktResult.AUTH_ERROR;
+                }
+            }
+        } catch (IOException e) {
+            SgTrakt.trackFailedRequest(context, "get user settings", e);
+            return AndroidUtils.isNetworkConnected(context)
+                    ? TraktResult.API_ERROR : TraktResult.OFFLINE;
+        }
+
+        // did we obtain a username (display name is not required)?
         if (TextUtils.isEmpty(username)) {
             return TraktResult.API_ERROR;
         }
+        TraktCredentials.get(context).storeUsername(username, displayname);
 
-        // store the new credentials
-        TraktCredentials.get(mContext).setCredentials(username, accessToken);
-        // store refresh token and expiry date
-        if (!TraktOAuthSettings.storeRefreshData(mContext, refreshToken, expiresIn)) {
-            // save failed
-            return Result.ERROR;
-        }
-
-        // try to get service manager
-        TraktV2 trakt = ServiceUtils.getTraktV2WithAuth(mContext);
-        if (trakt == null) {
-            // looks like credentials weren't saved properly
-            return Result.ERROR;
-        }
-        // set new credentials
-        trakt.setAccessToken(accessToken);
-
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mContext)
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(
+                context)
                 .edit();
 
         // make next sync merge local watched and collected episodes with those on trakt
@@ -174,7 +155,7 @@ public class ConnectTraktTask extends AsyncTask<String, Void, Integer> {
     protected void onPostExecute(Integer resultCode) {
         if (resultCode == Result.SUCCESS) {
             // trigger a sync, notifies user via toast
-            SgSyncAdapter.requestSyncImmediate(mContext, SgSyncAdapter.SyncType.DELTA, 0, true);
+            SgSyncAdapter.requestSyncImmediate(context, SgSyncAdapter.SyncType.DELTA, 0, true);
         }
 
         EventBus.getDefault().post(new FinishedEvent(resultCode));

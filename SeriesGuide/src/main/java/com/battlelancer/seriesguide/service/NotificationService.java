@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.service;
 
 import android.annotation.SuppressLint;
@@ -39,13 +23,13 @@ import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.style.StyleSpan;
 import com.battlelancer.seriesguide.R;
-import com.battlelancer.seriesguide.SeriesGuideApplication;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract.Episodes;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract.Shows;
 import com.battlelancer.seriesguide.provider.SeriesGuideDatabase.Tables;
 import com.battlelancer.seriesguide.settings.DisplaySettings;
 import com.battlelancer.seriesguide.settings.NotificationSettings;
-import com.battlelancer.seriesguide.thetvdbapi.TheTVDB;
+import com.battlelancer.seriesguide.thetvdbapi.TvdbTools;
 import com.battlelancer.seriesguide.ui.EpisodesActivity;
 import com.battlelancer.seriesguide.ui.QuickCheckInActivity;
 import com.battlelancer.seriesguide.ui.ShowsActivity;
@@ -73,6 +57,7 @@ public class NotificationService extends IntentService {
     private static final int REQUEST_CODE_MULTIPLE_EPISODES = 3;
 
     private static final int REQUEST_CODE_ACTION_CHECKIN = 4;
+    private static final int REQUEST_CODE_ACTION_SET_WATCHED = 4;
 
     private static final long[] VIBRATION_PATTERN = new long[] {
             0, 100, 200, 100, 100, 100
@@ -85,7 +70,8 @@ public class NotificationService extends IntentService {
     };
 
     // by airdate, then by show, then lowest number first
-    private static final String SORTING = Episodes.FIRSTAIREDMS + " ASC," + Shows.TITLE + " ASC,"
+    private static final String SORTING = Episodes.FIRSTAIREDMS + " ASC,"
+            + Shows.SORT_TITLE + ","
             + Episodes.NUMBER + " ASC";
 
     // only within time frame, unwatched episodes
@@ -156,15 +142,15 @@ public class NotificationService extends IntentService {
          */
         StringBuilder selection = new StringBuilder(SELECTION);
         boolean isFavsOnly = NotificationSettings.isNotifyAboutFavoritesOnly(this);
-        Timber.d("Do notify about " + (isFavsOnly ? "favorites ONLY" : "ALL"));
         if (isFavsOnly) {
             selection.append(" AND ").append(Shows.SELECTION_FAVORITES);
         }
         boolean isNoSpecials = DisplaySettings.isHidingSpecials(this);
-        Timber.d("Do " + (isNoSpecials ? "NOT " : "") + "notify about specials");
         if (isNoSpecials) {
             selection.append(" AND ").append(Episodes.SELECTION_NO_SPECIALS);
         }
+        Timber.d("Settings: favorites-only: %s, specials: %s",
+                isFavsOnly ? "YES" : "NO", isNoSpecials ? "YES" : "NO");
         // always exclude hidden shows
         selection.append(" AND ").append(Shows.SELECTION_NO_HIDDEN);
 
@@ -226,7 +212,7 @@ public class NotificationService extends IntentService {
 
             if (newEpisodesAvailable == 0) {
                 // Go to sleep, wake up as planned
-                Timber.d("No new episodes, going to sleep.");
+                Timber.d("No new episodes");
                 wakeUpTime = plannedWakeUpTime;
             } else {
                 // Get episodes which are within the notification threshold
@@ -269,13 +255,13 @@ public class NotificationService extends IntentService {
                          * Everything below HC does not have delete intents, so
                          * we just never notify about the same episode twice.
                          */
-                        Timber.d("Delete intent NOT supported, setting last cleared to: "
-                                + latestAirtime);
+                        Timber.d("Delete intent NOT supported, setting last cleared to: %d",
+                                latestAirtime);
                         prefs.edit().putLong(NotificationSettings.KEY_LAST_CLEARED,
                                 latestAirtime).commit();
                     }
-                    Timber.d("Found " + notifyPositions.size()
-                            + " new episodes, setting last notified to: " + latestAirtime);
+                    Timber.d("Found %d new episodes, setting last notified to: %d",
+                            notifyPositions.size(), latestAirtime);
                     prefs.edit().putLong(NotificationSettings.KEY_LAST_NOTIFIED, latestAirtime)
                             .commit();
 
@@ -292,7 +278,7 @@ public class NotificationService extends IntentService {
                             NotificationQuery.EPISODE_FIRST_RELEASE_MS);
                     if (releaseTime > latestTimeToInclude) {
                         // store next episode we plan to notify about
-                        Timber.d("Storing next episode time to notify about: " + releaseTime);
+                        Timber.d("Storing next episode time to notify about: %d", releaseTime);
                         prefs.edit().putLong(NotificationSettings.KEY_NEXT_TO_NOTIFY, releaseTime)
                                 .commit();
 
@@ -317,7 +303,7 @@ public class NotificationService extends IntentService {
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(this, NotificationService.class);
         PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
-        Timber.d("Going to sleep, setting wake-up alarm to: " + wakeUpTime);
+        Timber.d("Going to sleep, setting wake-up alarm to: %d", wakeUpTime);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, wakeUpTime, pi);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -338,7 +324,7 @@ public class NotificationService extends IntentService {
         long clearedTime = intent.getLongExtra(KEY_EPISODE_CLEARED_TIME, 0);
         if (clearedTime != 0) {
             // Never show the cleared episode(s) again
-            Timber.d("Notification cleared, setting last cleared episode time: " + clearedTime);
+            Timber.d("Notification cleared, setting last cleared episode time: %d", clearedTime);
             PreferenceManager.getDefaultSharedPreferences(context)
                     .edit()
                     .putLong(NotificationSettings.KEY_LAST_CLEARED, clearedTime)
@@ -377,7 +363,6 @@ public class NotificationService extends IntentService {
         final int count = notifyPositions.size();
         if (count == 1) {
             // notify in detail about one episode
-            Timber.d("Notifying about 1 new episode");
             upcomingEpisodes.moveToPosition(notifyPositions.get(0));
 
             final String showTitle = upcomingEpisodes.getString(NotificationQuery.SHOW_TITLE);
@@ -409,7 +394,6 @@ public class NotificationService extends IntentService {
                             PendingIntent.FLAG_CANCEL_CURRENT);
         } else {
             // notify about multiple episodes
-            Timber.d("Notifying about " + count + " new episodes");
             tickerText = getString(R.string.upcoming_episodes);
             contentTitle = getString(R.string.upcoming_episodes_number, count);
             contentText = getString(R.string.upcoming_display);
@@ -422,27 +406,29 @@ public class NotificationService extends IntentService {
 
         final NotificationCompat.Builder nb = new NotificationCompat.Builder(context);
 
-        if (AndroidUtils.isJellyBeanOrHigher()) {
-            Timber.d("Building rich notification (JB+)");
+        boolean richNotification = AndroidUtils.isJellyBeanOrHigher();
+        if (richNotification) {
             // JELLY BEAN and above
             if (count == 1) {
                 // single episode
                 upcomingEpisodes.moveToPosition(notifyPositions.get(0));
-                maybeSetPoster(context, nb, upcomingEpisodes.getString(NotificationQuery.POSTER));
+                maybeSetPoster(nb, upcomingEpisodes.getString(NotificationQuery.POSTER));
 
-                final String episodeTitle = upcomingEpisodes
-                        .getString(NotificationQuery.TITLE);
-                final String episodeSummary = upcomingEpisodes
-                        .getString(NotificationQuery.OVERVIEW);
+                if (!DisplaySettings.preventSpoilers(context)) {
+                    final String episodeTitle = upcomingEpisodes
+                            .getString(NotificationQuery.TITLE);
+                    final String episodeSummary = upcomingEpisodes
+                            .getString(NotificationQuery.OVERVIEW);
 
-                final SpannableStringBuilder bigText = new SpannableStringBuilder();
-                bigText.append(TextUtils.isEmpty(episodeTitle) ? "" : episodeTitle);
-                bigText.setSpan(new StyleSpan(Typeface.BOLD), 0, bigText.length(), 0);
-                bigText.append("\n");
-                bigText.append(TextUtils.isEmpty(episodeSummary) ? "" : episodeSummary);
+                    final SpannableStringBuilder bigText = new SpannableStringBuilder();
+                    bigText.append(TextUtils.isEmpty(episodeTitle) ? "" : episodeTitle);
+                    bigText.setSpan(new StyleSpan(Typeface.BOLD), 0, bigText.length(), 0);
+                    bigText.append("\n");
+                    bigText.append(TextUtils.isEmpty(episodeSummary) ? "" : episodeSummary);
 
-                nb.setStyle(new NotificationCompat.BigTextStyle().bigText(bigText)
-                        .setSummaryText(contentText));
+                    nb.setStyle(new NotificationCompat.BigTextStyle().bigText(bigText)
+                            .setSummaryText(contentText));
+                }
 
                 // Action button to check in
                 Intent checkInActionIntent = new Intent(context, QuickCheckInActivity.class);
@@ -456,6 +442,18 @@ public class NotificationService extends IntentService {
                         checkInActionIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                 nb.addAction(R.drawable.ic_action_checkin, getString(R.string.checkin),
                         checkInIntent);
+
+                // Action button to set watched
+                Intent setWatchedIntent = new Intent(context, NotificationActionReceiver.class);
+                setWatchedIntent.putExtra(NotificationActionReceiver.EXTRA_EPISODE_TVDBID,
+                        upcomingEpisodes.getInt(NotificationQuery._ID));
+                // data to handle delete
+                checkInActionIntent.putExtra(KEY_EPISODE_CLEARED_TIME, latestAirtime);
+                PendingIntent setWatchedPendingIntent = PendingIntent.getBroadcast(context,
+                        REQUEST_CODE_ACTION_SET_WATCHED,
+                        setWatchedIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                nb.addAction(R.drawable.ic_action_tick, getString(R.string.action_watched),
+                        setWatchedPendingIntent);
 
                 nb.setNumber(1);
             } else {
@@ -508,21 +506,21 @@ public class NotificationService extends IntentService {
             if (count == 1) {
                 // single episode
                 upcomingEpisodes.moveToPosition(notifyPositions.get(0));
-                maybeSetPoster(context, nb, upcomingEpisodes.getString(NotificationQuery.POSTER));
+                maybeSetPoster(nb, upcomingEpisodes.getString(NotificationQuery.POSTER));
             }
         }
 
         // notification sound
         final String ringtoneUri = NotificationSettings.getNotificationsRingtone(context);
         // If the string is empty, the user chose silent...
-        if (ringtoneUri.length() != 0) {
+        boolean hasSound = ringtoneUri.length() != 0;
+        if (hasSound) {
             // ...otherwise set the specified ringtone
-            Timber.d("Notification has sound");
             nb.setSound(Uri.parse(ringtoneUri));
         }
         // vibration
-        if (NotificationSettings.isNotificationVibrating(context)) {
-            Timber.d("Notification vibrates");
+        boolean vibrates = NotificationSettings.isNotificationVibrating(context);
+        if (vibrates) {
             nb.setVibrate(VIBRATION_PATTERN);
         }
         nb.setDefaults(Notification.DEFAULT_LIGHTS);
@@ -536,7 +534,6 @@ public class NotificationService extends IntentService {
         nb.setColor(ContextCompat.getColor(this, R.color.accent_primary));
         nb.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        Timber.d("Setting delete intent with episode time: " + latestAirtime);
         Intent i = new Intent(this, NotificationService.class);
         i.putExtra(KEY_EPISODE_CLEARED_TIME, latestAirtime);
         PendingIntent deleteIntent = PendingIntent.getService(this, REQUEST_CODE_DELETE_INTENT, i,
@@ -548,13 +545,20 @@ public class NotificationService extends IntentService {
 
         // use a unique id within the app
         NotificationManagerCompat nm = NotificationManagerCompat.from(getApplicationContext());
-        nm.notify(SeriesGuideApplication.NOTIFICATION_EPISODE_ID, notification);
+        nm.notify(SgApp.NOTIFICATION_EPISODE_ID, notification);
+
+        Timber.d("Notification: count=%d, rich(JB+)=%s, sound=%s, vibrate=%s, delete=%d",
+                count,
+                richNotification ? "YES" : "NO",
+                hasSound ? "YES" : "NO",
+                vibrates ? "YES" : "NO",
+                latestAirtime);
     }
 
-    private void maybeSetPoster(Context context, NotificationCompat.Builder nb, String posterPath) {
+    private void maybeSetPoster(NotificationCompat.Builder nb, String posterPath) {
         try {
-            Bitmap poster = ServiceUtils.loadWithPicasso(context,
-                    TheTVDB.buildPosterUrl(posterPath))
+            Bitmap poster = ServiceUtils.loadWithPicasso(this,
+                    TvdbTools.buildPosterUrl(posterPath))
                     .centerCrop()
                     .resizeDimen(R.dimen.show_poster_width, R.dimen.show_poster_height)
                     .get();
@@ -562,8 +566,8 @@ public class NotificationService extends IntentService {
 
             // add special large resolution background for wearables
             // https://developer.android.com/training/wearables/notifications/creating.html#AddWearableFeatures
-            Bitmap posterSquare = ServiceUtils.loadWithPicasso(context,
-                    TheTVDB.buildScreenshotUrl(posterPath))
+            Bitmap posterSquare = ServiceUtils.loadWithPicasso(this,
+                    TvdbTools.buildScreenshotUrl(posterPath))
                     .centerCrop()
                     .resize(400, 400)
                     .get();
@@ -572,7 +576,7 @@ public class NotificationService extends IntentService {
                             .setBackground(posterSquare);
             nb.extend(wearableExtender);
         } catch (IOException e) {
-            Timber.e(e, "Failed to load poster for notification: " + posterPath);
+            Timber.e(e, "maybeSetPoster: failed.");
         }
     }
 }

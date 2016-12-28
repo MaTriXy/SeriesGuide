@@ -11,7 +11,6 @@
   <string name="help">Guida</string>
   <string name="help_and_feedback">Aiuto e Feedback</string>
   <string name="drawer_open">Apri il menù di navigazione</string>
-  <string name="drawer_close">Chiudi il menù di navigazione</string>
   <!-- Media items -->
   <string name="show">Descrizione</string>
   <string name="episode">Episodio</string>
@@ -25,7 +24,7 @@
   <string name="description_overview">Panoramica</string>
   <string name="description_poster">Mostra poster</string>
   <string name="description_image">Immagine dell\'episodio</string>
-  <string name="description_menu_overflow">Opzioni aggiuntive</string>
+  <string name="description_menu_overflow">Altre opzioni</string>
   <!-- Actions -->
   <string name="clear">Cancella</string>
   <string name="discard">Scarta</string>
@@ -34,6 +33,9 @@
   <string name="web_search">Ricerca Web</string>
   <string name="add_to_homescreen">Aggiungi alla Home</string>
   <string name="action_open">Aperto</string>
+  <string name="sync_manually">Sincronizza manualmente</string>
+  <string name="sync_and_update">Sincronizza e Aggiorna</string>
+  <string name="sync_and_download_all">Sincronizza e Scarica tutto</string>
   <!-- Search -->
   <string name="clear_search_history">Cancella la cronologia di ricerca</string>
   <string name="search_hint">Cerca episodi</string>
@@ -43,9 +45,11 @@
   <string name="norating">non disponibile</string>
   <string name="unknown">sconosciuto</string>
   <string name="offline">Connettersi a una rete, quindi riprovare.</string>
-  <string name="app_not_available">Nessuna app per gestirlo.</string>
+  <string name="app_not_available">Nessuna app disponibile per gestire questo contenuto.</string>
   <string name="people_empty">Non c\'è nessuno?! Tocca per riprovare.</string>
   <string name="database_error">Impossibile modificare i dati.</string>
+  <string name="reinstall_info">Prova a eseguire un backup dalle impostazioni, reinstalla e ripristina.</string>
+  <string name="api_error_generic">Non è possibile contattare %s. Riprova più tardi.</string>
   <!-- Sharing -->
   <string name="share">Condividi</string>
   <string name="share_show">Condividi la serie</string>
@@ -54,6 +58,7 @@
   <string name="share_checkout">Scopri %s</string>
   <string name="addtocalendar">Aggiungi al calendario</string>
   <string name="addtocalendar_failed">Impossibile creare un evento nel calendario.</string>
+  <string name="links">Collegamenti</string>
   <!-- Comments -->
   <string name="comments">Commenti</string>
   <string name="shout_hint">Scrivi un commento (in inglese, almeno 5 parole)</string>
@@ -72,23 +77,20 @@
   <string name="episode_firstaired">Data di rilascio</string>
   <string name="episode_firstaired_unknown">Data di rilascio sconosciuta</string>
   <string name="episode_dvdnumber">Episodio su DVD</string>
-  <string name="show_actors">Attori</string>
   <string name="original_release">Rilascio originale</string>
   <string name="show_on_network">su %s</string>
   <string name="show_genres">Generi</string>
-  <string name="show_runtime">Durata</string>
   <string name="show_contentrating">Valutazione contenuto</string>
-  <string name="show_release_times">Date di rilascio</string>
+  <string name="show_release_times">Date di uscita</string>
   <string name="episode_directors">Regia</string>
   <string name="episode_gueststars">Ospiti speciali</string>
   <string name="episode_writers">Sceneggiatori</string>
   <string name="show_isalive">Continua</string>
   <string name="show_isnotalive">Conclusa</string>
   <string name="lastEdit">Ultima modifica // TVDb</string>
-  <string name="services_watch">Guarda</string>
-  <string name="services_more">Altro</string>
   <string name="no_translation">Non c\'è nessuna descrizione tradotta in %1$s disponibile su %2$s.</string>
   <string name="no_translation_title">Non tradotto</string>
+  <string name="no_spoilers">Alcuni dettagli sono nascosti per evitare spoiler. Per disattivare questa funzione vai su Impostazioni.</string>
   <!-- Date and Time -->
   <string name="today">oggi</string>
   <string name="now">adesso</string>
@@ -131,10 +133,11 @@
   <string name="action_shows_filter_hidden">Nascosti</string>
   <string name="action_shows_sort">Ordina le serie</string>
   <string name="action_shows_sort_title">Titolo</string>
-  <string name="action_shows_sort_episode">Prossimo episodio</string>
+  <string name="action_shows_sort_latest_episode">Episodio più recente</string>
+  <string name="action_shows_sort_oldest_episode">Episodio più vecchio</string>
+  <string name="action_shows_sort_last_watched">Ultimo visto</string>
+  <string name="action_shows_sort_remaining">Episodi rimanenti</string>
   <string name="action_shows_sort_favorites">Prima i preferiti</string>
-  <string name="updateall_yes">Aggiorna (Tutti)</string>
-  <string name="menu_update_delta">Aggiorna (solo vecchi)</string>
   <string name="context_updateshow">Aggiorna</string>
   <string name="context_marknext">Episodio seguente visto</string>
   <!-- Now -->
@@ -149,7 +152,7 @@
   <string name="user_stream_empty">Nessuna attività su trakt. Guarda e fai il check in di qualche serie!</string>
   <string name="user_movie_stream_empty">Nessun check in su trakt. Guarda qualche film!</string>
   <!-- Calendar -->
-  <string name="upcoming">Prossimi</string>
+  <string name="upcoming">Prossimamente</string>
   <string name="recent">Recenti</string>
   <string name="noupcoming">Non c\'è nessun episodio in programma.</string>
   <string name="norecent">Non ci sono episodi recenti.</string>
@@ -173,7 +176,7 @@
   <string name="no_results">Nessun risultato, prova parole complete.</string>
   <string name="action_try_any_language">Prova in altre lingue</string>
   <string name="action_try_again">Riprova</string>
-  <string name="search_error">Ricerca non riuscita, riprovare più tardi.</string>
+  <string name="tvdb_error_does_not_exist">La serie non esiste (ancora) su TheTVDB. Riprova più tardi.</string>
   <string name="add_all">Aggiungi tutto</string>
   <string name="add_multiple">Tutte le serie appariranno nella tua lista tra poco.</string>
   <string name="add_started">%s apparirà nella tua lista degli show tra poco.</string>
@@ -210,8 +213,9 @@
   <string name="movie_crew">Squadra</string>
   <string name="action_movies_sort">Ordina film</string>
   <string name="action_movies_sort_title">Titolo</string>
-  <string name="action_movies_sort_release">Data di rilascio</string>
+  <string name="action_movies_sort_release">Data di uscita</string>
   <!-- Statistics -->
+  <string name="statistics_failed">Impossibile calcolare le statistiche.</string>
   <string name="statistics_shows">Serie TV</string>
   <string name="statistics_episodes">Episodi</string>
   <string name="statistics_movies">Film</string>
@@ -234,10 +238,10 @@
     <item quantity="other">%d minuti</item>
   </plurals>
   <!-- Hexagon -->
-  <string name="hexagon_warning">Sperimentale!</string>
+  <string name="hexagon_warning">Sperimentale</string>
   <string name="hexagon_description">Connettiti alla cloud per eseguire il backup e la sincronizzazione delle tue serie TV e dei film.</string>
   <string name="hexagon_warning_lists">Le liste non sono incluse.</string>
-  <string name="hexagon_warning_trakt">Quando si utilizza SeriesGuide Cloud, le modifiche su trakt non verranno sincronizzate su SeriesGuide.</string>
+  <string name="hexagon_warning_trakt">Mentre SeriesGuide Cloud è connesso, la sincronizzazione con trakt verrà disattivata.</string>
   <string name="hexagon_signin">Connettiti</string>
   <string name="hexagon_signed_in">Sei connesso a SeriesGuide Cloud.</string>
   <string name="hexagon_signout">Esci</string>
@@ -247,7 +251,6 @@
   <string name="hexagon_remove_account_success">Account rimosso.</string>
   <string name="hexagon_remove_account_failure">Impossibile rimuovere l\'account.</string>
   <string name="hexagon_remove_account_confirmation">Rimuovendo il tuo account verranno eliminati tutti i film e le serie TV dalla SeriesGuide Cloud. Assicurati di rimuoverlo anche su tutti gli altri dispositivi connessi.</string>
-  <string name="hexagon_api_error">Impossibile comunicare con SeriesGuide Cloud. Prova più tardi.</string>
   <string name="hexagon_api_queued">Invio a SeriesGuide Cloud.</string>
   <string name="hexagon_permission_missing">Per utilizzare SeriesGuide Cloud, autorizza l\'accesso agli account.</string>
   <string name="hexagon_google_play_missing">Per utilizzare SeriesGuide Clouds è necessario avere installato Google Play Services.</string>
@@ -264,7 +267,6 @@
   <string name="traktcheckin_wait">Aspetterò</string>
   <string name="trakt_success">Inviato a trakt.</string>
   <string name="trakt_error_credentials">Qualcosa è andato storto. Per favore verifica le credenziali e riprova.</string>
-  <string name="trakt_error_general">Non è possibile contattare trakt. Riprova più tardi.</string>
   <string name="trakt_error_not_exists">Non (ancora) disponibile su trakt. Riprova più tardi.</string>
   <string name="trakt_notice_not_exists">Non è (ancora) possibile monitorarlo con trakt.</string>
   <!-- Connect trakt -->
@@ -320,16 +322,15 @@
   <string name="pref_onlyseasonepssummary">Non mostrare gli episodi speciali tranne che nella lista della stagione</string>
   <string name="pref_exactdates">Visualizza date esatte</string>
   <string name="pref_exactdates_summary">\"31 Ottobre\" invece di \"tra 3 giorni\"</string>
+  <string name="pref_nospoilers">Evita spoiler</string>
+  <string name="pref_nospoilers_summary">Nascondi i dettagli fino a quando l\'episodio è visto</string>
   <string name="pref_seasonsorting">Ordina stagioni per&#8230;</string>
   <string name="pref_episodesorting">Ordina episodi per&#8230;</string>
   <string name="pref_language">Lingua preferita per i contenuti</string>
   <string name="pref_updatewifionly">Immagini solo in Wi-Fi</string>
   <string name="pref_updatewifionlysummary">Per ridurre il consumo di dati, non scaricare le copertine attraverso connessione dati</string>
-  <string name="about">Info su SeriesGuide</string>
-  <string name="pref_autoaddshows">Aggiungi nuove serie trakt</string>
-  <string name="pref_autoaddshowssummary">Aggiungi automaticamente le serie dal tuo trakt</string>
   <!-- About screen -->
-  <string name="licence_tvdb">Questa applicazione utilizza dati e immagini di TheTVDB sotto licenza CC BY-NC 4.0.</string>
+  <string name="licence_tvdb">Questa applicazione utilizza informazioni e immagini di TheTVDB sotto licenza CC BY-NC 4.0.</string>
   <string name="licence_themoviedb">Questo prodotto utilizza l\'API di TMDb ma non è approvato o certificato da TMDb.</string>
   <string name="licence_trakt">Questa applicazione utilizza dati e immagini di trakt.</string>
   <string name="about_open_source">SeriesGuide è compilato con software open source.</string>
@@ -362,8 +363,7 @@
   <string name="pref_theme">Tema</string>
   <!-- Other advanced settings -->
   <string name="pref_other">Altro</string>
-  <string name="pref_autoupdate">Attiva aggiornamento automatico</string>
-  <string name="pref_autoupdatesummary">Aggiorna periodicamente le tue serie</string>
+  <string name="pref_autoupdatesummary">Sincronizza e aggiorna automaticamente i dati di SeriesGuide</string>
   <string name="pref_autobackup">Backup automatico</string>
   <string name="pref_autobackupsummary">Backup settimanali delle tue serie, liste e film</string>
   <string name="backup">Backup/Ripristino</string>
@@ -373,7 +373,7 @@
   <string name="pref_offsetsummary">Compensazione della messa onda di %s ore</string>
   <string name="clear_cache">Rimuovi le immagini nella cache</string>
   <string name="clear_cache_summary">Rimuovi tutte le immagini memorizzate nella cache dal tuo dispositivo</string>
-  <string name="pref_ganalyticssummary">Tieni traccia del tipo di utilizzo per aiutare a migliorare SeriesGuide</string>
+  <string name="pref_ganalyticssummary">Invia statistiche anonime sull\'utilizzo a un servizio Google</string>
   <!-- Backup and Restore -->
   <string name="backup_full_dump">Includere tutti i metadati come descrizioni, attori e voti.</string>
   <string name="backup_path">Cartella di Backup</string>
@@ -396,9 +396,9 @@
   <string name="import_warning">Le mie serie attuali, liste e film verranno sostituiti!</string>
   <string name="last_auto_backup">Ultimo backup automatico: %s</string>
   <string name="restore_auto_backup">Ripristina il Backup automatico</string>
-  <string name="dataliberation_permission_missing">Per eseguire il backup o il ripristino consentire l\'accesso ai file.</string>
-  <string name="autobackup_permission_missing">Per utilizzare il backup automatico consentire l\'accesso ai file.</string>
-  <string name="autobackup_files_missing">Per utilizzare il backup automatico seleziona file di backup validi.</string>
+  <string name="dataliberation_permission_missing">Per eseguire il backup o il ripristino, consenti l\'accesso ai file.</string>
+  <string name="autobackup_permission_missing">Per utilizzare il backup automatico, consenti l\'accesso ai file.</string>
+  <string name="autobackup_files_missing">Per utilizzare il backup automatico, seleziona file di backup validi.</string>
   <string name="no_file_selected">Nessun file selezionato</string>
   <string name="action_select_file">Seleziona file</string>
   <string name="backup_use_default_files">Utilizza i file di backup predefiniti</string>
@@ -428,8 +428,6 @@
   <string name="notification_release_earlier_hour">1 ora prima</string>
   <!-- Legacy Widgets -->
   <string name="smallwidget">SeriesGuide (piccolo)</string>
-  <string name="bigwidget">SeriesGuide (medio)</string>
-  <string name="largewidget">SeriesGuide (grande)</string>
   <!-- List Widget -->
   <string name="hide_watched">Nascondi episodi già visti</string>
   <string name="pref_widget_opacity">Sfondo widget</string>
@@ -462,7 +460,6 @@
   <string name="subscription_failed">Acquisto non completato.</string>
   <string name="pass_unavailable">X Pass non è al momento disponibile.</string>
   <!-- Extensions -->
-  <string name="extensions">Estensioni</string>
   <string name="action_extensions_configure">Personalizza le estensioni</string>
   <string name="action_extensions_add">Aggiungi un\'estensione</string>
   <string name="action_extensions_limit">Acquista X per ottenere più estensioni</string>
@@ -478,4 +475,13 @@
   <string name="description_extension_web_search">Ricerca di siti Web e immagini</string>
   <!-- People -->
   <string name="person_biography">Biografia</string>
+  <!-- Feedback -->
+  <string name="feedback_question_enjoy">Ti stai divertendo con SeriesGuide?</string>
+  <string name="feedback_action_yes">Si!</string>
+  <string name="feedback_action_notreally">Non proprio</string>
+  <string name="feedback_question_rate_google">Vuoi valutarlo su Google Play?</string>
+  <string name="feedback_question_rate_amazon">Vuoi valutarlo su Amazon?</string>
+  <string name="feedback_question_feedback">Vuoi dirmi come migliorarlo?</string>
+  <string name="feedback_action_ok">OK, sicuro</string>
+  <string name="feedback_action_nothanks">No, grazie</string>
 </resources>

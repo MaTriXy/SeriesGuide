@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="Theme" />
 
@@ -64,13 +64,13 @@
         <item name="sgColorBackgroundDrawer">@color/background_navbar</item>
         <item name="sgColorNavDrawerIcon">@color/nav_drawer_icon_sg</item>
         <item name="sgColorNavDrawerText">@color/nav_drawer_text_sg</item>
+        <item name="sgColorShadow">@color/protection_dark</item>
 
         <!-- Color Arrays -->
         <item name="colorsProgressBar">@array/progressBarColors</item>
 
         <!-- Drawables -->
         <item name="drawableAddIcon">@drawable/ic_action_add</item>
-        <item name="drawableDivider">@drawable/divider</item>
         <item name="drawableStar">@drawable/ic_action_star</item>
         <item name="drawableStar0">@drawable/ic_action_star_outline</item>
         <item name="drawableCancel">@drawable/ic_action_cancel</item>
@@ -78,6 +78,7 @@
         <item name="drawableArrowRight">@drawable/ic_arrow_forward_white_24dp</item>
         <item name="drawableDropdown">@drawable/ic_action_contextmenu</item>
         <item name="drawableCheckin">@drawable/ic_action_checkin</item>
+        <item name="drawableComments">@drawable/ic_forum_white_24dp</item>
         <item name="drawableWatch">@drawable/ic_action_tick</item>
         <item name="drawableWatchAll">@drawable/ic_action_watch_all</item>
         <item name="drawableWatched">@drawable/ic_ticked</item>
@@ -89,14 +90,10 @@
         <item name="drawableWatchSkipped">@drawable/ic_action_watch_skipped</item>
         <item name="drawableTraktHeart">@drawable/trakt_heart</item>
         <item name="drawableAddShow">@drawable/ic_action_new_show</item>
+        <item name="drawableLanguage">@drawable/ic_language_white_24dp</item>
         <item name="drawableLink">@drawable/ic_action_link</item>
         <item name="drawableList">@drawable/ic_action_list</item>
-        <item name="drawableMovie">@drawable/ic_action_movie</item>
         <item name="drawableShare">@drawable/ic_action_share</item>
-        <item name="drawableStats">@drawable/ic_action_bargraph</item>
-        <item name="drawableTv">@drawable/ic_action_tv</item>
-        <item name="drawableSettings">@drawable/ic_action_settings</item>
-        <item name="drawableHelp">@drawable/ic_action_help</item>
         <item name="drawableBackgroundGradient">@drawable/background_gradient</item>
 
     </style>
@@ -152,13 +149,13 @@
         <item name="sgColorBackgroundDrawer">@color/background_navbar</item>
         <item name="sgColorNavDrawerIcon">@color/nav_drawer_icon_dark</item>
         <item name="sgColorNavDrawerText">@color/nav_drawer_text_dark</item>
+        <item name="sgColorShadow">@color/protection_dark</item>
 
         <!-- Color Arrays -->
         <item name="colorsProgressBar">@array/progressBarColorsAndroidDark</item>
 
         <!-- Drawables -->
         <item name="drawableAddIcon">@drawable/ic_action_add</item>
-        <item name="drawableDivider">@drawable/divider</item>
         <item name="drawableStar">@drawable/ic_action_star</item>
         <item name="drawableStar0">@drawable/ic_action_star_outline</item>
         <item name="drawableCancel">@drawable/ic_action_cancel</item>
@@ -166,6 +163,7 @@
         <item name="drawableArrowRight">@drawable/ic_arrow_forward_white_24dp</item>
         <item name="drawableDropdown">@drawable/ic_action_contextmenu</item>
         <item name="drawableCheckin">@drawable/ic_action_checkin</item>
+        <item name="drawableComments">@drawable/ic_forum_white_24dp</item>
         <item name="drawableWatch">@drawable/ic_action_tick</item>
         <item name="drawableWatchAll">@drawable/ic_action_watch_all</item>
         <item name="drawableWatched">@drawable/ic_ticked</item>
@@ -177,14 +175,10 @@
         <item name="drawableWatchSkipped">@drawable/ic_action_watch_skipped</item>
         <item name="drawableTraktHeart">@drawable/trakt_heart</item>
         <item name="drawableAddShow">@drawable/ic_action_new_show</item>
+        <item name="drawableLanguage">@drawable/ic_language_white_24dp</item>
         <item name="drawableLink">@drawable/ic_action_link</item>
         <item name="drawableList">@drawable/ic_action_list</item>
-        <item name="drawableMovie">@drawable/ic_action_movie</item>
         <item name="drawableShare">@drawable/ic_action_share</item>
-        <item name="drawableStats">@drawable/ic_action_bargraph</item>
-        <item name="drawableTv">@drawable/ic_action_tv</item>
-        <item name="drawableSettings">@drawable/ic_action_settings</item>
-        <item name="drawableHelp">@drawable/ic_action_help</item>
         <item name="drawableBackgroundGradient">@drawable/background_gradient</item>
 
     </style>
@@ -252,13 +246,13 @@
         <item name="sgColorBackgroundDrawer">@color/background_navbar_inverse</item>
         <item name="sgColorNavDrawerIcon">@color/nav_drawer_icon_sg_light</item>
         <item name="sgColorNavDrawerText">@color/nav_drawer_text_sg_light</item>
+        <item name="sgColorShadow">@color/protection_light</item>
 
         <!-- Color Arrays -->
         <item name="colorsProgressBar">@array/progressBarColors</item>
 
         <!-- Drawables -->
         <item name="drawableAddIcon">@drawable/ic_action_add_inverse</item>
-        <item name="drawableDivider">@drawable/divider_light</item>
         <item name="drawableStar">@drawable/ic_action_star_inverse</item>
         <item name="drawableStar0">@drawable/ic_action_star_outline_inverse</item>
         <item name="drawableCancel">@drawable/ic_action_cancel_inverse</item>
@@ -266,6 +260,7 @@
         <item name="drawableArrowRight">@drawable/ic_arrow_forward_grey600_24dp</item>
         <item name="drawableDropdown">@drawable/ic_action_contextmenu_light</item>
         <item name="drawableCheckin">@drawable/ic_action_checkin_inverse</item>
+        <item name="drawableComments">@drawable/ic_forum_black_24dp</item>
         <item name="drawableWatch">@drawable/ic_action_tick_inverse</item>
         <item name="drawableWatchAll">@drawable/ic_action_watch_all_inverse</item>
         <item name="drawableWatched">@drawable/ic_ticked</item>
@@ -277,14 +272,10 @@
         <item name="drawableWatchSkipped">@drawable/ic_action_watch_skipped_inverse</item>
         <item name="drawableTraktHeart">@drawable/trakt_heart_inverse</item>
         <item name="drawableAddShow">@drawable/ic_action_new_show_inverse</item>
+        <item name="drawableLanguage">@drawable/ic_language_black_24dp</item>
         <item name="drawableLink">@drawable/ic_action_link_inverse</item>
         <item name="drawableList">@drawable/ic_action_list_inverse</item>
-        <item name="drawableMovie">@drawable/ic_action_movie_inverse</item>
         <item name="drawableShare">@drawable/ic_action_share_inverse</item>
-        <item name="drawableStats">@drawable/ic_action_bargraph_inverse</item>
-        <item name="drawableTv">@drawable/ic_action_tv_inverse</item>
-        <item name="drawableSettings">@drawable/ic_action_settings_inverse</item>
-        <item name="drawableHelp">@drawable/ic_action_help_inverse</item>
         <item name="drawableBackgroundGradient">@drawable/background_gradient_light</item>
 
     </style>
@@ -347,5 +338,9 @@
     <style name="Theme.SeriesGuide.DarkBlue.Immersive" />
 
     <style name="Theme.SeriesGuide.Light.Immersive" />
+
+    <style name="ThemeOverlay.WhiteAccent" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="colorAccent">@color/white</item>
+    </style>
 
 </resources>

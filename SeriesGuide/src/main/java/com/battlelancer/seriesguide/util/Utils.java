@@ -1,23 +1,8 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.util;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
@@ -32,17 +17,24 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.AnyRes;
 import android.support.annotation.AttrRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.util.Base64;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -58,17 +50,23 @@ import com.battlelancer.seriesguide.service.NotificationService;
 import com.battlelancer.seriesguide.service.OnAlarmReceiver;
 import com.battlelancer.seriesguide.settings.AdvancedSettings;
 import com.battlelancer.seriesguide.settings.UpdateSettings;
-import com.battlelancer.seriesguide.thetvdbapi.TheTVDB;
+import com.battlelancer.seriesguide.thetvdbapi.TvdbTools;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.uwetrottmann.androidutils.AndroidUtils;
 import java.io.File;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import retrofit2.Response;
 import timber.log.Timber;
 
 /**
  * Various generic helper methods that do not fit other tool categories.
  */
 public class Utils {
+
+    private static Mac sha256_hmac;
 
     private Utils() {
         // prevent instantiation
@@ -77,8 +75,8 @@ public class Utils {
     public static String getVersion(Context context) {
         String version;
         try {
-            version = context.getPackageManager().getPackageInfo(context.getPackageName(),
-                    PackageManager.GET_META_DATA).versionName;
+            version = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (NameNotFoundException e) {
             version = "UnknownVersion";
         }
@@ -210,6 +208,14 @@ public class Utils {
                 bottom != 0 ? ContextCompat.getDrawable(context, bottom) : null);
     }
 
+    public static void setVectorCompoundDrawable(Resources.Theme theme, Button button,
+            @AttrRes int vectorAttr) {
+        int vectorResId = Utils.resolveAttributeToResourceId(theme, vectorAttr);
+        VectorDrawableCompat drawable = VectorDrawableCompat.create(button.getResources(),
+                vectorResId, theme);
+        Utils.setCompoundDrawablesRelativeWithIntrinsicBounds(button, drawable, null, null, null);
+    }
+
     /**
      * Sets the Drawables (if any) to appear to the start of, above, to the end of, and below the
      * text.  Use null if you do not want a Drawable there. The Drawables' bounds will be set to
@@ -279,6 +285,10 @@ public class Utils {
         }
     }
 
+    public static void setMenuItemActiveString(@NonNull MenuItem item) {
+        item.setTitle(item.getTitle() + " ◀");
+    }
+
     /**
      * Clear all files in files directory on external storage.
      */
@@ -301,9 +311,12 @@ public class Utils {
     /**
      * Tries to load the given TVDb show poster into the given {@link android.widget.ImageView}
      * without any resizing or cropping.
+     *
+     * @param context {@link Context#getApplicationContext() context.getApplicationContext()} will
+     * be used.
      */
     public static void loadPoster(Context context, ImageView imageView, String posterPath) {
-        ServiceUtils.loadWithPicasso(context, TheTVDB.buildPosterUrl(posterPath))
+        ServiceUtils.loadWithPicasso(context, TvdbTools.buildPosterUrl(posterPath))
                 .noFade()
                 .into(imageView);
     }
@@ -311,8 +324,11 @@ public class Utils {
     /**
      * Tries to load the given TVDb show poster into the given {@link ImageView} without any
      * resizing or cropping. In addition sets alpha on the view.
+     *
+     * @param context {@link Context#getApplicationContext() context.getApplicationContext()} will
+     * be used.
      */
-    public static void loadPosterBackground(Context context, ImageView imageView,
+    public static void loadPosterBackground(Context context, @NonNull ImageView imageView,
             String posterPath) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             imageView.setImageAlpha(30);
@@ -331,12 +347,72 @@ public class Utils {
      *
      * <p>The resize dimensions are those used for posters in the show list and change depending on
      * screen size.
+     *
+     * @param context {@link Context#getApplicationContext() context.getApplicationContext()} will
+     * be used.
      */
     public static void loadTvdbShowPoster(Context context, ImageView imageView, String posterPath) {
         ServiceUtils.loadWithPicasso(context,
-                TextUtils.isEmpty(posterPath) ? null : TheTVDB.buildPosterUrl(posterPath))
+                TextUtils.isEmpty(posterPath) ? null : TvdbTools.buildPosterUrl(posterPath))
                 .centerCrop()
                 .resizeDimen(R.dimen.show_poster_width, R.dimen.show_poster_height)
+                .error(R.drawable.ic_image_missing)
+                .into(imageView);
+    }
+
+    /**
+     * Loads the TheTVDB poster via our image proxy + caching server to reduce load on TheTVDB's
+     * image server.
+     */
+    public static void loadTvdbShowPosterFromCache(Context context, ImageView imageView,
+            String posterPath) {
+        String posterUrl;
+        if (TextUtils.isEmpty(posterPath)) {
+            posterUrl = null;
+        } else {
+            posterUrl = TvdbTools.buildPosterUrl(posterPath);
+            String mac = encode(BuildConfig.IMAGE_CACHE_SECRET, posterUrl);
+            if (mac != null) {
+                posterUrl = String.format("%s/s%s/%s", BuildConfig.IMAGE_CACHE_URL, mac, posterUrl);
+            } else {
+                posterUrl = null;
+            }
+        }
+
+        ServiceUtils.loadWithPicasso(context, posterUrl)
+                .centerCrop()
+                .resizeDimen(R.dimen.show_poster_width, R.dimen.show_poster_height)
+                .error(R.drawable.ic_image_missing)
+                .into(imageView);
+    }
+
+    @Nullable
+    public static synchronized String encode(String key, String data) {
+        try {
+            if (sha256_hmac == null) {
+                sha256_hmac = Mac.getInstance("HmacSHA256");
+                SecretKeySpec secret_key = new SecretKeySpec(key.getBytes(), "HmacSHA256");
+                sha256_hmac.init(secret_key);
+            }
+
+            return Base64.encodeToString(sha256_hmac.doFinal(data.getBytes()),
+                    Base64.NO_WRAP | Base64.URL_SAFE);
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            Timber.e(e, "Signing image URL failed.");
+            return null;
+        }
+    }
+
+    /**
+     * @param context {@link Context#getApplicationContext() context.getApplicationContext()} will
+     * be used.
+     */
+    public static void loadAndFitTvdbShowPoster(Context context, ImageView imageView,
+            String posterPath) {
+        ServiceUtils.loadWithPicasso(context,
+                TextUtils.isEmpty(posterPath) ? null : TvdbTools.buildPosterUrl(posterPath))
+                .fit()
+                .centerCrop()
                 .error(R.drawable.ic_image_missing)
                 .into(imageView);
     }
@@ -347,13 +423,15 @@ public class Utils {
      * (ensure image view is set to center inside).
      *
      * <p>The resize dimensions are fixed for all screen sizes. E.g. for items using the show list
-     * layout, use {@link #loadTvdbShowPoster(android.content.Context, android.widget.ImageView,
-     * String)}.
+     * layout, use {@link #loadTvdbShowPoster(Context, ImageView, String)}.
+     *
+     * @param context {@link Context#getApplicationContext() context.getApplicationContext()} will
+     * be used.
      */
     public static void loadSmallPoster(Context context, ImageView imageView, String posterUrl) {
         ServiceUtils.loadWithPicasso(context, posterUrl)
                 .centerCrop()
-                .resizeDimen(R.dimen.show_poster_small_width, R.dimen.show_poster_small_height)
+                .resizeDimen(R.dimen.show_poster_width_default, R.dimen.show_poster_height_default)
                 .error(R.drawable.ic_image_missing)
                 .into(imageView);
     }
@@ -364,16 +442,7 @@ public class Utils {
     public static void loadSmallTvdbShowPoster(Context context, ImageView imageView,
             String posterPath) {
         loadSmallPoster(context, imageView,
-                TextUtils.isEmpty(posterPath) ? null : TheTVDB.buildPosterUrl(posterPath));
-    }
-
-    /**
-     * Track a screen view. This is commonly called in {@link android.support.v4.app.Fragment#onStart()}.
-     */
-    public static void trackView(Context context, String screenName) {
-        Tracker tracker = Analytics.getTracker(context);
-        tracker.setScreenName(screenName);
-        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+                TextUtils.isEmpty(posterPath) ? null : TvdbTools.buildPosterUrl(posterPath));
     }
 
     /**
@@ -382,10 +451,10 @@ public class Utils {
      * {@link #trackClick(android.content.Context, String, String)} trackers. Commonly important
      * status information.
      */
-    public static void trackCustomEvent(Context context, String tag, String action,
+    public static void trackCustomEvent(@NonNull Context context, String category, String action,
             String label) {
         Analytics.getTracker(context).send(new HitBuilders.EventBuilder()
-                .setCategory(tag)
+                .setCategory(category)
                 .setAction(action)
                 .setLabel(label)
                 .build());
@@ -394,9 +463,9 @@ public class Utils {
     /**
      * Track an action event, e.g. when an action item is clicked.
      */
-    public static void trackAction(Context context, String tag, String label) {
+    public static void trackAction(Context context, String category, String label) {
         Analytics.getTracker(context).send(new HitBuilders.EventBuilder()
-                .setCategory(tag)
+                .setCategory(category)
                 .setAction("Action Item")
                 .setLabel(label)
                 .build());
@@ -405,9 +474,9 @@ public class Utils {
     /**
      * Track a context menu event, e.g. when a context item is clicked.
      */
-    public static void trackContextMenu(Context context, String tag, String label) {
+    public static void trackContextMenu(Context context, String category, String label) {
         Analytics.getTracker(context).send(new HitBuilders.EventBuilder()
-                .setCategory(tag)
+                .setCategory(category)
                 .setAction("Context Item")
                 .setLabel(label)
                 .build());
@@ -417,12 +486,29 @@ public class Utils {
      * Track a generic click that does not fit {@link #trackAction(android.content.Context, String,
      * String)} or {@link #trackContextMenu(android.content.Context, String, String)}.
      */
-    public static void trackClick(Context context, String tag, String label) {
+    public static void trackClick(Context context, String category, String label) {
         Analytics.getTracker(context).send(new HitBuilders.EventBuilder()
-                .setCategory(tag)
+                .setCategory(category)
                 .setAction("Click")
                 .setLabel(label)
                 .build());
+    }
+
+    public static void trackFailedRequest(Context context, String category, String action,
+            Response response) {
+        Utils.trackCustomEvent(context, category, action,
+                response.code() + " " + response.message());
+        // log like "action: 404 not found"
+        Timber.tag(category);
+        Timber.e("%s: %s %s", action, response.code(), response.message());
+    }
+
+    public static void trackFailedRequest(Context context, String category, String action,
+            Throwable throwable) {
+        Utils.trackCustomEvent(context, category, action, throwable.getMessage());
+        // log like "action: Unable to resolve host"
+        Timber.tag(category);
+        Timber.e(throwable, "%s: %s", action, throwable.getMessage());
     }
 
     /**
@@ -524,6 +610,30 @@ public class Utils {
         return handled;
     }
 
+    public static void startActivityWithAnimation(Activity activity, Intent intent, View view) {
+        ActivityCompat.startActivity(activity, intent,
+                ActivityOptionsCompat
+                        .makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight())
+                        .toBundle()
+        );
+    }
+
+    public static void startActivityWithTransition(Activity activity, Intent intent, View view,
+            @StringRes int sharedElementNameRes) {
+        Bundle activityOptions;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // shared element transition on L+
+            activityOptions = ActivityOptions.makeSceneTransitionAnimation(activity, view,
+                    activity.getString(sharedElementNameRes)).toBundle();
+        } else {
+            // simple scale up animation pre-L
+            activityOptions = ActivityOptionsCompat
+                    .makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight())
+                    .toBundle();
+        }
+        ActivityCompat.startActivity(activity, intent, activityOptions);
+    }
+
     /**
      * Resolves the given attribute to the resource id for the given theme.
      */
@@ -538,12 +648,12 @@ public class Utils {
     /**
      * Tries to start a new activity to handle the given URL using {@link #openNewDocument}.
      */
-    public static void launchWebsite(@Nullable Context context, @Nullable String url) {
+    public static boolean launchWebsite(@Nullable Context context, @Nullable String url) {
         if (context == null || TextUtils.isEmpty(url)) {
-            return;
+            return false;
         }
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        openNewDocument(context, intent, null, null);
+        return openNewDocument(context, intent, null, null);
     }
 
     /**
@@ -565,7 +675,7 @@ public class Utils {
      * <p>On versions before L, will instead clear the launched activity from the task stack when
      * returning to the app through the task switcher.
      */
-    public static void openNewDocument(@NonNull Context context, @NonNull Intent intent,
+    public static boolean openNewDocument(@NonNull Context context, @NonNull Intent intent,
             @Nullable String logTag, @Nullable String logItem) {
         // launch as a new document (separate entry in task switcher)
         // or on older versions: clear from task stack when returning to app
@@ -576,11 +686,13 @@ public class Utils {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         }
 
-        Utils.tryStartActivity(context, intent, true);
+        boolean handled = Utils.tryStartActivity(context, intent, true);
 
         if (logTag != null && logItem != null) {
             Utils.trackAction(context, logTag, logItem);
         }
+
+        return handled;
     }
 
     /**

@@ -12,7 +12,6 @@
   <string name="help_and_feedback">Hjälp &amp; feedback</string>
   <string name="drawer_open">Öppna navigeringslåda
 </string>
-  <string name="drawer_close">Stäng navigeringslåda</string>
   <!-- Media items -->
   <string name="show">Serie</string>
   <string name="episode">Avsnitt</string>
@@ -34,7 +33,10 @@
   <string name="action_display_all">Visa alla</string>
   <string name="web_search">Webbsökning</string>
   <string name="add_to_homescreen">Genväg</string>
-  <string name="action_open">Open</string>
+  <string name="action_open">Öppna</string>
+  <string name="sync_manually">Sync manually</string>
+  <string name="sync_and_update">Sync &amp; Update</string>
+  <string name="sync_and_download_all">Sync &amp; Download all</string>
   <!-- Search -->
   <string name="clear_search_history">Rensa sökhistorik</string>
   <string name="search_hint">Sök avsnitt</string>
@@ -47,6 +49,8 @@
   <string name="app_not_available">Ingen app tillgänglig för att hantera detta.</string>
   <string name="people_empty">Ingen här? Tryck för att försöka igen.</string>
   <string name="database_error">Kunde inte modifiera data.</string>
+  <string name="reinstall_info">Try to backup in Settings, re-install and restore.</string>
+  <string name="api_error_generic">Could not talk to %s. Try again later.</string>
   <!-- Sharing -->
   <string name="share">Dela</string>
   <string name="share_show">Dela serie</string>
@@ -55,6 +59,7 @@
   <string name="share_checkout">Kolla in %s</string>
   <string name="addtocalendar">Lägg till i kalendern</string>
   <string name="addtocalendar_failed">Kan inte lägga till i kalendern. </string>
+  <string name="links">Länkar</string>
   <!-- Comments -->
   <string name="comments">Kommentarer</string>
   <string name="shout_hint">Skriv en kommentar (engelska, 5+ ord)</string>
@@ -73,11 +78,9 @@
   <string name="episode_firstaired">Releasedatum</string>
   <string name="episode_firstaired_unknown">Releasedatum okänt</string>
   <string name="episode_dvdnumber">DVD-avsnitt</string>
-  <string name="show_actors">Skådespelare</string>
   <string name="original_release">Ursprunglig release</string>
   <string name="show_on_network">på %s</string>
   <string name="show_genres">Genrer</string>
-  <string name="show_runtime">Speltid</string>
   <string name="show_contentrating">Åldersgräns</string>
   <string name="show_release_times">Visa publiceringstider</string>
   <string name="episode_directors">Regissörer</string>
@@ -86,10 +89,9 @@
   <string name="show_isalive">Fortsätter</string>
   <string name="show_isnotalive">Avslutad</string>
   <string name="lastEdit">Senast redigerad // TVDb</string>
-  <string name="services_watch">Titta på</string>
-  <string name="services_more">Mer</string>
   <string name="no_translation">Det finns ingen beskrivning översatt till %1$s tillgänglig på %2$s.</string>
-  <string name="no_translation_title">Not translated</string>
+  <string name="no_translation_title">Inte översatt</string>
+  <string name="no_spoilers">Vissa detaljer är dolda för att undvika spoilers. För att stänga av detta, gå till inställningar.</string>
   <!-- Date and Time -->
   <string name="today">idag</string>
   <string name="now">nu</string>
@@ -132,10 +134,11 @@
   <string name="action_shows_filter_hidden">Dolda</string>
   <string name="action_shows_sort">Sortera serier</string>
   <string name="action_shows_sort_title">Titel</string>
-  <string name="action_shows_sort_episode">Nästa avsnitt</string>
+  <string name="action_shows_sort_latest_episode">Latest episode</string>
+  <string name="action_shows_sort_oldest_episode">Oldest episode</string>
+  <string name="action_shows_sort_last_watched">Last watched</string>
+  <string name="action_shows_sort_remaining">Remaining episodes</string>
   <string name="action_shows_sort_favorites">Favoriter först</string>
-  <string name="updateall_yes">Uppdatera (alla)</string>
-  <string name="menu_update_delta">Uppdatera (gamla)</string>
   <string name="context_updateshow">Uppdatera</string>
   <string name="context_marknext">Sett nästa avsnitt</string>
   <!-- Now -->
@@ -174,7 +177,7 @@
   <string name="no_results">Inga resultat, försök med hela ord.</string>
   <string name="action_try_any_language">Testa alla språk</string>
   <string name="action_try_again">Försök igen</string>
-  <string name="search_error">Sökningen misslyckades, försök igen senare.</string>
+  <string name="tvdb_error_does_not_exist">The show does not exist (yet) on TheTVDB. Try again later.</string>
   <string name="add_all">Lägg till alla</string>
   <string name="add_multiple">Alla serier kommer att visas i din serielista snart.</string>
   <string name="add_started">%s kommer snart att visas i din serielista.</string>
@@ -195,7 +198,7 @@
   <string name="list_empty">Du kan lägga till serier, säsonger eller avsnitt till denna lista.</string>
   <string name="action_lists_sort">Sortera listor</string>
   <string name="action_lists_reorder">Sortera om listor</string>
-  <string name="error_name_already_exists">A list with this name already exists</string>
+  <string name="error_name_already_exists">En lista med det här namnet finns redan</string>
   <!-- Movies -->
   <string name="movies_collection">Samling</string>
   <string name="movies_watchlist">Bevakningslista</string>
@@ -213,6 +216,7 @@
   <string name="action_movies_sort_title">Titel</string>
   <string name="action_movies_sort_release">Releasedatum</string>
   <!-- Statistics -->
+  <string name="statistics_failed">Gick inte att beräkna statistik.</string>
   <string name="statistics_shows">serier</string>
   <string name="statistics_episodes">avsnitt</string>
   <string name="statistics_movies">filmer</string>
@@ -238,7 +242,7 @@
   <string name="hexagon_warning">Experimentell!</string>
   <string name="hexagon_description">Anslut till molnet för att säkerhetskopiera och synkronisera dina serier och filmer.</string>
   <string name="hexagon_warning_lists">Listor ingår inte.</string>
-  <string name="hexagon_warning_trakt">När du använder SeriesGuide Cloud synkroniseras inte ändringarna på trakt till SeriesGuide.</string>
+  <string name="hexagon_warning_trakt">Medan SeriesGuide Cloud är ansluten, kommer trakt sync att inaktiveras.</string>
   <string name="hexagon_signin">Logga in</string>
   <string name="hexagon_signed_in">Du är ansluten till SeriesGuide Cloud.</string>
   <string name="hexagon_signout">Logga ut</string>
@@ -248,7 +252,6 @@
   <string name="hexagon_remove_account_success">Konto utplånat.</string>
   <string name="hexagon_remove_account_failure">Kunde inte ta bort konto.</string>
   <string name="hexagon_remove_account_confirmation">Att ta bort ditt konto kommer även att radera alla serier och filmer från SeriesGuide Cloud. Se till att ta bort det även på andra anslutna enheter.</string>
-  <string name="hexagon_api_error">Kunde inte kommunicera med SeriesGuide Cloud. Försök igen senare.</string>
   <string name="hexagon_api_queued">Skickar till SeriesGuide Cloud.</string>
   <string name="hexagon_permission_missing">För att använda SeriesGuide Cloud behöver du tillåta åtkomst till dina kontakter.</string>
   <string name="hexagon_google_play_missing">För att använda SeriesGuide Cloud krävs Google Play-tjänster.</string>
@@ -265,7 +268,6 @@
   <string name="traktcheckin_wait">Jag väntar</string>
   <string name="trakt_success">Skickat till trakt.</string>
   <string name="trakt_error_credentials">Något gick fel. Vänligen kontrollera dina uppgifter och försök igen.</string>
-  <string name="trakt_error_general">Kunde inte kommunicera med trakt. Försök igen senare.</string>
   <string name="trakt_error_not_exists">Inte (än) tillgänglig på trakt. Försök igen senare.</string>
   <string name="trakt_notice_not_exists">Kan inte (än) följas med trakt.</string>
   <!-- Connect trakt -->
@@ -321,14 +323,13 @@
   <string name="pref_onlyseasonepssummary">Specialavsnitt döljs överallt utom i säsongslistan</string>
   <string name="pref_exactdates">Visa exakt datum</string>
   <string name="pref_exactdates_summary">\"31 oktober\" istället för \"om 3 dagar\"</string>
+  <string name="pref_nospoilers">Förhindra spoilers</string>
+  <string name="pref_nospoilers_summary">Dölj detaljer tills ett avsnitt har setts</string>
   <string name="pref_seasonsorting">Sortera säsonger efter&#8230;</string>
   <string name="pref_episodesorting">Sortera avsnitt efter&#8230;</string>
   <string name="pref_language">Innehållsspråk som föredras</string>
   <string name="pref_updatewifionly">Endast bilder via Wi-Fi</string>
   <string name="pref_updatewifionlysummary">To reduce data charges, don\'t download over mobile or metered networks</string>
-  <string name="about">Om SeriesGuide</string>
-  <string name="pref_autoaddshows">Lägg till nya trakt-serier</string>
-  <string name="pref_autoaddshowssummary">Lägg automatiskt till program från din trakt activity stream</string>
   <!-- About screen -->
   <string name="licence_tvdb">Den här appen använder data och bilder från TheTVDB under licensen CC BY-NC 4.0.</string>
   <string name="licence_themoviedb">Denna produkt använder TMDb:s API men är inte godkänd eller certifierad av TMDb.</string>
@@ -363,8 +364,7 @@
   <string name="pref_theme">Tema</string>
   <!-- Other advanced settings -->
   <string name="pref_other">Övrigt</string>
-  <string name="pref_autoupdate">Aktivera automatisk uppdatering</string>
-  <string name="pref_autoupdatesummary">Uppdatera dina serier regelbundet</string>
+  <string name="pref_autoupdatesummary">Automatically sync and update SeriesGuide data</string>
   <string name="pref_autobackup">Automatisk säkerhetskopiering</string>
   <string name="pref_autobackupsummary">Veckovis säkerhetskopiering av dina serier, listor och filmer</string>
   <string name="backup">Säkerhetskopiera/återställ</string>
@@ -374,7 +374,7 @@
   <string name="pref_offsetsummary">Förskjut sändningstiden med %s timmar</string>
   <string name="clear_cache">Töm bildcache</string>
   <string name="clear_cache_summary">Ta bort alla cachade bilder från enheten</string>
-  <string name="pref_ganalyticssummary">Mäter användningen av funktioner för att förbättra SeriesGuide</string>
+  <string name="pref_ganalyticssummary">Skicka anonym användardata till Googles tjänster</string>
   <!-- Backup and Restore -->
   <string name="backup_full_dump">Inkludera all metadata som beskrivningar, skådespelare och betyg.</string>
   <string name="backup_path">Mapp för säkerhetskopia</string>
@@ -429,8 +429,6 @@
   <string name="notification_release_earlier_hour">en timme i förväg</string>
   <!-- Legacy Widgets -->
   <string name="smallwidget">SeriesGuide (liten)</string>
-  <string name="bigwidget">SeriesGuide (mellan)</string>
-  <string name="largewidget">SeriesGuide (stor)</string>
   <!-- List Widget -->
   <string name="hide_watched">Dölj sedda avsnitt</string>
   <string name="pref_widget_opacity">Widgetbakgrund </string>
@@ -463,7 +461,6 @@
   <string name="subscription_failed">Köp ej slutfört.</string>
   <string name="pass_unavailable">X Pass är för tillfället otillgängligt.</string>
   <!-- Extensions -->
-  <string name="extensions">Tillägg</string>
   <string name="action_extensions_configure">Anpassa tillägg</string>
   <string name="action_extensions_add">Lägg till tillägg</string>
   <string name="action_extensions_limit">Skaffa X för att lägga till fler tillägg</string>
@@ -479,4 +476,13 @@
   <string name="description_extension_web_search">Sök efter webbplatser och bilder</string>
   <!-- People -->
   <string name="person_biography">Biografi</string>
+  <!-- Feedback -->
+  <string name="feedback_question_enjoy">Gillar du SeriesGuide?</string>
+  <string name="feedback_action_yes">Ja!</string>
+  <string name="feedback_action_notreally">Inte riktigt</string>
+  <string name="feedback_question_rate_google">Betygsätt det på Google Play?</string>
+  <string name="feedback_question_rate_amazon">Betygsätt det på Amazon?</string>
+  <string name="feedback_question_feedback">Berätta för mig hur man kan förbättra det?</string>
+  <string name="feedback_action_ok">OK, visst</string>
+  <string name="feedback_action_nothanks">Nej, tack</string>
 </resources>

@@ -11,7 +11,6 @@
   <string name="help">Ajutor</string>
   <string name="help_and_feedback">Ajutor și feedback</string>
   <string name="drawer_open">Deschide sertarul de navigare</string>
-  <string name="drawer_close">Închide sertarul de navigare</string>
   <!-- Media items -->
   <string name="show">Emisiune</string>
   <string name="episode">Episod</string>
@@ -34,6 +33,9 @@
   <string name="web_search">Căutare pe web</string>
   <string name="add_to_homescreen">Scurtătură</string>
   <string name="action_open">Open</string>
+  <string name="sync_manually">Sync manually</string>
+  <string name="sync_and_update">Sync &amp; Update</string>
+  <string name="sync_and_download_all">Sync &amp; Download all</string>
   <!-- Search -->
   <string name="clear_search_history">Ștergere istoric căutare</string>
   <string name="search_hint">Căutaţi episoade</string>
@@ -44,8 +46,10 @@
   <string name="unknown">necunoscut</string>
   <string name="offline">Conectați-vă la o rețea, apoi încercați din nou.</string>
   <string name="app_not_available">Nu exista aplicatii instalate pentru a utiliza aceasta actiune.</string>
-  <string name="people_empty">Nimeni aici?! Apăsați să încercați din nou. </string>
+  <string name="people_empty">Nimeni aici?! Apăsați să încercați din nou.</string>
   <string name="database_error">Datele nu pot fi modificate.</string>
+  <string name="reinstall_info">Try to backup in Settings, re-install and restore.</string>
+  <string name="api_error_generic">Could not talk to %s. Try again later.</string>
   <!-- Sharing -->
   <string name="share">Distribuie</string>
   <string name="share_show">Distribuie emisiunea</string>
@@ -54,6 +58,7 @@
   <string name="share_checkout">Verifica %s</string>
   <string name="addtocalendar">Adăugați la calendar</string>
   <string name="addtocalendar_failed">Nu puteţi crea evenimentul în calendar.</string>
+  <string name="links">Links</string>
   <!-- Comments -->
   <string name="comments">Comentarii</string>
   <string name="shout_hint">Scrieți un comentariu (engleză, 5+ cuvinte)</string>
@@ -73,11 +78,9 @@
   <string name="episode_firstaired">Data de lansare</string>
   <string name="episode_firstaired_unknown">Data de lansare necunoscută</string>
   <string name="episode_dvdnumber">Episod DVD</string>
-  <string name="show_actors">Actori</string>
   <string name="original_release">Release original</string>
   <string name="show_on_network">pe %s</string>
   <string name="show_genres">Genuri</string>
-  <string name="show_runtime">Durata</string>
   <string name="show_contentrating">Punctajul conţinutului</string>
   <string name="show_release_times">Ora de lansare</string>
   <string name="episode_directors">Regizori</string>
@@ -86,10 +89,9 @@
   <string name="show_isalive">Continuă</string>
   <string name="show_isnotalive">Terminat</string>
   <string name="lastEdit">Ultima editare//TVDb</string>
-  <string name="services_watch">Vezi</string>
-  <string name="services_more">Mai mult</string>
   <string name="no_translation">There is no description translated to %1$s available at %2$s.</string>
   <string name="no_translation_title">Not translated</string>
+  <string name="no_spoilers">Some details are hidden to prevent spoilers. To turn this off go to Settings.</string>
   <!-- Date and Time -->
   <string name="today">astăzi</string>
   <string name="now">acum</string>
@@ -132,10 +134,11 @@
   <string name="action_shows_filter_hidden">Ascunse</string>
   <string name="action_shows_sort">Sortați serialele</string>
   <string name="action_shows_sort_title">Titlu</string>
-  <string name="action_shows_sort_episode">Următorul episod</string>
+  <string name="action_shows_sort_latest_episode">Latest episode</string>
+  <string name="action_shows_sort_oldest_episode">Oldest episode</string>
+  <string name="action_shows_sort_last_watched">Last watched</string>
+  <string name="action_shows_sort_remaining">Remaining episodes</string>
   <string name="action_shows_sort_favorites">Favoritele primele</string>
-  <string name="updateall_yes">Actualizează (toate)</string>
-  <string name="menu_update_delta">Actualizează (doar pe cele învechite)</string>
   <string name="context_updateshow">Actualizare</string>
   <string name="context_marknext">Episodul următor a fost vizionat</string>
   <!-- Now -->
@@ -174,7 +177,7 @@
   <string name="no_results">Nici un rezultat, încercaţi folosind cuvinte întregi.</string>
   <string name="action_try_any_language">Try any language</string>
   <string name="action_try_again">Try again</string>
-  <string name="search_error">Căutarea nu a reuşit, încercaţi din nou mai târziu.</string>
+  <string name="tvdb_error_does_not_exist">The show does not exist (yet) on TheTVDB. Try again later.</string>
   <string name="add_all">Adaugă-le pe toate</string>
   <string name="add_multiple">Toate emisiunile vor apărea în lista de emisiuni în scurt timp.</string>
   <string name="add_started">%s va apărea în lista de emisiuni în scurt timp.</string>
@@ -213,6 +216,7 @@
   <string name="action_movies_sort_title">Titlu</string>
   <string name="action_movies_sort_release">Data de lansare</string>
   <!-- Statistics -->
+  <string name="statistics_failed">Could not calculate statistics.</string>
   <string name="statistics_shows">Seriale</string>
   <string name="statistics_episodes">Episoade</string>
   <string name="statistics_movies">Filme</string>
@@ -238,10 +242,10 @@
     <item quantity="other">%d minutes</item>
   </plurals>
   <!-- Hexagon -->
-  <string name="hexagon_warning">Experimental!</string>
+  <string name="hexagon_warning">Experimental</string>
   <string name="hexagon_description">Conectează-te la Cloud pentru a arhiva sau a sincroniza emisiunile și filmele.</string>
   <string name="hexagon_warning_lists">Listele nu sunt incluse.</string>
-  <string name="hexagon_warning_trakt">Când folosiți SeriesGuide Cloud, schimbarile pe trakt nu se vor sincroniza în SeriesGuide.</string>
+  <string name="hexagon_warning_trakt">While SeriesGuide Cloud is connected, trakt sync will be disabled.</string>
   <string name="hexagon_signin">Conectare</string>
   <string name="hexagon_signed_in">Sunteți conectați pe SeriesGuide cloud.</string>
   <string name="hexagon_signout">Deconectare</string>
@@ -251,7 +255,6 @@
   <string name="hexagon_remove_account_success">Contul a fost șters.</string>
   <string name="hexagon_remove_account_failure">Nu se poate șterge contul.</string>
   <string name="hexagon_remove_account_confirmation">Ștergerea contului va rezulta în ștergerea emisiunilor și filmelor de pe SeriesGuide Cloud. Asigurați-vă că le veți șterge și de pe celelalte dispozitive.</string>
-  <string name="hexagon_api_error">Comunicare cu SeriesGuide Cloud eșuată. Încearcă mai târziu.</string>
   <string name="hexagon_api_queued">Se trimite către SeriesGuide Cloud.</string>
   <string name="hexagon_permission_missing">Pentru a folosi SeriesGuide Cloud, apermite accesul la conturile tale.</string>
   <string name="hexagon_google_play_missing">Pentru a folosi SeriesGuide Cloud, Google Play Services este necesar.</string>
@@ -268,7 +271,6 @@
   <string name="traktcheckin_wait">Voi aștepta</string>
   <string name="trakt_success">Trimis către trakt.</string>
   <string name="trakt_error_credentials">Ceva a mers prost. Vă rugăm să vă verificaţi acreditările şi să încercaţi din nou.</string>
-  <string name="trakt_error_general">Nu s-a putut comunica cu trakt. Încercați mai tarziu.</string>
   <string name="trakt_error_not_exists">Not (yet) available on trakt. Try again later.</string>
   <string name="trakt_notice_not_exists">Can not (yet) be tracked with trakt.</string>
   <!-- Connect trakt -->
@@ -286,7 +288,7 @@
   <string name="connect_trakt_done_explanation">SeriesGuide va sincroniza emisiunile și filmele de pe dispozitivul acesta cu trakt. Acest lucru poate dura ceva timp.</string>
   <string name="add_trakt_shows">Adaugă emisiuni din biblioteca trakt:</string>
   <string name="show_library">Arată biblioteca dvs. trakt</string>
-  <string name="about_trakt">Trakt ajută la păstrarea unei evidenţe a emisiunilor TV şi a filmelor la care te uiţi.  <a href="http://trakt.tv">Află mai multe</a></string>
+  <string name="about_trakt">trakt ajută la păstrarea unei evidenţe a emisiunilor TV şi a filmelor la care te uiţi. <a href="https://trakt.tv">Află mai multe</a></string>
   <!-- trakt ratings -->
   <string name="action_rate">Evaluare</string>
   <string name="your_rating">Nota ta</string>
@@ -325,14 +327,13 @@
   <string name="pref_onlyseasonepssummary">Episoadele speciale dispar de peste tot, cu excepţia celor din lista sezonului</string>
   <string name="pref_exactdates">Display exact dates</string>
   <string name="pref_exactdates_summary">\"October 31\" instead of \"in 3 days\"</string>
+  <string name="pref_nospoilers">Prevent spoilers</string>
+  <string name="pref_nospoilers_summary">Hide details until an episode is watched</string>
   <string name="pref_seasonsorting">Sortare sezoane după&#8230;</string>
   <string name="pref_episodesorting">Sortare episoade după&#8230;</string>
   <string name="pref_language">Limba preferată</string>
   <string name="pref_updatewifionly">Imaginile se vor încarca doar prin intermediul Wi-Fi</string>
   <string name="pref_updatewifionlysummary">To reduce data charges, don\'t download over mobile or metered networks</string>
-  <string name="about">Despre SeriesGuide</string>
-  <string name="pref_autoaddshows">Adăugați emisiuni trakt</string>
-  <string name="pref_autoaddshowssummary">Adăugați automat emisiunile după activitatea dvs. de pe trakt</string>
   <!-- About screen -->
   <string name="licence_tvdb">Această aplicație folosește date și imagini ale TVDB sub licența CC BY-NC 4.0.</string>
   <string name="licence_themoviedb">Acest produs utilizează API-ul TMDb, dar nu este aprobat sau certificată de TMDb.</string>
@@ -367,8 +368,7 @@
   <string name="pref_theme">Temă</string>
   <!-- Other advanced settings -->
   <string name="pref_other">Alte</string>
-  <string name="pref_autoupdate">Porniţi Actualizarea Automată</string>
-  <string name="pref_autoupdatesummary">Actualizați periodic emisiunile</string>
+  <string name="pref_autoupdatesummary">Automatically sync and update SeriesGuide data</string>
   <string name="pref_autobackup">Backup automat</string>
   <string name="pref_autobackupsummary">Backup săptămânal al serialelor, listelor si filmelor</string>
   <string name="backup">Arhivare/Restaurare</string>
@@ -378,13 +378,13 @@
   <string name="pref_offsetsummary">Compensare timp de difuzare cu %s ore</string>
   <string name="clear_cache">Șterge imaginile din cache</string>
   <string name="clear_cache_summary">Șterge toate imaginile din cache de pe acest dispozitiv</string>
-  <string name="pref_ganalyticssummary">Urmărește utilizarea opțiunilor pentru a ajuta la îmbunătățirea SeriesGuide</string>
+  <string name="pref_ganalyticssummary">Send anonymous usage statistics to a Google service</string>
   <!-- Backup and Restore -->
   <string name="backup_full_dump">Include toate detaliile ca descrieri, actori și evaluări.</string>
   <string name="backup_path">Fișier de arhive</string>
   <string name="backup_version">Versiunea bazei de date</string>
   <string name="backup_failed_file_access">Can\'t backup. A backup file can not be found or accessed.</string>
-  <string name="backup_inprogress">Baza de date se arhivează...</string>
+  <string name="backup_inprogress">Baza de date se arhivează&#8230;</string>
   <string name="backup_success">Arhivare reușită.</string>
   <string name="backup_failed">Arhivare eșuată.</string>
   <string name="import_inprogress">Restaurarea bazei de date&#8230;</string>
@@ -433,8 +433,6 @@
   <string name="notification_release_earlier_hour">o oră în avans</string>
   <!-- Legacy Widgets -->
   <string name="smallwidget">SeriesGuide (mic)</string>
-  <string name="bigwidget">SeriesGuide (mediu)</string>
-  <string name="largewidget">SeriesGuide (mare)</string>
   <!-- List Widget -->
   <string name="hide_watched">Ascundeți episoadele vizionate</string>
   <string name="pref_widget_opacity">Widget fundal</string>
@@ -467,7 +465,6 @@
   <string name="subscription_failed">Plata nu a fost făcută.</string>
   <string name="pass_unavailable">X Pass nu este disponibil momentan.</string>
   <!-- Extensions -->
-  <string name="extensions">Extensii</string>
   <string name="action_extensions_configure">Personalizează extensile</string>
   <string name="action_extensions_add">Adaugă extensie</string>
   <string name="action_extensions_limit">Cumpărați X pentru a adăuga mai multe extensii</string>
@@ -483,4 +480,13 @@
   <string name="description_extension_web_search">Caută site-uri și imagini</string>
   <!-- People -->
   <string name="person_biography">Biografie</string>
+  <!-- Feedback -->
+  <string name="feedback_question_enjoy">Are you enjoying SeriesGuide?</string>
+  <string name="feedback_action_yes">Yes!</string>
+  <string name="feedback_action_notreally">Not really</string>
+  <string name="feedback_question_rate_google">Rate it on Google Play?</string>
+  <string name="feedback_question_rate_amazon">Rate it on Amazon?</string>
+  <string name="feedback_question_feedback">Tell me how to improve it?</string>
+  <string name="feedback_action_ok">OK, sure</string>
+  <string name="feedback_action_nothanks">No, thanks</string>
 </resources>

@@ -1,30 +1,18 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.util;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.format.DateUtils;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract;
+import com.battlelancer.seriesguide.traktapi.SgTrakt;
 import com.uwetrottmann.androidutils.AndroidUtils;
-import com.uwetrottmann.trakt.v2.TraktV2;
-import com.uwetrottmann.trakt.v2.entities.Ratings;
-import retrofit.RetrofitError;
+import com.uwetrottmann.trakt5.entities.Ratings;
+import com.uwetrottmann.trakt5.services.Episodes;
+import com.uwetrottmann.trakt5.services.Shows;
+import dagger.Lazy;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 public class TraktRatingsTask extends AsyncTask<Void, Void, Void> {
@@ -36,98 +24,81 @@ public class TraktRatingsTask extends AsyncTask<Void, Void, Void> {
     private final static android.support.v4.util.LruCache<Long, Long> sCache
             = new android.support.v4.util.LruCache<>(HARD_CACHE_CAPACITY);
 
-    private Context mContext;
-
-    private int mShowTvdbId;
-
-    private int mEpisodeTvdbId;
-
-    private int mSeason;
-
-    private int mEpisode;
+    private final Context context;
+    private final int showTvdbId;
+    private final int episodeTvdbId;
+    private final int season;
+    private final int episode;
+    @Inject Lazy<Shows> traktShows;
+    @Inject Lazy<Episodes> traktEpisodes;
 
     /**
      * Loads the latest ratings for the given show from trakt and saves them to the database. If
      * ratings were loaded recently, might do nothing.
      */
-    public TraktRatingsTask(Context context, int showTvdbId) {
-        mContext = context;
-        mShowTvdbId = showTvdbId;
-        mEpisodeTvdbId = 0;
+    public TraktRatingsTask(SgApp app, int showTvdbId) {
+        this(app, showTvdbId, 0, 0, 0);
     }
 
     /**
      * Loads the latest ratings for the given episode from trakt and saves them to the database. If
      * ratings were loaded recently, might do nothing.
      */
-    public TraktRatingsTask(Context context, int showTvdbId, int episodeTvdbId, int season,
+    public TraktRatingsTask(SgApp app, int showTvdbId, int episodeTvdbId, int season,
             int episode) {
-        this(context, showTvdbId);
-        mEpisodeTvdbId = episodeTvdbId;
-        mSeason = season;
-        mEpisode = episode;
+        this.context = app;
+        app.getServicesComponent().inject(this);
+        this.showTvdbId = showTvdbId;
+        this.episodeTvdbId = episodeTvdbId;
+        this.season = season;
+        this.episode = episode;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
-        long ratingId = createUniqueId(mShowTvdbId, mEpisodeTvdbId);
-        long currentTimeMillis = System.currentTimeMillis();
+        long ratingId = createUniqueId(showTvdbId, episodeTvdbId);
 
         // avoid saving ratings too frequently
         // (network requests are cached, but also avoiding database writes)
+        long currentTimeMillis = System.currentTimeMillis();
         synchronized (sCache) {
             Long lastUpdateMillis = sCache.get(ratingId);
             // if the ratings were just updated, do nothing
             if (lastUpdateMillis != null && lastUpdateMillis > currentTimeMillis - MAXIMUM_AGE) {
-                Timber.d("Skip loading ratings for " + ratingId + ": just recently did");
+                Timber.d("Just loaded rating for %s, skip.", ratingId);
                 return null;
             }
         }
 
-        if (isCancelled() || !AndroidUtils.isNetworkConnected(mContext)) {
+        if (isCancelled() || !AndroidUtils.isNetworkConnected(context)) {
             return null;
         }
 
-        TraktV2 trakt = ServiceUtils.getTraktV2(mContext);
+        // look up show trakt id
+        Integer showTraktId = ShowTools.getShowTraktId(context, showTvdbId);
+        if (showTraktId == null) {
+            Timber.d("Show %s has no trakt id, skip.", showTvdbId);
+            return null;
+        }
 
-        try {
-            // look up show trakt id
-            Integer showTraktId = ShowTools.getShowTraktId(mContext, mShowTvdbId);
-            if (showTraktId == null) {
-                Timber.d("Not loading ratings, show has no trakt id.");
-                return null;
-            }
+        String showTraktIdString = String.valueOf(showTraktId);
+        boolean isShowNotEpisode = episodeTvdbId == 0;
 
-            if (mEpisodeTvdbId == 0) {
-                // download latest show ratings
-                Ratings ratings = trakt.shows().ratings(String.valueOf(showTraktId));
-                if (ratings == null || ratings.rating == null || ratings.votes == null) {
-                    return null;
-                }
-                // save ratings to database
-                ContentValues values = new ContentValues();
-                values.put(SeriesGuideContract.Shows.RATING_GLOBAL, ratings.rating);
-                values.put(SeriesGuideContract.Shows.RATING_VOTES, ratings.votes);
-                mContext.getContentResolver()
-                        .update(SeriesGuideContract.Shows.buildShowUri(mShowTvdbId), values, null,
-                                null);
+        Ratings ratings;
+        if (isShowNotEpisode) {
+            ratings = SgTrakt.executeCall(context, traktShows.get().ratings(showTraktIdString),
+                    "get show rating");
+        } else {
+            ratings = SgTrakt.executeCall(context,
+                    traktEpisodes.get().ratings(showTraktIdString, season, episode),
+                    "get episode rating");
+        }
+        if (ratings != null && ratings.rating != null && ratings.votes != null) {
+            if (isShowNotEpisode) {
+                saveShowRating(ratings);
             } else {
-                // download latest episode ratings
-                Ratings ratings = trakt.episodes()
-                        .ratings(String.valueOf(showTraktId), mSeason, mEpisode);
-                if (ratings == null || ratings.rating == null || ratings.votes == null) {
-                    return null;
-                }
-                // save ratings to database
-                ContentValues values = new ContentValues();
-                values.put(SeriesGuideContract.Episodes.RATING_GLOBAL, ratings.rating);
-                values.put(SeriesGuideContract.Episodes.RATING_VOTES, ratings.votes);
-                mContext.getContentResolver()
-                        .update(SeriesGuideContract.Episodes.buildEpisodeUri(mEpisodeTvdbId),
-                                values, null, null);
+                saveEpisodeRating(ratings);
             }
-        } catch (RetrofitError e) {
-            Timber.e(e, "Loading ratings failed");
         }
 
         // cache download time to avoid saving ratings too frequently
@@ -138,14 +109,26 @@ public class TraktRatingsTask extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
-    @Override
-    protected void onCancelled() {
-        releaseReferences();
+    private void saveEpisodeRating(Ratings ratings) {
+        ContentValues values = new ContentValues();
+        values.put(SeriesGuideContract.Episodes.RATING_GLOBAL, ratings.rating);
+        values.put(SeriesGuideContract.Episodes.RATING_VOTES, ratings.votes);
+        context.getContentResolver()
+                .update(SeriesGuideContract.Episodes.buildEpisodeUri(episodeTvdbId), values, null,
+                        null);
+
+        // notify withshow uri as well (used by episode details view)
+        context.getContentResolver()
+                .notifyChange(SeriesGuideContract.Episodes.buildEpisodeWithShowUri(episodeTvdbId),
+                        null);
     }
 
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        releaseReferences();
+    private void saveShowRating(Ratings ratings) {
+        ContentValues values = new ContentValues();
+        values.put(SeriesGuideContract.Shows.RATING_GLOBAL, ratings.rating);
+        values.put(SeriesGuideContract.Shows.RATING_VOTES, ratings.votes);
+        context.getContentResolver()
+                .update(SeriesGuideContract.Shows.buildShowUri(showTvdbId), values, null, null);
     }
 
     /**
@@ -155,9 +138,5 @@ public class TraktRatingsTask extends AsyncTask<Void, Void, Void> {
     private long createUniqueId(int showTvdbId, int episodeTvdbId) {
         return ((showTvdbId + episodeTvdbId) * (showTvdbId + episodeTvdbId + 1) / 2)
                 + episodeTvdbId;
-    }
-
-    private void releaseReferences() {
-        mContext = null;
     }
 }

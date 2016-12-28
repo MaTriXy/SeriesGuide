@@ -1,27 +1,13 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.util;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
+import com.battlelancer.seriesguide.AnalyticsTree;
 import com.battlelancer.seriesguide.Constants;
 import com.battlelancer.seriesguide.R;
 import com.battlelancer.seriesguide.ui.SeriesGuidePreferences;
@@ -49,28 +35,6 @@ public class TimeTools {
 
     private static final String TIMEZONE_ID_PREFIX_AMERICA = "America/";
 
-    private static final String AUSTRALIA = "Australia";
-    private static final String ISO3166_1_AUSTRALIA = "au";
-
-    private static final String CANADA = "Canada";
-    private static final String ISO3166_1_CANADA = "ca";
-
-    private static final String FINLAND = "Finland";
-    private static final String ISO3166_1_FINLAND = "fi";
-
-    private static final String GERMANY = "Germany";
-    private static final String ISO3166_1_GERMANY = "de";
-
-    private static final String JAPAN = "Japan";
-    private static final String ISO3166_1_JAPAN = "jp";
-
-    private static final String NETHERLANDS = "Netherlands";
-    private static final String ISO3166_1_NETHERLANDS = "nl";
-
-    private static final String UNITED_KINGDOM = "United Kingdom";
-    private static final String ISO3166_1_UNITED_KINGDOM = "gb";
-
-    private static final String UNITED_STATES = "United States";
     private static final String ISO3166_1_UNITED_STATES = "us";
     private static final String TIMEZONE_ID_US_EASTERN = "America/New_York";
     private static final Object TIMEZONE_ID_US_EASTERN_DETROIT = "America/Detroit";
@@ -78,6 +42,8 @@ public class TimeTools {
     private static final String TIMEZONE_ID_US_MOUNTAIN = "America/Denver";
     private static final String TIMEZONE_ID_US_ARIZONA = "America/Phoenix";
     private static final String TIMEZONE_ID_US_PACIFIC = "America/Los_Angeles";
+
+    private static final String NETWORK_NETFLIX = "Netflix";
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER_UTC
             = ISODateTimeFormat.dateTime().withZoneUTC();
@@ -168,9 +134,10 @@ public class TimeTools {
      * @param showReleaseTime See {@link #getShowReleaseTime(int)}.
      * @return -1 if no conversion was possible. Otherwise, any other long value (may be negative!).
      */
-    public static long parseEpisodeReleaseDate(@NonNull DateTimeZone showTimeZone,
-            @Nullable String releaseDate, @NonNull LocalTime showReleaseTime,
-            @Nullable String showCountry, @NonNull String deviceTimeZone) {
+    public static long parseEpisodeReleaseDate(@Nullable Context context,
+            @NonNull DateTimeZone showTimeZone, @Nullable String releaseDate,
+            @NonNull LocalTime showReleaseTime, @Nullable String showCountry,
+            @Nullable String showNetwork, @NonNull String deviceTimeZone) {
         if (releaseDate == null || releaseDate.length() == 0) {
             return Constants.EPISODE_UNKNOWN_RELEASE;
         }
@@ -181,14 +148,18 @@ public class TimeTools {
             localDate = TVDB_DATE_FORMATTER.parseLocalDate(releaseDate);
         } catch (IllegalArgumentException e) {
             // date string could not be parsed
-            Timber.e(e, "TheTVDB date could not be parsed: " + releaseDate);
+            if (context != null) {
+                Utils.trackCustomEvent(context, AnalyticsTree.CATEGORY_THETVDB_ERROR,
+                        "Date parsing failure", releaseDate);
+            }
+            Timber.e(e, "TheTVDB date could not be parsed: %s", releaseDate);
             return Constants.EPISODE_UNKNOWN_RELEASE;
         }
 
         // set time
         LocalDateTime localDateTime = localDate.toLocalDateTime(showReleaseTime);
 
-        localDateTime = handleHourPastMidnight(showCountry, localDateTime);
+        localDateTime = handleHourPastMidnight(showCountry, showNetwork, localDateTime);
         localDateTime = handleDstGap(showTimeZone, localDateTime);
 
         // finally get a valid datetime in the show time zone
@@ -231,7 +202,8 @@ public class TimeTools {
      * @return The date is today or on the next day matching the given week day.
      */
     public static Date getShowReleaseDateTime(@NonNull Context context, @NonNull LocalTime time,
-            int weekDay, @Nullable String timeZone, @Nullable String country) {
+            int weekDay, @Nullable String timeZone, @Nullable String country,
+            @Nullable String network) {
         // determine show time zone (falls back to America/New_York)
         DateTimeZone showTimeZone = getDateTimeZone(timeZone);
 
@@ -249,7 +221,7 @@ public class TimeTools {
             localDateTime = localDateTime.withDayOfWeek(weekDay);
         }
 
-        localDateTime = handleHourPastMidnight(country, localDateTime);
+        localDateTime = handleHourPastMidnight(country, network, localDateTime);
         localDateTime = handleDstGap(showTimeZone, localDateTime);
 
         DateTime dateTime = localDateTime.toDateTime(showTimeZone);
@@ -267,7 +239,7 @@ public class TimeTools {
 
     /**
      * If the release time is within the hour past midnight (0:00 until 0:59) moves the date one day
-     * into the future (currently US shows only).
+     * into the future (currently US shows only, excluding Netflix shows).
      *
      * <p> This is based on late night shows being commonly listed as releasing the day before if
      * they air past midnight (e.g. "Monday night at 0:35" actually is Tuesday 0:35).
@@ -277,9 +249,10 @@ public class TimeTools {
      * <p>See also: https://forums.thetvdb.com/viewtopic.php?t=22791
      */
     private static LocalDateTime handleHourPastMidnight(@Nullable String country,
-            LocalDateTime localDateTime) {
-        // Example:
-        if (ISO3166_1_UNITED_STATES.equals(country) && localDateTime.getHourOfDay() == 0) {
+            @Nullable String network, LocalDateTime localDateTime) {
+        if (ISO3166_1_UNITED_STATES.equals(country)
+                && !NETWORK_NETFLIX.equals(network)
+                && localDateTime.getHourOfDay() == 0) {
             return localDateTime.plusDays(1);
         }
         return localDateTime;
@@ -377,26 +350,11 @@ public class TimeTools {
         if (releaseCountry == null || releaseCountry.length() == 0) {
             return context.getString(R.string.unknown);
         }
-        switch (releaseCountry) {
-            case ISO3166_1_AUSTRALIA:
-                return AUSTRALIA;
-            case ISO3166_1_CANADA:
-                return CANADA;
-            case ISO3166_1_JAPAN:
-                return JAPAN;
-            case ISO3166_1_FINLAND:
-                return FINLAND;
-            case ISO3166_1_GERMANY:
-                return GERMANY;
-            case ISO3166_1_NETHERLANDS:
-                return NETHERLANDS;
-            case ISO3166_1_UNITED_KINGDOM:
-                return UNITED_KINGDOM;
-            case ISO3166_1_UNITED_STATES:
-                return UNITED_STATES;
-            default:
-                return context.getString(R.string.unknown);
+        String country = new Locale("", releaseCountry).getDisplayCountry(Locale.getDefault());
+        if (TextUtils.isEmpty(country)) {
+            return context.getString(R.string.unknown);
         }
+        return country;
     }
 
     /**

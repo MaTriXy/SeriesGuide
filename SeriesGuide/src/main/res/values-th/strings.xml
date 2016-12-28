@@ -11,7 +11,6 @@
   <string name="help">ช่วยเหลือ</string>
   <string name="help_and_feedback">ช่วยเหลือ &amp; ความคิดเห็น</string>
   <string name="drawer_open">เปิดแถบนำทาง</string>
-  <string name="drawer_close">ปิดแถบนำทาง</string>
   <!-- Media items -->
   <string name="show">ซีรีส์</string>
   <string name="episode">ตอน</string>
@@ -34,6 +33,9 @@
   <string name="web_search">ค้นเว็บ</string>
   <string name="add_to_homescreen">ทางลัด</string>
   <string name="action_open">เปิด</string>
+  <string name="sync_manually">ซิงค์ด้วยตนเอง</string>
+  <string name="sync_and_update">ซิงค์ &amp; อัปเดต</string>
+  <string name="sync_and_download_all">ซิงค์ &amp; ดาวน์โหลดทั้งหมด</string>
   <!-- Search -->
   <string name="clear_search_history">ล้างประวัติการค้นหา</string>
   <string name="search_hint">ค้นหาตอน</string>
@@ -46,6 +48,8 @@
   <string name="app_not_available">ไม่มีแอปที่สามารถจัดการกับสิ่งนี้</string>
   <string name="people_empty">ไม่มีใครอยู่ที่นี่เลยหรือ? แตะเพื่อลองอีกครั้ง</string>
   <string name="database_error">ไม่สามารถแก้ไขข้อมูล</string>
+  <string name="reinstall_info">ลองสำรองข้อมูลในการตั้งค่า, ติดตั้งแอปใหม่ และเรียกคืนข้อมูล</string>
+  <string name="api_error_generic">ไม่สามารถติดต่อกับ %s ลองอีกครั้งในภายหลัง</string>
   <!-- Sharing -->
   <string name="share">แบ่งปัน</string>
   <string name="share_show">แบ่งปันซีรีส์</string>
@@ -54,6 +58,7 @@
   <string name="share_checkout">ลองดู %s</string>
   <string name="addtocalendar">เพิ่มในปฏิทิน</string>
   <string name="addtocalendar_failed">ไม่สามารถสร้างกิจกรรมบนปฏิทิน</string>
+  <string name="links">ลิงก์</string>
   <!-- Comments -->
   <string name="comments">ความคิดเห็น</string>
   <string name="shout_hint">พิมพ์ความคิดเห็น (ภาษาอังกฤษ, 5+ คำ)</string>
@@ -71,11 +76,9 @@
   <string name="episode_firstaired">วันที่ออกฉาย</string>
   <string name="episode_firstaired_unknown">ไม่ทราบวันที่ออกฉาย</string>
   <string name="episode_dvdnumber">ตอนใน DVD</string>
-  <string name="show_actors">นักแสดง</string>
   <string name="original_release">วันที่ออกดั้งเดิม</string>
   <string name="show_on_network">บน %s</string>
   <string name="show_genres">ประเภท</string>
-  <string name="show_runtime">ระยะเวลา</string>
   <string name="show_contentrating">การจัดอันดับเนื้อหา</string>
   <string name="show_release_times">เวลาออกฉาย</string>
   <string name="episode_directors">ผู้กำกับ</string>
@@ -84,10 +87,9 @@
   <string name="show_isalive">ยังไม่จบ</string>
   <string name="show_isnotalive">จบแล้ว</string>
   <string name="lastEdit">แก้ไขล่าสุด // TheTVDB</string>
-  <string name="services_watch">ดู</string>
-  <string name="services_more">เพิ่มเติม</string>
   <string name="no_translation">ไม่มีรายละเอียดที่ถูกแปลเป็น %1$s พร้อมใช้งานที่ %2$s</string>
   <string name="no_translation_title">ยังไม่ถูกแปล</string>
+  <string name="no_spoilers">รายละเอียดบางอย่างถูกซ่อนเพื่อป้องกันการสปอยล์ ปิดการป้องกันนี้ได้ในการตั้งค่า</string>
   <!-- Date and Time -->
   <string name="today">วันนี้</string>
   <string name="now">ขณะนี้</string>
@@ -130,10 +132,11 @@
   <string name="action_shows_filter_hidden">ซ่อน</string>
   <string name="action_shows_sort">แสดงซีรีส์</string>
   <string name="action_shows_sort_title">ชื่อเรื่อง</string>
-  <string name="action_shows_sort_episode">ตอนถัดไป</string>
+  <string name="action_shows_sort_latest_episode">ตอนล่าสุด</string>
+  <string name="action_shows_sort_oldest_episode">ตอนเก่าที่สุด</string>
+  <string name="action_shows_sort_last_watched">ดูล่าสุด</string>
+  <string name="action_shows_sort_remaining">ตอนที่เหลือ</string>
   <string name="action_shows_sort_favorites">รายการโปรดก่อน</string>
-  <string name="updateall_yes">อัปเดต (ทั้งหมด)</string>
-  <string name="menu_update_delta">อัปเดต (เก่าแล้วเท่านั้น)</string>
   <string name="context_updateshow">อัปเดต</string>
   <string name="context_marknext">ดูตอนถัดไป</string>
   <!-- Now -->
@@ -172,7 +175,7 @@
   <string name="no_results">ไม่พบผลลัพธ์ ลองคำที่สมบูรณ์</string>
   <string name="action_try_any_language">ลองภาษาใดก็ได้</string>
   <string name="action_try_again">ลองอีกครั้ง</string>
-  <string name="search_error">การค้นหาล้มเหลว ลองอีกครั้งในภายหลัง</string>
+  <string name="tvdb_error_does_not_exist">รายการนี้(ยัง)ไม่มีบน TheTVDB ลองอีกครั้งในภายหลัง</string>
   <string name="add_all">เพิ่มทั้งหมด</string>
   <string name="add_multiple">ซีรีส์ทั้งหมดจะปรากฏในรายการซีรีส์ของคุณในไม่ช้า</string>
   <string name="add_started">%s จะปรากฏในรายการซีรีส์ของคุณในไม่ช้า</string>
@@ -211,6 +214,7 @@
   <string name="action_movies_sort_title">ชื่อเรื่อง</string>
   <string name="action_movies_sort_release">วันที่ออกฉาย</string>
   <!-- Statistics -->
+  <string name="statistics_failed">ไม่สามารถคำนวณสถิติ</string>
   <string name="statistics_shows">ซีรีส์</string>
   <string name="statistics_episodes">ตอน</string>
   <string name="statistics_movies">ภาพยนตร์</string>
@@ -233,7 +237,7 @@
   <string name="hexagon_warning">การทดลอง!</string>
   <string name="hexagon_description">เชื่อมต่อคลาวด์เพื่อสำรองและซิงค์ซีรีส์และภาพยนตร์ของคุณ</string>
   <string name="hexagon_warning_lists">ไม่รวมรายการ</string>
-  <string name="hexagon_warning_trakt">เมื่อใช้ SeriesGuide Cloud, การเปลี่ยนแปลงบน trakt จะไม่ซิงค์มายัง SeriesGuide</string>
+  <string name="hexagon_warning_trakt">ขณะที่เชื่อมต่อ SeriesGuide Cloud อยู่, ดารซิงค์กับ trakt จะถูกปิดใช้งาน</string>
   <string name="hexagon_signin">เข้าสู่ระบบ</string>
   <string name="hexagon_signed_in">คุณเชื่อมต่อกับ SeriesGuide Cloud แล้ว</string>
   <string name="hexagon_signout">ออกจากระบบ</string>
@@ -243,7 +247,6 @@
   <string name="hexagon_remove_account_success">ลบบัญชีแล้ว</string>
   <string name="hexagon_remove_account_failure">ไม่สามารถลบบัญชี</string>
   <string name="hexagon_remove_account_confirmation">การลบบัญชีของคุณจะลบซีรีส์และภาพยนตร์ทั้งหมดออกจาก SeriesGuide Cloud ยืนยันให้แน่ใจว่าคุณต้องการลบข้อมูลออกจากอุปกรณ์ที่เชื่อมต่ออยู่ด้วยเช่นกัน</string>
-  <string name="hexagon_api_error">ไม่สามารถติดต่อกับ SeriesGuide Cloud ลองอีกครั้งในภายหลัง</string>
   <string name="hexagon_api_queued">กำลังส่งไปยัง SeriesGuide Cloud</string>
   <string name="hexagon_permission_missing">ในการใช้ SeriesGuide Cloud, อนุญาตให้เราเข้าถึงบัญชีของคุณ</string>
   <string name="hexagon_google_play_missing">ในการใช้ SeriesGuide Cloud, จำเป็นต้องมี Google Play Services</string>
@@ -260,7 +263,6 @@
   <string name="traktcheckin_wait">ฉันจะรอ</string>
   <string name="trakt_success">ส่งไปยัง trakt</string>
   <string name="trakt_error_credentials">มีบางอย่างผิดพลาด ตรวจสอบข้อมูล trakt ของคุณและลองอีกครั้ง</string>
-  <string name="trakt_error_general">ไม่สามารถติดต่อกับ trakt ได้ ลองอีกครั้งในภายหลัง</string>
   <string name="trakt_error_not_exists">(ยัง)ไม่พร้อมใช้งานบน trakt ลองอีกครั้งในภายหลัง</string>
   <string name="trakt_notice_not_exists">(ยัง)ไม่สามารถติดตามด้วย trakt</string>
   <!-- Connect trakt -->
@@ -315,14 +317,13 @@
   <string name="pref_onlyseasonepssummary">ตอนพิเศษจะหายไปจากทุกที่ยกเว้นรายการซีซั่น</string>
   <string name="pref_exactdates">แสดงวันที่ที่แน่นอน</string>
   <string name="pref_exactdates_summary">\"31 ตุลาคม\" แทน \"ใน 3 วัน\"</string>
+  <string name="pref_nospoilers">ป้องกันการสปอยล์</string>
+  <string name="pref_nospoilers_summary">ซ่อนรายละเอียดเฉพาะตอนที่ยังไม่ได้ดู</string>
   <string name="pref_seasonsorting">เรียงซีซั่นโดย&#8230;</string>
   <string name="pref_episodesorting">เรียงตอนโดย&#8230;</string>
   <string name="pref_language">ภาษาของเนื้อหาที่ต้องการ</string>
   <string name="pref_updatewifionly">รูปภาพผ่านไวไฟเท่านั้น</string>
   <string name="pref_updatewifionlysummary">เพื่อใช้ข้อมูลน้อยลง ไม่ต้องดาวน์โหลดผ่านเครือข่ายมือถือ</string>
-  <string name="about">เกี่ยวกับ SeiresGuide</string>
-  <string name="pref_autoaddshows">เพิ่มซีรีส์ trakt ใหม่</string>
-  <string name="pref_autoaddshowssummary">เพิ่มซีรีส์จากสตรีมกิจกรรม trakt ของคุณโดยอัตโนมัติ</string>
   <!-- About screen -->
   <string name="licence_tvdb">แอปนี้ใช้ข้อมูลและรูปภาพจาก TheTVDB สงวนสิทธิ์ภายใต้ CC BY-NC 4.0</string>
   <string name="licence_themoviedb">ผลิตภัณฑ์นี้ใช้ API ของ TMDb แต่ไม่ได้รับการรับรองโดย TMDb</string>
@@ -357,8 +358,7 @@
   <string name="pref_theme">ธีม</string>
   <!-- Other advanced settings -->
   <string name="pref_other">อื่นๆ</string>
-  <string name="pref_autoupdate">เปิดใช้งานการอัปเดตอัตโนมัติ</string>
-  <string name="pref_autoupdatesummary">อัปเดตซีรีส์ของคุณเป็นระยะๆ</string>
+  <string name="pref_autoupdatesummary">ซิงค์และอัปเดตข้อมูล SeriesGuide อัตโนมัติ</string>
   <string name="pref_autobackup">สำรองอัตโนมัติ</string>
   <string name="pref_autobackupsummary">สำรองข้อมูลซีรีส์, รายการ และภาพยนตร์รายสัปดาห์</string>
   <string name="backup">สำรอง/กู้คืน</string>
@@ -368,7 +368,7 @@
   <string name="pref_offsetsummary">ชดเชยเวลาออกอากาศ %s ชั่วโมง</string>
   <string name="clear_cache">ลบแคชรูปภาพ</string>
   <string name="clear_cache_summary">ลบแคชรูปภาพทั้งหมดออกจากอุปกรณ์ของคุณ</string>
-  <string name="pref_ganalyticssummary">ติดตามการใช้งานคุณสมบัติเพื่อปรับปรุง SeriesGuide</string>
+  <string name="pref_ganalyticssummary">ส่งสถิติการใช้งานแบบไม่ระบุชื่อกับบริการของ Google</string>
   <!-- Backup and Restore -->
   <string name="backup_full_dump">รวมข้อมูลทั้งหมด เช่น รายละเอียด, นักแสดง และการจัดอันดับ</string>
   <string name="backup_path">โฟลเดอร์สำรองข้อมูล</string>
@@ -423,8 +423,6 @@
   <string name="notification_release_earlier_hour">ล่วงหน้า 1 ชั่วโมง</string>
   <!-- Legacy Widgets -->
   <string name="smallwidget">SeriesGuide (เล็ก)</string>
-  <string name="bigwidget">SeriesGuide (กลาง)</string>
-  <string name="largewidget">SeriesGuide (ใหญ่)</string>
   <!-- List Widget -->
   <string name="hide_watched">ซ่อนตอนที่ดูแล้ว</string>
   <string name="pref_widget_opacity">พื้นหลังวิตเจ็ต</string>
@@ -457,7 +455,6 @@
   <string name="subscription_failed">การชำระเงินไม่สมบูรณ์</string>
   <string name="pass_unavailable">X Pass ไม่พร้อมใช้งาน</string>
   <!-- Extensions -->
-  <string name="extensions">ส่วนเสริม</string>
   <string name="action_extensions_configure">ปรับแต่งส่วนเสริม</string>
   <string name="action_extensions_add">เพิ่มส่วนเสริม</string>
   <string name="action_extensions_limit">รับ X เพื่อเพิ่มส่วนเสริมมากขึ้น</string>
@@ -473,4 +470,13 @@
   <string name="description_extension_web_search">ค้นหาเว็บไซต์และรูปภาพ</string>
   <!-- People -->
   <string name="person_biography">ประวัติ</string>
+  <!-- Feedback -->
+  <string name="feedback_question_enjoy">เพลิดเพลินกับ SeriesGuide หรือไม่?</string>
+  <string name="feedback_action_yes">ใช่!</string>
+  <string name="feedback_action_notreally">ก็ไม่เชิง</string>
+  <string name="feedback_question_rate_google">ให้คะแนนบน Google Play?</string>
+  <string name="feedback_question_rate_amazon">ให้คะแนนบน Amazon?</string>
+  <string name="feedback_question_feedback">บอกเราว่าจะปรับปรุงได้อย่างไร?</string>
+  <string name="feedback_action_ok">ตกลง, แน่นอน</string>
+  <string name="feedback_action_nothanks">ไม่, ขอบคุณ</string>
 </resources>

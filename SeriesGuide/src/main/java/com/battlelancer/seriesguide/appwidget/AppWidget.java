@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.appwidget;
 
 import android.app.IntentService;
@@ -25,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.widget.RemoteViews;
@@ -33,9 +16,10 @@ import com.battlelancer.seriesguide.R;
 import com.battlelancer.seriesguide.adapters.CalendarAdapter;
 import com.battlelancer.seriesguide.settings.CalendarSettings;
 import com.battlelancer.seriesguide.settings.DisplaySettings;
-import com.battlelancer.seriesguide.thetvdbapi.TheTVDB;
+import com.battlelancer.seriesguide.thetvdbapi.TvdbTools;
 import com.battlelancer.seriesguide.ui.ShowsActivity;
 import com.battlelancer.seriesguide.util.DBUtils;
+import com.battlelancer.seriesguide.util.EpisodeTools;
 import com.battlelancer.seriesguide.util.ServiceUtils;
 import com.battlelancer.seriesguide.util.TextTools;
 import com.battlelancer.seriesguide.util.TimeTools;
@@ -119,6 +103,7 @@ public class AppWidget extends AppWidgetProvider {
                 views.addView(R.id.LinearLayoutWidget, item);
             } else {
                 boolean displayExactDate = DisplaySettings.isDisplayExactDate(context);
+                boolean preventSpoilers = DisplaySettings.preventSpoilers(context);
 
                 int viewsToAdd = Integer.valueOf(limit);
                 while (upcomingEpisodes.moveToNext() && viewsToAdd != 0) {
@@ -126,13 +111,21 @@ public class AppWidget extends AppWidgetProvider {
 
                     RemoteViews item = new RemoteViews(context.getPackageName(), itemLayout);
                     // upcoming episode
-                    int seasonNumber = upcomingEpisodes.getInt(
-                            CalendarAdapter.Query.SEASON);
-                    int episodeNumber = upcomingEpisodes.getInt(
-                            CalendarAdapter.Query.NUMBER);
+                    int seasonNumber = upcomingEpisodes.getInt(CalendarAdapter.Query.SEASON);
+                    int episodeNumber = upcomingEpisodes.getInt(CalendarAdapter.Query.NUMBER);
                     String title = upcomingEpisodes.getString(CalendarAdapter.Query.TITLE);
-                    item.setTextViewText(R.id.textViewWidgetEpisode,
-                            TextTools.getNextEpisodeString(this, seasonNumber, episodeNumber, title));
+                    int watchedFlag = upcomingEpisodes.getInt(CalendarAdapter.Query.WATCHED);
+                    String nextEpisodeString;
+                    if (EpisodeTools.isUnwatched(watchedFlag) && preventSpoilers) {
+                        // just display the episode number
+                        nextEpisodeString = TextTools.getEpisodeNumber(context, seasonNumber,
+                                episodeNumber);
+                    } else {
+                        // display episode number and title
+                        nextEpisodeString = TextTools.getNextEpisodeString(context, seasonNumber,
+                                episodeNumber, title);
+                    }
+                    item.setTextViewText(R.id.textViewWidgetEpisode, nextEpisodeString);
 
                     Date actualRelease = TimeTools.applyUserOffset(context,
                             upcomingEpisodes.getLong(CalendarAdapter.Query.RELEASE_TIME_MS)
@@ -164,18 +157,7 @@ public class AppWidget extends AppWidgetProvider {
                     // show poster
                     String posterPath = upcomingEpisodes.getString(
                             CalendarAdapter.Query.SHOW_POSTER);
-                    try {
-                        Bitmap poster = ServiceUtils.loadWithPicasso(this,
-                                TheTVDB.buildPosterUrl(posterPath))
-                                .centerCrop()
-                                .resizeDimen(R.dimen.show_poster_width,
-                                        R.dimen.show_poster_height)
-                                .get();
-                        item.setImageViewBitmap(R.id.widgetPoster, poster);
-                    } catch (IOException e) {
-                        Timber.e(e,
-                                "Failed to load show poster for widget item: " + posterPath);
-                    }
+                    maybeSetPoster(item, posterPath);
 
                     views.addView(R.id.LinearLayoutWidget, item);
                 }
@@ -195,23 +177,25 @@ public class AppWidget extends AppWidgetProvider {
                     .getPendingIntent(0, 0);
             views.setOnClickPendingIntent(R.id.LinearLayoutWidget, activityPendingIntent);
 
-            if (layout != R.layout.appwidget) {
-                // Create an Intent to launch SeriesGuide
-                Intent launchIntent = new Intent(context, ShowsActivity.class);
-                launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        | Intent.FLAG_ACTIVITY_NEW_TASK
-                        | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                PendingIntent pendingIntent = PendingIntent
-                        .getActivity(context, 0, launchIntent, 0);
-                views.setOnClickPendingIntent(R.id.widgetShowlistButton, pendingIntent);
-            }
-
             // Create an intent to update the widget
             updateIntent.setAction(REFRESH);
             PendingIntent pi = PendingIntent.getBroadcast(context, 0, updateIntent, 0);
             views.setOnClickPendingIntent(R.id.ImageButtonWidget, pi);
 
             return views;
+        }
+
+        private void maybeSetPoster(RemoteViews item, String posterPath) {
+            try {
+                Bitmap poster = ServiceUtils.loadWithPicasso(this,
+                        TvdbTools.buildPosterUrl(posterPath))
+                        .centerCrop()
+                        .resizeDimen(R.dimen.show_poster_width, R.dimen.show_poster_height)
+                        .get();
+                item.setImageViewBitmap(R.id.widgetPoster, poster);
+            } catch (IOException e) {
+                Timber.e(e, "maybeSetPoster: failed.");
+            }
         }
     }
 }

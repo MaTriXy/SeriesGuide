@@ -1,23 +1,8 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
@@ -32,17 +17,19 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.items.SearchResult;
+import com.battlelancer.seriesguide.thetvdbapi.TvdbTools;
 import com.battlelancer.seriesguide.ui.dialogs.AddShowDialogFragment;
-import com.battlelancer.seriesguide.util.ServiceUtils;
 import com.battlelancer.seriesguide.util.TaskManager;
+import com.battlelancer.seriesguide.util.Utils;
 import com.battlelancer.seriesguide.widgets.EmptyView;
 import com.uwetrottmann.androidutils.AndroidUtils;
-import de.greenrobot.event.EventBus;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Super class for fragments displaying a list of shows and allowing to add them to the database.
@@ -52,10 +39,10 @@ public abstract class AddFragment extends Fragment {
     public static class AddShowEvent {
     }
 
-    @Bind(R.id.containerAddContent) View contentContainer;
-    @Bind(R.id.progressBarAdd) View progressBar;
-    @Bind(android.R.id.list) GridView resultsGridView;
-    @Bind(R.id.emptyViewAdd) EmptyView emptyView;
+    @BindView(R.id.containerAddContent) View contentContainer;
+    @BindView(R.id.progressBarAdd) View progressBar;
+    @BindView(android.R.id.list) GridView resultsGridView;
+    @BindView(R.id.emptyViewAdd) EmptyView emptyView;
 
     protected List<SearchResult> searchResults;
     protected AddAdapter adapter;
@@ -105,20 +92,13 @@ public abstract class AddFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        ButterKnife.unbind(this);
-    }
-
     protected abstract void setupEmptyView(EmptyView buttonEmptyView);
 
     /**
      * Changes the empty message.
      */
-    public void setEmptyMessage(int stringResourceId) {
-        emptyView.setMessage(stringResourceId);
+    public void setEmptyMessage(CharSequence message) {
+        emptyView.setMessage(message);
     }
 
     public void setSearchResults(List<SearchResult> searchResults) {
@@ -161,7 +141,8 @@ public abstract class AddFragment extends Fragment {
     /**
      * Called if the user adds a new show through the dialog.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings("UnusedParameters")
+    @Subscribe
     public void onEvent(AddShowEvent event) {
         adapter.notifyDataSetChanged();
     }
@@ -172,21 +153,24 @@ public abstract class AddFragment extends Fragment {
             void onClick(View view, int showTvdbId);
         }
 
+        private final SgApp app;
         private final OnContextMenuClickListener menuClickListener;
         private final boolean hideContextMenuIfAdded;
         private final LayoutInflater inflater;
 
-        public AddAdapter(Context context, List<SearchResult> objects,
+        public AddAdapter(Activity activity, List<SearchResult> objects,
                 OnContextMenuClickListener menuClickListener,
                 boolean hideContextMenuIfAdded) {
-            super(context, 0, objects);
+            super(activity, 0, objects);
+            this.app = SgApp.from(activity);
             this.menuClickListener = menuClickListener;
             this.hideContextMenuIfAdded = hideContextMenuIfAdded;
-            inflater = LayoutInflater.from(context);
+            this.inflater = LayoutInflater.from(activity);
         }
 
+        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             ViewHolder holder;
 
             if (convertView == null) {
@@ -198,6 +182,9 @@ public abstract class AddFragment extends Fragment {
             }
 
             final SearchResult item = getItem(position);
+            if (item == null) {
+                return convertView; // all bets are off!
+            }
             holder.showTvdbId = item.tvdbid;
 
             // hide context menu if not useful
@@ -215,22 +202,24 @@ public abstract class AddFragment extends Fragment {
                     item.isAdded = true;
                     EventBus.getDefault().post(new AddShowEvent());
 
-                    TaskManager.getInstance(getContext()).performAddTask(item);
+                    TaskManager.getInstance(getContext()).performAddTask(app, item);
                 }
             });
 
             // set text properties immediately
             holder.title.setText(showTitle);
             holder.description.setText(item.overview);
-            if (item.poster != null) {
-                holder.poster.setVisibility(View.VISIBLE);
-                ServiceUtils.loadWithPicasso(getContext(), item.poster)
-                        .centerCrop()
-                        .resizeDimen(R.dimen.show_poster_add_width, R.dimen.show_poster_add_height)
-                        .error(R.drawable.ic_image_missing)
-                        .into(holder.poster);
+
+            // only local shows will have a poster path set
+            // try to fall back to the first uploaded TVDB poster for all others
+            if (item.poster == null) {
+                // only load posters from caching server that are not from local shows
+                // because those are still loaded from TVDB directly
+                // and we do not want to cache them on device twice
+                Utils.loadTvdbShowPosterFromCache(getContext(), holder.poster,
+                        TvdbTools.buildFallbackPosterPath(item.tvdbid));
             } else {
-                holder.poster.setVisibility(View.GONE);
+                Utils.loadTvdbShowPoster(getContext(), holder.poster, item.poster);
             }
 
             return convertView;

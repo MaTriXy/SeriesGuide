@@ -11,7 +11,6 @@
   <string name="help">עזרה</string>
   <string name="help_and_feedback">עזרה &amp; משוב</string>
   <string name="drawer_open">פתח תפריט ניווט</string>
-  <string name="drawer_close">סגור תפריט ניווט</string>
   <!-- Media items -->
   <string name="show">סדרה</string>
   <string name="episode">פרק</string>
@@ -34,6 +33,9 @@
   <string name="web_search">חיפוש באינטרנט</string>
   <string name="add_to_homescreen">קיצור-דרך</string>
   <string name="action_open">Open</string>
+  <string name="sync_manually">Sync manually</string>
+  <string name="sync_and_update">Sync &amp; Update</string>
+  <string name="sync_and_download_all">Sync &amp; Download all</string>
   <!-- Search -->
   <string name="clear_search_history">נקה את היסטוריית החיפוש</string>
   <string name="search_hint">חפש פרקים</string>
@@ -46,6 +48,8 @@
   <string name="app_not_available">אין יישום זמין בשביל זה.</string>
   <string name="people_empty">אין כאן אף אחד?! לחץ כדי לנסות שוב.</string>
   <string name="database_error">לא הייתה אפשרות לשנות את הנתונים.</string>
+  <string name="reinstall_info">Try to backup in Settings, re-install and restore.</string>
+  <string name="api_error_generic">Could not talk to %s. Try again later.</string>
   <!-- Sharing -->
   <string name="share">שתף</string>
   <string name="share_show">שתף סדרה</string>
@@ -54,6 +58,7 @@
   <string name="share_checkout">בדוק את %s</string>
   <string name="addtocalendar">הוסף ללוח השנה</string>
   <string name="addtocalendar_failed">אין אפשרות ליצור אירוע בלוח השנה.</string>
+  <string name="links">קישורים</string>
   <!-- Comments -->
   <string name="comments">תגובות</string>
   <string name="shout_hint">הקלד תגובה (באנגלית, 5+ מילות)</string>
@@ -64,6 +69,8 @@
   <string name="refresh">רענון</string>
   <plurals name="replies_plural">
     <item quantity="one">%d תגובה</item>
+    <item quantity="two">%d replies</item>
+    <item quantity="many">%d replies</item>
     <item quantity="other">%d replies</item>
   </plurals>
   <!-- Metadata -->
@@ -72,11 +79,9 @@
   <string name="episode_firstaired">תאריך שחרור</string>
   <string name="episode_firstaired_unknown">תאריך שחרור לא ידוע</string>
   <string name="episode_dvdnumber">פרק DVD</string>
-  <string name="show_actors">שחקנים</string>
   <string name="original_release">השחרור המקורי</string>
   <string name="show_on_network">ב- %s</string>
   <string name="show_genres">ז\'אנרים</string>
-  <string name="show_runtime">זמן ריצה</string>
   <string name="show_contentrating">דירוג תוכן</string>
   <string name="show_release_times">זמני שחרור</string>
   <string name="episode_directors">במאים</string>
@@ -85,10 +90,9 @@
   <string name="show_isalive">ממשיכה</string>
   <string name="show_isnotalive">הסתיימה</string>
   <string name="lastEdit">עדכון אחרון // TVDb</string>
-  <string name="services_watch">צפה</string>
-  <string name="services_more">עוד</string>
   <string name="no_translation">אין תיאור זמין המתורגם ל%1$s ב-%2$s.</string>
   <string name="no_translation_title">Not translated</string>
+  <string name="no_spoilers">Some details are hidden to prevent spoilers. To turn this off go to Settings.</string>
   <!-- Date and Time -->
   <string name="today">היום</string>
   <string name="now">עכשיו</string>
@@ -131,10 +135,11 @@
   <string name="action_shows_filter_hidden">מוסתר</string>
   <string name="action_shows_sort">מיון סדרות</string>
   <string name="action_shows_sort_title">שם</string>
-  <string name="action_shows_sort_episode">הפרק הבא</string>
+  <string name="action_shows_sort_latest_episode">Latest episode</string>
+  <string name="action_shows_sort_oldest_episode">Oldest episode</string>
+  <string name="action_shows_sort_last_watched">Last watched</string>
+  <string name="action_shows_sort_remaining">Remaining episodes</string>
   <string name="action_shows_sort_favorites">מועדפים בהתחלה</string>
-  <string name="updateall_yes">(עדכן (הכל</string>
-  <string name="menu_update_delta">עדכן (ישנים בלבד)</string>
   <string name="context_updateshow">עדכן</string>
   <string name="context_marknext">צפה בפרק הבא</string>
   <!-- Now -->
@@ -173,7 +178,7 @@
   <string name="no_results">אין תוצאות, נסה ביטויים שלמים.</string>
   <string name="action_try_any_language">נסה בכל שפה</string>
   <string name="action_try_again">נסה שוב</string>
-  <string name="search_error">החיפוש הנכשל, נסה מאוחר יותר</string>
+  <string name="tvdb_error_does_not_exist">The show does not exist (yet) on TheTVDB. Try again later.</string>
   <string name="add_all">הוסף הכל</string>
   <string name="add_multiple">כל הסדרות יופיעו ברשימת הסדרות שלך בעוד זמן קצר.</string>
   <string name="add_started">%s יופיע ברשימת התכניות שלך בהקדם.</string>
@@ -212,6 +217,7 @@
   <string name="action_movies_sort_title">שם</string>
   <string name="action_movies_sort_release">תאריך שחרור</string>
   <!-- Statistics -->
+  <string name="statistics_failed">Could not calculate statistics.</string>
   <string name="statistics_shows">סדרות</string>
   <string name="statistics_episodes">פרקים</string>
   <string name="statistics_movies">סרטים</string>
@@ -223,21 +229,27 @@
   <string name="runtime_movies_watchlist">זמן כולל של רשימת הצפייה</string>
   <plurals name="days_plural">
     <item quantity="one">%d יום</item>
+    <item quantity="two">%d days</item>
+    <item quantity="many">%d days</item>
     <item quantity="other">%d days</item>
   </plurals>
   <plurals name="hours_plural">
     <item quantity="one">%d שעה</item>
+    <item quantity="two">%d hours</item>
+    <item quantity="many">%d hours</item>
     <item quantity="other">%d hours</item>
   </plurals>
   <plurals name="minutes_plural">
     <item quantity="one">%d דקה</item>
+    <item quantity="two">%d minutes</item>
+    <item quantity="many">%d minutes</item>
     <item quantity="other">%d minutes</item>
   </plurals>
   <!-- Hexagon -->
   <string name="hexagon_warning">ניסיוני!</string>
   <string name="hexagon_description">התחבר לענן בכדי לגבות ולסנכרן את התוכניות והסרטים שלך.</string>
   <string name="hexagon_warning_lists">רשימות אינן כלולות.</string>
-  <string name="hexagon_warning_trakt">בעת השימוש בענן SeriesGuide, השינויים המתבצעים ב-Trakt לא יסתכרנו עם SeriesGuide.</string>
+  <string name="hexagon_warning_trakt">While SeriesGuide Cloud is connected, trakt sync will be disabled.</string>
   <string name="hexagon_signin">התחבר</string>
   <string name="hexagon_signed_in">אתה מחובר ל-SeriesGuide Cloud.</string>
   <string name="hexagon_signout">התנתק</string>
@@ -247,7 +259,6 @@
   <string name="hexagon_remove_account_success">החשבון נמחק.</string>
   <string name="hexagon_remove_account_failure">לא ניתן להסיר את החשבון.</string>
   <string name="hexagon_remove_account_confirmation">הסרת החשבון שלך תמחק את כל התוכניות והסרטים מ-SeriesGuide Cloud. הקפד למחוק אותם גם בהתקנים מחוברים אחרים.</string>
-  <string name="hexagon_api_error">לא הייתה אפשרות לדבר עם SeriesGuide Cloud. נסה שוב מאוחר יותר.</string>
   <string name="hexagon_api_queued">שולח ל-SeriesGuide Cloud.</string>
   <string name="hexagon_permission_missing">כדי להשתמש ב-SeriesGuide בענן, אפשר גישה לחשבונות שלך.</string>
   <string name="hexagon_google_play_missing">כדי להשתמש ב-SeriesGuide בענן, נדרש שירותי Google Play.</string>
@@ -264,7 +275,6 @@
   <string name="traktcheckin_wait">אני אחכה</string>
   <string name="trakt_success">נשלח ל-trakt.</string>
   <string name="trakt_error_credentials">משהו השתבש. אנא בדוק את הסיסמא/שם המשתמש שלך ונסה שוב.</string>
-  <string name="trakt_error_general">לא ניתן להתחבר ל-Trakt. נסה שוב מאוחר יותר.</string>
   <string name="trakt_error_not_exists">לא זמין (עדיין) ב-trakt. נסה שוב מאוחר יותר.</string>
   <string name="trakt_notice_not_exists">לא ניתן (עדיין) לעקוב עם trakt.</string>
   <!-- Connect trakt -->
@@ -298,6 +308,8 @@
   <string name="rating9">מצוין</string>
   <plurals name="votes">
     <item quantity="one">%d הצבעה</item>
+    <item quantity="two">%d votes</item>
+    <item quantity="many">%d votes</item>
     <item quantity="other">%d votes</item>
   </plurals>
   <!-- Check Ins -->
@@ -320,14 +332,13 @@
   <string name="pref_onlyseasonepssummary">פרקים מיוחדים מועלמים תמיד, פרט לרשימת העונות</string>
   <string name="pref_exactdates">הצג תאריכים מדויקים</string>
   <string name="pref_exactdates_summary">\"31 באוקטובר\" במקום \"ב-3 ימים\"</string>
+  <string name="pref_nospoilers">Prevent spoilers</string>
+  <string name="pref_nospoilers_summary">Hide details until an episode is watched</string>
   <string name="pref_seasonsorting">מיין עונות לפי</string>
   <string name="pref_episodesorting">מיין פרקים לפי</string>
   <string name="pref_language">שפת תוכן מועדפת</string>
   <string name="pref_updatewifionly">תמונות באמצעות Wi-Fi בלבד</string>
   <string name="pref_updatewifionlysummary">כדי לצמצם את חיובי הנתונים, לא להוריד ברשת סלולרי או רשת מבוקרת</string>
-  <string name="about">אודות SeriesGuide</string>
-  <string name="pref_autoaddshows">הוסף סדרות trakt חדשות</string>
-  <string name="pref_autoaddshowssummary">הוסף סדרות מפעילות ה-trakt שלך באופן אוטומטי</string>
   <!-- About screen -->
   <string name="licence_tvdb">יישום זה משתמש בנתונים ותמונות על ידי TheTVDB תחת רישיון CC BY-NC 4.0.</string>
   <string name="licence_themoviedb">מוצר זה עושה שימוש ב-API TMDb אך אינו נתמך או מאושר על ידי TMDb.</string>
@@ -362,8 +373,7 @@
   <string name="pref_theme">ערכת נושא</string>
   <!-- Other advanced settings -->
   <string name="pref_other">אחר</string>
-  <string name="pref_autoupdate">הדלק עדכון אוטומטי</string>
-  <string name="pref_autoupdatesummary">עדכן את הסדרות שלך מדי פעם</string>
+  <string name="pref_autoupdatesummary">Automatically sync and update SeriesGuide data</string>
   <string name="pref_autobackup">גיבוי אוטומטי</string>
   <string name="pref_autobackupsummary">גיבוי שבועי של הסדרות, רשימות והסרטים שלך</string>
   <string name="backup">גיבוי/שחזור</string>
@@ -373,7 +383,7 @@
   <string name="pref_offsetsummary">הסט זמני שידור ב- %s שעות</string>
   <string name="clear_cache">נקה מטמוני תמונות</string>
   <string name="clear_cache_summary">הסר את כל מטמוני התמונות ממכשירך</string>
-  <string name="pref_ganalyticssummary">עוקב אחר השימוש בתוכנה על מנת לסייע בשיפור SeriesGuide</string>
+  <string name="pref_ganalyticssummary">Send anonymous usage statistics to a Google service</string>
   <!-- Backup and Restore -->
   <string name="backup_full_dump">כלול את כל הנתונים כמו תיאור, שחקנים ודירוגים.</string>
   <string name="backup_path">תיקיית גיבוי</string>
@@ -428,8 +438,6 @@
   <string name="notification_release_earlier_hour">שעה מראש</string>
   <!-- Legacy Widgets -->
   <string name="smallwidget">SeriesGuide (קטן)</string>
-  <string name="bigwidget">SeriesGuide (בינוני)</string>
-  <string name="largewidget">SeriesGuide (גדול)</string>
   <!-- List Widget -->
   <string name="hide_watched">הסתר פרקים שנצפו</string>
   <string name="pref_widget_opacity">רקע ווידג\'ט</string>
@@ -443,7 +451,7 @@
   <!-- DashClock extension -->
   <string name="dashclock_extension_label">פרקים קרובים</string>
   <string name="dashclock_extension_description">מציג את הפרק הקרוב הבא מסדרות ה-SeriesGuide שלך.</string>
-  <string name="dashclock_pref_upcoming_threshold">הצג פרקים ב... הבאות</string>
+  <string name="dashclock_pref_upcoming_threshold">הצג פרקים ב&#8230; הבאות</string>
   <!-- Google In-App Billing -->
   <string name="onlyx">עמום</string>
   <string name="action_upgrade">פתח את כל האפשרויות</string>
@@ -462,7 +470,6 @@
   <string name="subscription_failed">הרכישה לא הושלמה.</string>
   <string name="pass_unavailable">X Pass אינו זמין כרגע.</string>
   <!-- Extensions -->
-  <string name="extensions">תוספים</string>
   <string name="action_extensions_configure">התאמת תוספים</string>
   <string name="action_extensions_add">הוספת תוסף</string>
   <string name="action_extensions_limit">הירשם ל-X בכדי להוסיף הרחבות נוספות</string>
@@ -478,4 +485,13 @@
   <string name="description_extension_web_search">חפש אתרים ותמונות</string>
   <!-- People -->
   <string name="person_biography">ביוגרפיה</string>
+  <!-- Feedback -->
+  <string name="feedback_question_enjoy">Are you enjoying SeriesGuide?</string>
+  <string name="feedback_action_yes">כן!</string>
+  <string name="feedback_action_notreally">לא ממש</string>
+  <string name="feedback_question_rate_google">דרג/י אותנו ב- Google Play?</string>
+  <string name="feedback_question_rate_amazon">Rate it on Amazon?</string>
+  <string name="feedback_question_feedback">Tell me how to improve it?</string>
+  <string name="feedback_action_ok">OK, sure</string>
+  <string name="feedback_action_nothanks">לא, תודה</string>
 </resources>

@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui.dialogs;
 
 import android.annotation.SuppressLint;
@@ -24,31 +8,32 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
+import android.support.annotation.Nullable;
 import android.support.v4.os.AsyncTaskCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.text.format.DateUtils;
 import android.widget.Toast;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.enums.TraktAction;
-import com.battlelancer.seriesguide.enums.TraktStatus;
 import com.battlelancer.seriesguide.settings.TraktCredentials;
-import com.battlelancer.seriesguide.traktapi.Response;
-import com.battlelancer.seriesguide.util.ServiceUtils;
+import com.battlelancer.seriesguide.traktapi.SgTrakt;
 import com.battlelancer.seriesguide.util.TraktTask;
 import com.battlelancer.seriesguide.util.TraktTask.InitBundle;
-import com.battlelancer.seriesguide.util.Utils;
-import com.uwetrottmann.trakt.v2.TraktV2;
-import com.uwetrottmann.trakt.v2.exceptions.OAuthUnauthorizedException;
-import de.greenrobot.event.EventBus;
-import retrofit.RetrofitError;
+import com.uwetrottmann.trakt5.services.Checkin;
+import dagger.Lazy;
+import java.io.IOException;
+import javax.inject.Inject;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Warns about an ongoing check-in, how long it takes until it is finished. Offers to override or
  * wait out.
  */
-public class TraktCancelCheckinDialogFragment extends DialogFragment {
+public class TraktCancelCheckinDialogFragment extends AppCompatDialogFragment {
 
+    @Inject Lazy<Checkin> traktCheckin;
     private int mWait;
 
     /**
@@ -63,9 +48,10 @@ public class TraktCancelCheckinDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Utils.trackView(getActivity(), "Cancel Check-In Dialog");
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        SgApp.from(getActivity()).getServicesComponent().inject(this);
     }
 
     @NonNull
@@ -80,55 +66,55 @@ public class TraktCancelCheckinDialogFragment extends DialogFragment {
                 mWait < 0 ? context.getString(R.string.not_available)
                         : DateUtils.formatElapsedTime(mWait)));
 
+        final SgApp app = SgApp.from(getActivity());
         builder.setPositiveButton(R.string.traktcheckin_cancel, new OnClickListener() {
 
             @Override
             @SuppressLint("CommitTransaction")
             public void onClick(DialogInterface dialog, int which) {
-                AsyncTask<String, Void, Response> cancelCheckinTask
-                        = new AsyncTask<String, Void, Response>() {
+                AsyncTask<String, Void, String> cancelCheckinTask
+                        = new AsyncTask<String, Void, String>() {
 
                     @Override
-                    protected Response doInBackground(String... params) {
-                        Response r = new Response();
-                        r.status = TraktStatus.FAILURE;
-
-                        TraktV2 trakt = ServiceUtils.getTraktV2WithAuth(context);
-                        if (trakt == null) {
-                            // not authenticated any longer
-                            r.error = context.getString(R.string.trakt_error_credentials);
-                            return r;
+                    protected String doInBackground(String... params) {
+                        // check for credentials
+                        if (!TraktCredentials.get(context).hasCredentials()) {
+                            return context.getString(R.string.trakt_error_credentials);
                         }
 
                         try {
-                            retrofit.client.Response responseDelete = trakt.checkin()
-                                    .deleteActiveCheckin();
-                            if (responseDelete != null && responseDelete.getStatus() == 204) {
-                                r.status = TraktStatus.SUCCESS;
+                            retrofit2.Response<Void> response = traktCheckin.get()
+                                    .deleteActiveCheckin()
+                                    .execute();
+                            if (response.isSuccessful()) {
+                                return null;
+                            } else {
+                                if (SgTrakt.isUnauthorized(context, response)) {
+                                    return context.getString(R.string.trakt_error_credentials);
+                                }
+                                SgTrakt.trackFailedRequest(context, "delete check-in", response);
                             }
-                        } catch (RetrofitError e) {
-                            r.error = context.getString(R.string.trakt_error_general);
-                        } catch (OAuthUnauthorizedException e) {
-                            TraktCredentials.get(context).setCredentialsInvalid();
-                            r.error = context.getString(R.string.trakt_error_credentials);
+                        } catch (IOException e) {
+                            SgTrakt.trackFailedRequest(context, "delete check-in", e);
                         }
 
-                        return r;
+                        return context.getString(R.string.api_error_generic,
+                                context.getString(R.string.trakt));
                     }
 
                     @Override
-                    protected void onPostExecute(Response r) {
-                        if (TraktStatus.SUCCESS.equals(r.status)) {
+                    protected void onPostExecute(String message) {
+                        if (message == null) {
                             // all good
                             Toast.makeText(context, R.string.checkin_canceled_success_trakt,
                                     Toast.LENGTH_SHORT).show();
 
                             // relaunch the trakt task which called us to
                             // try the check in again
-                            AsyncTaskCompat.executeParallel(new TraktTask(context, args));
-                        } else if (TraktStatus.FAILURE.equals(r.status)) {
+                            AsyncTaskCompat.executeParallel(new TraktTask(app, args));
+                        } else {
                             // well, something went wrong
-                            Toast.makeText(context, r.error, Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                         }
                     }
                 };

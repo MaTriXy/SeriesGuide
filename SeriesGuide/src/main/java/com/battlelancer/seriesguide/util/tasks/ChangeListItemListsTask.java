@@ -1,19 +1,3 @@
-/*
- * Copyright 2016 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.util.tasks;
 
 import android.content.ContentProviderOperation;
@@ -23,7 +7,6 @@ import android.support.annotation.NonNull;
 import com.battlelancer.seriesguide.backend.HexagonTools;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract;
 import com.battlelancer.seriesguide.util.DBUtils;
-import com.uwetrottmann.androidutils.AndroidUtils;
 import com.uwetrottmann.seriesguide.backend.lists.Lists;
 import com.uwetrottmann.seriesguide.backend.lists.model.SgList;
 import com.uwetrottmann.seriesguide.backend.lists.model.SgListItem;
@@ -58,13 +41,8 @@ public class ChangeListItemListsTask extends BaseActionTask {
     }
 
     @Override
-    protected Integer doInBackground(Void... params) {
-        // if sending to service, check for connection
+    protected Integer doBackgroundAction(Void... params) {
         if (isSendingToHexagon()) {
-            if (!AndroidUtils.isNetworkConnected(getContext())) {
-                return ERROR_NETWORK;
-            }
-
             Lists listsService = HexagonTools.getListsService(getContext());
             if (listsService == null) {
                 return ERROR_HEXAGON_API;
@@ -78,7 +56,7 @@ public class ChangeListItemListsTask extends BaseActionTask {
                 try {
                     listsService.save(wrapper).execute();
                 } catch (IOException e) {
-                    Timber.e(e, "doInBackground: failed to add item to lists on hexagon.");
+                    HexagonTools.trackFailedRequest(getContext(), "add list items", e);
                     return ERROR_HEXAGON_API;
                 }
             }
@@ -90,7 +68,7 @@ public class ChangeListItemListsTask extends BaseActionTask {
                 try {
                     listsService.removeItems(wrapper).execute();
                 } catch (IOException e) {
-                    Timber.e(e, "doInBackground: failed to remove item from lists on hexagon.");
+                    HexagonTools.trackFailedRequest(getContext(), "remove list items", e);
                     return ERROR_HEXAGON_API;
                 }
             }

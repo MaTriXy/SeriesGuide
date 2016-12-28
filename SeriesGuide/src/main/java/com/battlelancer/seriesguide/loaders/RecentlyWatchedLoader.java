@@ -1,28 +1,15 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.loaders;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import com.battlelancer.seriesguide.R;
 import com.battlelancer.seriesguide.adapters.NowAdapter;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract;
+import com.battlelancer.seriesguide.provider.SeriesGuideContract.Activity;
 import com.battlelancer.seriesguide.provider.SeriesGuideDatabase;
+import com.battlelancer.seriesguide.thetvdbapi.TvdbTools;
 import com.battlelancer.seriesguide.util.TextTools;
 import com.uwetrottmann.androidutils.GenericSimpleLoader;
 import java.util.ArrayList;
@@ -43,11 +30,10 @@ public class RecentlyWatchedLoader extends GenericSimpleLoader<List<NowAdapter.N
 
         // get activity of the last 24 hours with the latest one first
         Cursor query = getContext().getContentResolver()
-                .query(SeriesGuideContract.Activity.CONTENT_URI,
-                        new String[] { SeriesGuideContract.Activity.TIMESTAMP,
-                                SeriesGuideContract.Activity.EPISODE_TVDB_ID },
-                        SeriesGuideContract.Activity.TIMESTAMP + ">" + timeDayAgo, null,
-                        SeriesGuideContract.Activity.TIMESTAMP + " DESC");
+                .query(Activity.CONTENT_URI,
+                        new String[] { Activity.TIMESTAMP_MS, Activity.EPISODE_TVDB_ID },
+                        Activity.TIMESTAMP_MS + ">" + timeDayAgo, null,
+                        Activity.SORT_LATEST);
         if (query == null) {
             return null;
         }
@@ -77,12 +63,16 @@ public class RecentlyWatchedLoader extends GenericSimpleLoader<List<NowAdapter.N
 
             // add items
             if (episodeQuery.moveToFirst()) {
+                String poster = episodeQuery.getString(7);
+                if (!TextUtils.isEmpty(poster)) {
+                    poster = TvdbTools.buildPosterUrl(poster);
+                }
                 NowAdapter.NowItem item = new NowAdapter.NowItem().displayData(
                         timestamp,
                         episodeQuery.getString(6),
                         TextTools.getNextEpisodeString(getContext(), episodeQuery.getInt(3),
                                 episodeQuery.getInt(2), episodeQuery.getString(1)),
-                        episodeQuery.getString(7)
+                        poster
                 ).tvdbIds(episodeTvdbId, episodeQuery.getInt(5)).recentlyWatchedLocal();
                 items.add(item);
             }

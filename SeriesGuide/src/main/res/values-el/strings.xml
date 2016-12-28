@@ -11,7 +11,6 @@
   <string name="help">Βοήθεια</string>
   <string name="help_and_feedback">Help &amp; Feedback</string>
   <string name="drawer_open">Συρτάρι ανοιχτό</string>
-  <string name="drawer_close">Κλείσιμο μενού πλοήγησης</string>
   <!-- Media items -->
   <string name="show">Σειρά</string>
   <string name="episode">Επεισόδιο</string>
@@ -34,6 +33,9 @@
   <string name="web_search">Αναζήτηση στον ιστό</string>
   <string name="add_to_homescreen">Συντόμευση</string>
   <string name="action_open">Open</string>
+  <string name="sync_manually">Sync manually</string>
+  <string name="sync_and_update">Sync &amp; Update</string>
+  <string name="sync_and_download_all">Sync &amp; Download all</string>
   <!-- Search -->
   <string name="clear_search_history">Εκκαθάριση ιστορικού αναζήτησης</string>
   <string name="search_hint">Αναζήτηση επεισοδίων</string>
@@ -46,6 +48,8 @@
   <string name="app_not_available">Δεν υπάρχει διαθέσιμη εφαρμογή για να το χειριστεί.</string>
   <string name="people_empty">Κανείς εδώ;! Πατήστε για να προσπαθήσετε ξανά.</string>
   <string name="database_error">Δεν ήταν δυνατή η τροποποίηση δεδομένων.</string>
+  <string name="reinstall_info">Try to backup in Settings, re-install and restore.</string>
+  <string name="api_error_generic">Could not talk to %s. Try again later.</string>
   <!-- Sharing -->
   <string name="share">Μοίρασε</string>
   <string name="share_show">Κοινοποίηση σειράς</string>
@@ -54,6 +58,7 @@
   <string name="share_checkout">Κάντε Check out για το %s</string>
   <string name="addtocalendar">Προσθήκη στο ημερολόγιο</string>
   <string name="addtocalendar_failed">Δεν είναι δυνατόν να δημιουργηθεί γεγονός ημερολογίου.</string>
+  <string name="links">Links</string>
   <!-- Comments -->
   <string name="comments">Σχόλια</string>
   <string name="shout_hint">Πληκτρολογίστε ένα σχόλιο (Αγγλικά, 5+ λέξεις)</string>
@@ -72,11 +77,9 @@
   <string name="episode_firstaired">Ημερομηνία προβολής</string>
   <string name="episode_firstaired_unknown">Άγνωστη ημερομηνία προβολής</string>
   <string name="episode_dvdnumber">Επεισόδιο DVD</string>
-  <string name="show_actors">Ηθοποιοί</string>
   <string name="original_release">Αρχική κυκλοφορία</string>
   <string name="show_on_network">στο %s</string>
   <string name="show_genres">Είδη</string>
-  <string name="show_runtime">Διάρκεια</string>
   <string name="show_contentrating">Αξιολόγηση περιεχομένου</string>
   <string name="show_release_times">Ώρες που παίζονται</string>
   <string name="episode_directors">Σκηνοθέτες</string>
@@ -85,10 +88,9 @@
   <string name="show_isalive">Συνεχίζεται</string>
   <string name="show_isnotalive">Σταμάτησε</string>
   <string name="lastEdit">Τελευταία επεξεργασία // TVDb</string>
-  <string name="services_watch">Παρακολουθήστε</string>
-  <string name="services_more">Περισσότερα</string>
   <string name="no_translation">There is no description translated to %1$s available at %2$s.</string>
   <string name="no_translation_title">Not translated</string>
+  <string name="no_spoilers">Some details are hidden to prevent spoilers. To turn this off go to Settings.</string>
   <!-- Date and Time -->
   <string name="today">Σήμερα</string>
   <string name="now">τώρα</string>
@@ -131,10 +133,11 @@
   <string name="action_shows_filter_hidden">Κρυφά</string>
   <string name="action_shows_sort">Ταξινόμηση σειρών</string>
   <string name="action_shows_sort_title">Τίτλος</string>
-  <string name="action_shows_sort_episode">Επόμενο επεισόδιο</string>
+  <string name="action_shows_sort_latest_episode">Latest episode</string>
+  <string name="action_shows_sort_oldest_episode">Oldest episode</string>
+  <string name="action_shows_sort_last_watched">Last watched</string>
+  <string name="action_shows_sort_remaining">Remaining episodes</string>
   <string name="action_shows_sort_favorites">Αγαπημένα πρώτα</string>
-  <string name="updateall_yes">Ενημέρωση (όλα)</string>
-  <string name="menu_update_delta">Ενημέρωση (παλιά μόνο)</string>
   <string name="context_updateshow">Ενημέρωση</string>
   <string name="context_marknext">Το επόμενο επεισόδιο έχει παρακολουθηθεί</string>
   <!-- Now -->
@@ -173,7 +176,7 @@
   <string name="no_results">Κανένα αποτέλεσμα, δοκιμάστε ολόκληρες λέξεις.</string>
   <string name="action_try_any_language">Try any language</string>
   <string name="action_try_again">Try again</string>
-  <string name="search_error">Η αναζήτηση απέτυχε, δοκιμάστε ξανά αργότερα.</string>
+  <string name="tvdb_error_does_not_exist">The show does not exist (yet) on TheTVDB. Try again later.</string>
   <string name="add_all">Προσθήκη όλων</string>
   <string name="add_multiple">Όλες οι σειρές θα εμφανιστούν στη λίστα σύντομα.</string>
   <string name="add_started">%s θα εμφανιστεί στην λίστα με τις σειρές σου σύντομα.</string>
@@ -212,6 +215,7 @@
   <string name="action_movies_sort_title">Τίτλος</string>
   <string name="action_movies_sort_release">Ημερομηνία προβολής</string>
   <!-- Statistics -->
+  <string name="statistics_failed">Could not calculate statistics.</string>
   <string name="statistics_shows">Σειρές</string>
   <string name="statistics_episodes">Επεισόδια</string>
   <string name="statistics_movies">Ταινίες</string>
@@ -237,7 +241,7 @@
   <string name="hexagon_warning">Πειραματική έκδοση!</string>
   <string name="hexagon_description">Συνδεθείτε με το  cloud για να κάνετε αντίγραφα ασφαλείας και να συγχρονίσετε τις σειρές και τις ταινίες σας.</string>
   <string name="hexagon_warning_lists">Δεν συμπεριλαμβάνονται λίστες.</string>
-  <string name="hexagon_warning_trakt">Όταν χρησιμοποιείτε το SeriesGuide cloud, οι αλλαγές στο trakt δεν συγχρονίζονται στο SeriesGuide.</string>
+  <string name="hexagon_warning_trakt">While SeriesGuide Cloud is connected, trakt sync will be disabled.</string>
   <string name="hexagon_signin">Σύνδεση</string>
   <string name="hexagon_signed_in">Είστε συνδεδεμένος στο σύννεφο του SeriesGuide.</string>
   <string name="hexagon_signout">Αποσύνδεση</string>
@@ -247,7 +251,6 @@
   <string name="hexagon_remove_account_success">Ο λογαριασμός διαγράφηκε.</string>
   <string name="hexagon_remove_account_failure">Δεν ήταν δυνατή η κατάργηση του λογαριασμού.</string>
   <string name="hexagon_remove_account_confirmation">Η αφαίρεση του λογαριασμού σας θα διαγράψει όλες τις σειρές και τις ταινίες από το SeriesGuide cloud. Σιγουρευτείτε ότι θα τον αφαιρέσετε και από τις άλλες συνδεδεμένες συσκευές σας.</string>
-  <string name="hexagon_api_error">Αποτηχία σύνδεσης με SeriesGuide. Προσπαθήστε αργότερα.</string>
   <string name="hexagon_api_queued">Αποστολή στο SeriesGuide Cloud.</string>
   <string name="hexagon_permission_missing">To use SeriesGuide Cloud, allow access to your accounts.</string>
   <string name="hexagon_google_play_missing">To use SeriesGuide Cloud, Google Play Services are required.</string>
@@ -264,7 +267,6 @@
   <string name="traktcheckin_wait">Θα περιμένω</string>
   <string name="trakt_success">Στάλθηκε στο trakt.</string>
   <string name="trakt_error_credentials">Κάτι πήγε στραβά. Παρακαλώ ελέγξτε τα στοιχεία σας και προσπαθήστε ξανά.</string>
-  <string name="trakt_error_general">Δεν μπορέσαμε να μιλήσουμε στο trakt. Προσπαθήστε ξανά αργότερα.</string>
   <string name="trakt_error_not_exists">Not (yet) available on trakt. Try again later.</string>
   <string name="trakt_notice_not_exists">Can not (yet) be tracked with trakt.</string>
   <!-- Connect trakt -->
@@ -320,14 +322,13 @@
   <string name="pref_onlyseasonepssummary">Τα ειδικά επεισόδια να μην εμφανίζονται πουθενά εκτός από τη λίστα με τις σεζόν</string>
   <string name="pref_exactdates">Display exact dates</string>
   <string name="pref_exactdates_summary">\"October 31\" instead of \"in 3 days\"</string>
+  <string name="pref_nospoilers">Prevent spoilers</string>
+  <string name="pref_nospoilers_summary">Hide details until an episode is watched</string>
   <string name="pref_seasonsorting">Ταξινόμηση σεζόν κατά&#8230;</string>
   <string name="pref_episodesorting">Ταξινόμηση επεισοδίων κατά&#8230;</string>
   <string name="pref_language">Preferred content language</string>
   <string name="pref_updatewifionly">Εικόνες μόνο μέσω Wi-Fi</string>
   <string name="pref_updatewifionlysummary">To reduce data charges, don\'t download over mobile or metered networks</string>
-  <string name="about">Σχετικά με το SeriesGuide</string>
-  <string name="pref_autoaddshows">Προσθήκη νέων σειρών από το trakt</string>
-  <string name="pref_autoaddshowssummary">Αυτόματη προσθήκη σειρών από το trakt activity stream</string>
   <!-- About screen -->
   <string name="licence_tvdb">Αυτή η εφαρμογή χρησιμοποιεί πληροφορίες και εικόνες από το TheTVDB με άδεια CC BY-NC 4.0.</string>
   <string name="licence_themoviedb">Αυτό το προϊόν χρησιμοποιεί το API του TMDb, αλλά δεν είναι εγκεκριμένο ούτε πιστοποιημένο από το TMDb.</string>
@@ -362,8 +363,7 @@
   <string name="pref_theme">Θέμα</string>
   <!-- Other advanced settings -->
   <string name="pref_other">Άλλα</string>
-  <string name="pref_autoupdate">Aυτόματη ενημέρωση</string>
-  <string name="pref_autoupdatesummary">Ενημερώνετε περιοδικά τις σειρές σας</string>
+  <string name="pref_autoupdatesummary">Automatically sync and update SeriesGuide data</string>
   <string name="pref_autobackup">Auto Backup</string>
   <string name="pref_autobackupsummary">Weekly backup of your shows, lists and movies</string>
   <string name="backup">Δημιουργία αντιγράφου ασφαλείας/Επαναφορά</string>
@@ -373,7 +373,7 @@
   <string name="pref_offsetsummary">Μετατόπιση ωρών προβολής κατα %s ώρες</string>
   <string name="clear_cache">Καθαρισμός προσωρινής μνήμης εικόνων</string>
   <string name="clear_cache_summary">Αφαιρέστε όλες τις προσωρινά αποθηκευμένες εικόνες από τη συσκευή σας</string>
-  <string name="pref_ganalyticssummary">Καταγραφή της χρήσης για την βελτίωση του SeriesGuide</string>
+  <string name="pref_ganalyticssummary">Send anonymous usage statistics to a Google service</string>
   <!-- Backup and Restore -->
   <string name="backup_full_dump">Περιλαμβάνει όλα τα μετα-δεδομένα όπως περιγραφές, ηθοποιούς και βαθμολογίες.</string>
   <string name="backup_path">Φάκελος αντιγράφων ασφαλείας</string>
@@ -428,8 +428,6 @@
   <string name="notification_release_earlier_hour">μία ώρα νωρίτερα</string>
   <!-- Legacy Widgets -->
   <string name="smallwidget">SeriesGuide (μικρό)</string>
-  <string name="bigwidget">SeriesGuide (μεσαίο)</string>
-  <string name="largewidget">SeriesGuide (μεγάλο)</string>
   <!-- List Widget -->
   <string name="hide_watched">Απόκρυψη παρακολουθημένων επεισοδίων</string>
   <string name="pref_widget_opacity">Φόντο widget</string>
@@ -462,7 +460,6 @@
   <string name="subscription_failed">Η αγορά δεν έχει ολοκληρωθεί.</string>
   <string name="pass_unavailable">Το X Pass δεν είναι προσωρινά διαθέσιμο.</string>
   <!-- Extensions -->
-  <string name="extensions">Επεκτάσεις</string>
   <string name="action_extensions_configure">Προσαρμοσμένες επεκτάσεις</string>
   <string name="action_extensions_add">Προσθήκη επέκταση</string>
   <string name="action_extensions_limit">Λήψη X για να προσθέσετε περισσότερες επεκτάσεις</string>
@@ -478,4 +475,13 @@
   <string name="description_extension_web_search">Αναζήτηση για ιστοσελίδες και εικόνες</string>
   <!-- People -->
   <string name="person_biography">Βιογραφία</string>
+  <!-- Feedback -->
+  <string name="feedback_question_enjoy">Are you enjoying SeriesGuide?</string>
+  <string name="feedback_action_yes">Yes!</string>
+  <string name="feedback_action_notreally">Not really</string>
+  <string name="feedback_question_rate_google">Rate it on Google Play?</string>
+  <string name="feedback_question_rate_amazon">Rate it on Amazon?</string>
+  <string name="feedback_question_feedback">Tell me how to improve it?</string>
+  <string name="feedback_action_ok">OK, sure</string>
+  <string name="feedback_action_nothanks">No, thanks</string>
 </resources>

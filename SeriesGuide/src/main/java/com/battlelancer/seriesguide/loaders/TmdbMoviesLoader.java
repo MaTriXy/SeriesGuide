@@ -1,34 +1,21 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.loaders;
 
-import android.content.Context;
 import android.text.TextUtils;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.settings.DisplaySettings;
-import com.battlelancer.seriesguide.util.ServiceUtils;
+import com.battlelancer.seriesguide.tmdbapi.SgTmdb;
 import com.uwetrottmann.androidutils.AndroidUtils;
 import com.uwetrottmann.androidutils.GenericSimpleLoader;
-import com.uwetrottmann.tmdb.Tmdb;
-import com.uwetrottmann.tmdb.entities.Movie;
-import com.uwetrottmann.tmdb.entities.MovieResultsPage;
+import com.uwetrottmann.tmdb2.entities.Movie;
+import com.uwetrottmann.tmdb2.entities.MovieResultsPage;
+import com.uwetrottmann.tmdb2.services.MoviesService;
+import com.uwetrottmann.tmdb2.services.SearchService;
+import dagger.Lazy;
+import java.io.IOException;
 import java.util.List;
-import retrofit.RetrofitError;
-import timber.log.Timber;
+import javax.inject.Inject;
+import retrofit2.Response;
 
 /**
  * Loads a list of movies from TMDb.
@@ -37,49 +24,67 @@ public class TmdbMoviesLoader extends GenericSimpleLoader<TmdbMoviesLoader.Resul
 
     public static class Result {
         public List<Movie> results;
-        public int emptyTextResId;
+        public String emptyText;
 
-        public Result(List<Movie> results, int emptyTextResId) {
+        public Result(List<Movie> results, String emptyText) {
             this.results = results;
-            this.emptyTextResId = emptyTextResId;
+            this.emptyText = emptyText;
         }
     }
 
+    @Inject Lazy<MoviesService> moviesService;
+    @Inject Lazy<SearchService> searchService;
     private String mQuery;
 
-    public TmdbMoviesLoader(Context context, String query) {
-        super(context);
+    public TmdbMoviesLoader(SgApp app, String query) {
+        super(app);
+        app.getServicesComponent().inject(this);
         mQuery = query;
     }
 
     @Override
     public Result loadInBackground() {
-        Tmdb tmdb = ServiceUtils.getTmdb(getContext());
-        String languageCode = DisplaySettings.getContentLanguage(getContext());
+        String languageCode = DisplaySettings.getMoviesLanguage(getContext());
 
         List<Movie> results = null;
-
+        String action = null;
         try {
-            MovieResultsPage page;
+            Response<MovieResultsPage> response;
 
             if (TextUtils.isEmpty(mQuery)) {
-                page = tmdb.moviesService().nowPlaying(null, languageCode);
+                action = "get now playing movies";
+                response = moviesService.get()
+                        .nowPlaying(null, languageCode)
+                        .execute();
             } else {
-                page = tmdb.searchService()
-                        .movie(mQuery, null, languageCode, false, null, null, null);
+                action = "search for movies";
+                response = searchService.get()
+                        .movie(mQuery, null, languageCode, false, null, null, null)
+                        .execute();
             }
 
-            if (page != null) {
-                results = page.results;
+            if (response.isSuccessful()) {
+                MovieResultsPage page = response.body();
+                if (page != null) {
+                    results = page.results;
+                }
+            } else {
+                SgTmdb.trackFailedRequest(getContext(), action, response);
+                return buildErrorResult();
             }
-        } catch (RetrofitError e) {
-            Timber.e(e, "Loading movies from TMDb failed.");
+        } catch (IOException e) {
+            SgTmdb.trackFailedRequest(getContext(), action, e);
             // only check for connection here to allow hitting the response cache
-            return new Result(null,
-                    AndroidUtils.isNetworkConnected(getContext()) ? R.string.search_error
-                            : R.string.offline);
+            return AndroidUtils.isNetworkConnected(getContext())
+                    ? buildErrorResult()
+                    : new Result(null, getContext().getString(R.string.offline));
         }
 
-        return new Result(results, R.string.no_results);
+        return new Result(results, getContext().getString(R.string.no_results));
+    }
+
+    private Result buildErrorResult() {
+        return new Result(null, getContext().getString(R.string.api_error_generic,
+                getContext().getString(R.string.tmdb)));
     }
 }

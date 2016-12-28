@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
 import android.os.Bundle;
@@ -32,17 +16,21 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.items.SearchResult;
 import com.battlelancer.seriesguide.loaders.TvdbAddLoader;
 import com.battlelancer.seriesguide.settings.DisplaySettings;
 import com.battlelancer.seriesguide.settings.TraktCredentials;
 import com.battlelancer.seriesguide.widgets.EmptyView;
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.Collections;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import timber.log.Timber;
 
 public class TvdbAddFragment extends AddFragment {
@@ -57,8 +45,9 @@ public class TvdbAddFragment extends AddFragment {
     private static final String KEY_QUERY = "searchQuery";
     private static final String KEY_LANGUAGE = "searchLanguage";
 
-    @Bind(R.id.spinnerAddTvdbLanguage) Spinner spinnerLanguage;
+    @BindView(R.id.spinnerAddTvdbLanguage) Spinner spinnerLanguage;
 
+    private Unbinder unbinder;
     private String language;
     private boolean shouldTryAnyLanguage;
     private String currentQuery;
@@ -76,10 +65,10 @@ public class TvdbAddFragment extends AddFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_addshow_tvdb, container, false);
-        ButterKnife.bind(this, v);
+        unbinder = ButterKnife.bind(this, v);
 
         // language chooser (Supported languages + any as first option)
-        CharSequence[] languageNamesArray = getResources().getTextArray(R.array.languages);
+        CharSequence[] languageNamesArray = getResources().getTextArray(R.array.languagesShows);
         ArrayList<CharSequence> languageNamesList = new ArrayList<>(languageNamesArray.length + 1);
         languageNamesList.add(getString(R.string.any_language));
         Collections.addAll(languageNamesList, languageNamesArray);
@@ -87,7 +76,7 @@ public class TvdbAddFragment extends AddFragment {
                 android.R.layout.simple_spinner_item, languageNamesList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLanguage.setAdapter(adapter);
-        final String[] languageCodes = getResources().getStringArray(R.array.languageData);
+        final String[] languageCodes = getResources().getStringArray(R.array.languageCodesShows);
         language = DisplaySettings.getSearchLanguage(getContext());
         if (!TextUtils.isEmpty(language)) {
             for (int i = 0; i < languageCodes.length; i++) {
@@ -164,7 +153,7 @@ public class TvdbAddFragment extends AddFragment {
                     .setVisible(false);
 
             popupMenu.setOnMenuItemClickListener(
-                    new TraktAddFragment.AddItemMenuItemClickListener(view.getContext(),
+                    new TraktAddFragment.AddItemMenuItemClickListener(SgApp.from(getActivity()),
                             showTvdbId));
             popupMenu.show();
         }
@@ -192,6 +181,14 @@ public class TvdbAddFragment extends AddFragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        unbinder.unbind();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(SearchActivity.SearchQuerySubmitEvent event) {
         currentQuery = event.query;
         search();
@@ -239,7 +236,7 @@ public class TvdbAddFragment extends AddFragment {
                     language = null;
                 }
             }
-            return new TvdbAddLoader(getContext(), query, language);
+            return new TvdbAddLoader((SgApp) getActivity().getApplication(), query, language);
         }
 
         @Override
@@ -248,7 +245,7 @@ public class TvdbAddFragment extends AddFragment {
                 return;
             }
             setSearchResults(data.results);
-            setEmptyMessage(data.emptyTextResId);
+            setEmptyMessage(data.emptyText);
             if (data.successful && data.results.size() == 0 && !TextUtils.isEmpty(language)) {
                 shouldTryAnyLanguage = true;
                 emptyView.setButtonText(R.string.action_try_any_language);

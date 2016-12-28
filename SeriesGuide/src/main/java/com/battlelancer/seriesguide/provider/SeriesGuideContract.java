@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.provider;
 
 import android.net.Uri;
@@ -23,7 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import com.battlelancer.seriesguide.Constants;
-import com.battlelancer.seriesguide.SeriesGuideApplication;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.enums.EpisodeFlags;
 import com.battlelancer.seriesguide.util.DBUtils;
 import java.lang.annotation.Retention;
@@ -251,10 +235,15 @@ public class SeriesGuideContract {
         String GETGLUEID = "series_getglueid";
 
         /**
-         * Id of the last watched episode, used to calculate the next episode to watch. Added in db
-         * version 31.
+         * Id of the last watched episode, used to calculate the next episode to watch. Added with
+         * {@link SeriesGuideDatabase#DBVER_39_SHOW_LAST_WATCHED}.
          */
         String LASTWATCHEDID = "series_lastwatchedid";
+
+        /**
+         * Store the time an episode was last watched for this show. Added in
+         */
+        String LASTWATCHED_MS = "series_lastwatched_ms";
 
         /**
          * Language the show should be downloaded in, in two letter ISO 639-1 format.
@@ -265,6 +254,12 @@ public class SeriesGuideContract {
          * </pre>
          */
         String LANGUAGE = "series_language";
+
+        /**
+         * The remaining number of episodes to watch for this show. Added with {@link
+         * SeriesGuideDatabase#DBVER_39_SHOW_LAST_WATCHED}.
+         */
+        String UNWATCHED_COUNT = "series_unwatched_count";
     }
 
     interface SeasonsColumns {
@@ -371,7 +366,7 @@ public class SeriesGuideContract {
         String FIRSTAIREDMS = "episode_firstairedms";
 
         /**
-         * Whether an episode has been watched.
+         * One of {@link EpisodeFlags}, whether an episode is watched, skipped or unwatched.
          */
         String WATCHED = "watched";
 
@@ -521,7 +516,7 @@ public class SeriesGuideContract {
 
     interface ActivityColumns {
 
-        String TIMESTAMP = "activity_time";
+        String TIMESTAMP_MS = "activity_time";
 
         String EPISODE_TVDB_ID = "activity_episode";
 
@@ -529,7 +524,7 @@ public class SeriesGuideContract {
     }
 
     private static final Uri BASE_CONTENT_URI = Uri.parse("content://"
-            + SeriesGuideApplication.CONTENT_AUTHORITY);
+            + SgApp.CONTENT_AUTHORITY);
 
     public static final String PATH_SHOWS = "shows";
 
@@ -596,14 +591,14 @@ public class SeriesGuideContract {
         public static final String CONTENT_ITEM_TYPE
                 = "vnd.android.cursor.item/vnd.seriesguide.show";
 
-        /**
-         * Default "ORDER BY" clause.
-         */
-        public static final String DEFAULT_SORT = ShowsColumns.TITLE + " ASC";
+        public static final String SORT_TITLE = Shows.TITLE + " COLLATE NOCASE ASC";
+        public static final String SORT_TITLE_NOARTICLE = Shows.TITLE_NOARTICLE
+                + " COLLATE NOCASE ASC";
+        public static final String SORT_STATUS = Shows.STATUS + " DESC";
+        public static final String SORT_LATEST_EPISODE = Shows.NEXTAIRDATEMS + " DESC,"
+                + Shows.SORT_STATUS;
 
         public static final String SELECTION_FAVORITES = Shows.FAVORITE + "=1";
-
-        public static final String SELECTION_WITH_NEXT_EPISODE = Shows.NEXTEPISODE + "!=''";
 
         public static final String SELECTION_WITH_RELEASED_NEXT_EPISODE = Shows.NEXTAIRDATEMS + "!="
                 + DBUtils.UNKNOWN_NEXT_RELEASE_DATE;
@@ -665,9 +660,28 @@ public class SeriesGuideContract {
 
         public static final String SELECTION_RELEASED_BEFORE_X = Episodes.FIRSTAIREDMS + "<=?";
 
-        public static final String SORT_SEASON_ASC = Episodes.SEASON + " ASC";
+        /**
+         * Lower season or if season is equal has to have a lower episode number. Must be watched or
+         * skipped, excludes special episodes (because their release times are spread over all
+         * seasons).
+         */
+        public static final String SELECTION_PREVIOUS_WATCHED =
+                SEASON + ">0"
+                        + " AND " + SELECTION_WATCHED_OR_SKIPPED
+                        + " AND (" + SEASON + "<? OR "
+                        + "(" + SEASON + "=? AND "
+                        + NUMBER + "<?)"
+                        + ")";
 
+        public static final String SORT_SEASON_ASC = Episodes.SEASON + " ASC";
         public static final String SORT_NUMBER_ASC = Episodes.NUMBER + " ASC";
+        /**
+         * Order by season, then by number, then by release time.
+         */
+        public static final String SORT_PREVIOUS_WATCHED =
+                SEASON + " DESC" + ","
+                        + NUMBER + " DESC" + ","
+                        + FIRSTAIREDMS + " DESC";
 
         public static Uri buildEpisodeUri(String episodeId) {
             return CONTENT_URI.buildUpon().appendPath(episodeId).build();
@@ -832,20 +846,7 @@ public class SeriesGuideContract {
         public static final String SELECTION_EPISODES = ListItems.TYPE + "="
                 + ListItemTypes.EPISODE;
 
-        public static final String SORT_TITLE = Shows.TITLE + " COLLATE NOCASE ASC, "
-                + ListItems.TYPE + " ASC";
-        public static final String SORT_TITLE_REVERSE = Shows.TITLE + " COLLATE NOCASE DESC, "
-                + ListItems.TYPE + " ASC";
-        public static final String SORT_TITLE_NOARTICLE = Shows.TITLE_NOARTICLE
-                + " COLLATE NOCASE ASC, " + ListItems.TYPE + " ASC";
-        public static final String SORT_TITLE_NOARTICLE_REVERSE = Shows.TITLE_NOARTICLE
-                + " COLLATE NOCASE DESC, " + ListItems.TYPE + " ASC";
-        public static final String SORT_NEWEST_EPISODE_FIRST = Shows.NEXTAIRDATEMS + " DESC,"
-                + Shows.STATUS + " DESC," + Shows.TITLE + " COLLATE NOCASE ASC," + ListItems.TYPE
-                + " ASC";
-        public static final String SORT_OLDEST_EPISODE_FIRST = Shows.NEXTAIRDATEMS + " ASC,"
-                + Shows.STATUS + " DESC," + Shows.TITLE + " COLLATE NOCASE ASC," + ListItems.TYPE
-                + " ASC";
+        public static final String SORT_TYPE = ListItems.TYPE + " ASC";
 
         public static Uri buildListItemUri(String id) {
             return CONTENT_URI.buildUpon().appendPath(id).build();
@@ -955,6 +956,8 @@ public class SeriesGuideContract {
          * Use if multiple items get returned
          */
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.seriesguide.activity";
+
+        public static final String SORT_LATEST = Activity.TIMESTAMP_MS + " DESC";
 
         public static Uri buildActivityUri(String episodeTvdbId) {
             return CONTENT_URI.buildUpon().appendPath(episodeTvdbId).build();

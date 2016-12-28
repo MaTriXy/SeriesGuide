@@ -1,27 +1,9 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
 import android.app.SearchManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
@@ -35,7 +17,10 @@ import com.battlelancer.seriesguide.adapters.SearchResultsAdapter;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract.EpisodeSearch;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract.Episodes;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract.Shows;
-import de.greenrobot.event.EventBus;
+import com.battlelancer.seriesguide.util.Utils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Displays episode search results.
@@ -67,7 +52,7 @@ public class EpisodeSearchFragment extends ListFragment {
     public void onStart() {
         super.onStart();
 
-        EventBus.getDefault().registerSticky(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -82,11 +67,10 @@ public class EpisodeSearchFragment extends ListFragment {
         Intent i = new Intent(getActivity(), EpisodesActivity.class);
         i.putExtra(EpisodesActivity.InitBundle.EPISODE_TVDBID, (int) id);
 
-        ActivityCompat.startActivity(getActivity(), i,
-                ActivityOptionsCompat.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight())
-                        .toBundle());
+        Utils.startActivityWithAnimation(getActivity(), i, v);
     }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEventMainThread(SearchActivity.SearchQueryEvent event) {
         search(event.args);
     }

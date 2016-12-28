@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.dataliberation;
 
 import android.annotation.SuppressLint;
@@ -27,7 +11,6 @@ import android.os.ParcelFileDescriptor;
 import android.preference.PreferenceManager;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.widget.Toast;
 import com.battlelancer.seriesguide.R;
 import com.battlelancer.seriesguide.dataliberation.model.Episode;
@@ -46,7 +29,6 @@ import com.battlelancer.seriesguide.provider.SeriesGuideContract.Seasons;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract.Shows;
 import com.battlelancer.seriesguide.settings.AdvancedSettings;
 import com.battlelancer.seriesguide.settings.BackupSettings;
-import com.battlelancer.seriesguide.settings.DisplaySettings;
 import com.battlelancer.seriesguide.util.EpisodeTools;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -254,6 +236,9 @@ public class JsonExportTask extends AsyncTask<Void, Integer, Integer> {
 
                 ParcelFileDescriptor pfd = context.getContentResolver()
                         .openFileDescriptor(backupFileUri, "w");
+                if (pfd == null) {
+                    return ERROR_FILE_ACCESS;
+                }
                 FileOutputStream out = new FileOutputStream(pfd.getFileDescriptor());
 
                 if (type == BACKUP_SHOWS) {
@@ -311,7 +296,7 @@ public class JsonExportTask extends AsyncTask<Void, Integer, Integer> {
             return context.getContentResolver().query(
                     Shows.CONTENT_URI,
                     isFullDump ? ShowsQuery.PROJECTION_FULL : ShowsQuery.PROJECTION,
-                    null, null, ShowsQuery.SORT);
+                    null, null, Shows.SORT_TITLE);
         }
         if (type == BACKUP_LISTS) {
             return context.getContentResolver()
@@ -377,7 +362,7 @@ public class JsonExportTask extends AsyncTask<Void, Integer, Integer> {
             }
 
             Show show = new Show();
-            show.tvdbId = shows.getInt(ShowsQuery.ID);
+            show.tvdb_id = shows.getInt(ShowsQuery.ID);
             show.title = shows.getString(ShowsQuery.TITLE);
             show.favorite = shows.getInt(ShowsQuery.FAVORITE) == 1;
             show.hidden = shows.getInt(ShowsQuery.HIDDEN) == 1;
@@ -386,23 +371,24 @@ public class JsonExportTask extends AsyncTask<Void, Integer, Integer> {
             show.release_weekday = shows.getInt(ShowsQuery.RELEASE_WEEKDAY);
             show.release_timezone = shows.getString(ShowsQuery.RELEASE_TIMEZONE);
             show.country = shows.getString(ShowsQuery.RELEASE_COUNTRY);
-            show.lastWatchedEpisode = shows.getInt(ShowsQuery.LASTWATCHEDID);
+            show.last_watched_episode = shows.getInt(ShowsQuery.LASTWATCHEDID);
+            show.last_watched_ms = shows.getLong(ShowsQuery.LASTWATCHED_MS);
             show.poster = shows.getString(ShowsQuery.POSTER);
-            show.contentRating = shows.getString(ShowsQuery.CONTENTRATING);
+            show.content_rating = shows.getString(ShowsQuery.CONTENTRATING);
             show.status = DataLiberationTools.decodeShowStatus(shows.getInt(ShowsQuery.STATUS));
             show.runtime = shows.getInt(ShowsQuery.RUNTIME);
             show.network = shows.getString(ShowsQuery.NETWORK);
-            show.imdbId = shows.getString(ShowsQuery.IMDBID);
-            show.traktId = shows.getInt(ShowsQuery.TRAKT_ID);
-            show.firstAired = shows.getString(ShowsQuery.FIRSTAIRED);
+            show.imdb_id = shows.getString(ShowsQuery.IMDBID);
+            show.trakt_id = shows.getInt(ShowsQuery.TRAKT_ID);
+            show.first_aired = shows.getString(ShowsQuery.FIRSTAIRED);
             show.rating_user = shows.getInt(ShowsQuery.RATING_USER);
             if (isFullDump) {
                 show.overview = shows.getString(ShowsQuery.OVERVIEW);
                 show.rating = shows.getDouble(ShowsQuery.RATING_GLOBAL);
                 show.rating_votes = shows.getInt(ShowsQuery.RATING_VOTES);
                 show.genres = shows.getString(ShowsQuery.GENRES);
-                show.lastUpdated = shows.getLong(ShowsQuery.LAST_UPDATED);
-                show.lastEdited = shows.getLong(ShowsQuery.LAST_EDITED);
+                show.last_updated = shows.getLong(ShowsQuery.LAST_UPDATED);
+                show.last_edited = shows.getLong(ShowsQuery.LAST_EDITED);
             }
 
             addSeasons(show);
@@ -419,7 +405,7 @@ public class JsonExportTask extends AsyncTask<Void, Integer, Integer> {
     private void addSeasons(Show show) {
         show.seasons = new ArrayList<>();
         final Cursor seasonsCursor = context.getContentResolver().query(
-                Seasons.buildSeasonsOfShowUri(String.valueOf(show.tvdbId)),
+                Seasons.buildSeasonsOfShowUri(String.valueOf(show.tvdb_id)),
                 new String[] {
                         Seasons._ID,
                         Seasons.COMBINED
@@ -596,6 +582,7 @@ public class JsonExportTask extends AsyncTask<Void, Integer, Integer> {
                 Shows.RELEASE_TIMEZONE,
                 Shows.RELEASE_COUNTRY,
                 Shows.LASTWATCHEDID,
+                Shows.LASTWATCHED_MS,
                 Shows.POSTER,
                 Shows.CONTENTRATING,
                 Shows.STATUS,
@@ -617,6 +604,7 @@ public class JsonExportTask extends AsyncTask<Void, Integer, Integer> {
                 Shows.RELEASE_TIMEZONE,
                 Shows.RELEASE_COUNTRY,
                 Shows.LASTWATCHEDID,
+                Shows.LASTWATCHED_MS,
                 Shows.POSTER,
                 Shows.CONTENTRATING,
                 Shows.STATUS,
@@ -635,8 +623,6 @@ public class JsonExportTask extends AsyncTask<Void, Integer, Integer> {
                 Shows.LASTEDIT
         };
 
-        String SORT = Shows.TITLE + " COLLATE NOCASE ASC";
-
         int ID = 0;
         int TITLE = 1;
         int FAVORITE = 2;
@@ -646,23 +632,24 @@ public class JsonExportTask extends AsyncTask<Void, Integer, Integer> {
         int RELEASE_TIMEZONE = 6;
         int RELEASE_COUNTRY = 7;
         int LASTWATCHEDID = 8;
-        int POSTER = 9;
-        int CONTENTRATING = 10;
-        int STATUS = 11;
-        int RUNTIME = 12;
-        int NETWORK = 13;
-        int IMDBID = 14;
-        int TRAKT_ID = 15;
-        int FIRSTAIRED = 16;
-        int RATING_USER = 17;
-        int LANGUAGE = 18;
+        int LASTWATCHED_MS = 9;
+        int POSTER = 10;
+        int CONTENTRATING = 11;
+        int STATUS = 12;
+        int RUNTIME = 13;
+        int NETWORK = 14;
+        int IMDBID = 15;
+        int TRAKT_ID = 16;
+        int FIRSTAIRED = 17;
+        int RATING_USER = 18;
+        int LANGUAGE = 19;
         // Full dump only
-        int OVERVIEW = 19;
-        int RATING_GLOBAL = 20;
-        int RATING_VOTES = 21;
-        int GENRES = 22;
-        int LAST_UPDATED = 23;
-        int LAST_EDITED = 24;
+        int OVERVIEW = 20;
+        int RATING_GLOBAL = 21;
+        int RATING_VOTES = 22;
+        int GENRES = 23;
+        int LAST_UPDATED = 24;
+        int LAST_EDITED = 25;
     }
 
     public interface EpisodesQuery {

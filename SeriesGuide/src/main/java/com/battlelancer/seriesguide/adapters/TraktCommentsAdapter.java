@@ -1,23 +1,9 @@
 
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v4.widget.TextViewCompat;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.battlelancer.seriesguide.R;
 import com.battlelancer.seriesguide.util.ServiceUtils;
-import com.uwetrottmann.trakt.v2.entities.Comment;
+import com.uwetrottmann.trakt5.entities.Comment;
 import java.util.List;
 
 /**
@@ -35,11 +21,11 @@ import java.util.List;
  */
 public class TraktCommentsAdapter extends ArrayAdapter<Comment> {
 
-    private final LayoutInflater mInflater;
+    private final LayoutInflater inflater;
 
     public TraktCommentsAdapter(Context context) {
         super(context, R.layout.item_comment);
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public void setData(List<Comment> data) {
@@ -51,14 +37,15 @@ public class TraktCommentsAdapter extends ArrayAdapter<Comment> {
         }
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         // A ViewHolder keeps references to children views to avoid
         // unnecessary calls to findViewById() on each row.
         TraktCommentsAdapter.ViewHolder holder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.item_comment, parent, false);
+            convertView = inflater.inflate(R.layout.item_comment, parent, false);
 
             holder = new ViewHolder();
             holder.username = (TextView) convertView.findViewById(R.id.textViewCommentUsername);
@@ -74,6 +61,9 @@ public class TraktCommentsAdapter extends ArrayAdapter<Comment> {
 
         // Bind the data efficiently with the holder.
         final Comment comment = getItem(position);
+        if (comment == null) {
+            return convertView;
+        }
 
         String name = null;
         String avatarPath = null;
@@ -84,16 +74,15 @@ public class TraktCommentsAdapter extends ArrayAdapter<Comment> {
             }
         }
         holder.username.setText(name);
-        ServiceUtils.loadWithPicasso(getContext(), avatarPath)
-                .into(holder.avatar);
+        ServiceUtils.loadWithPicasso(getContext(), avatarPath).into(holder.avatar);
 
         if (comment.spoiler) {
             holder.comment.setText(R.string.isspoiler);
-            holder.comment.setTextAppearance(getContext(),
+            TextViewCompat.setTextAppearance(holder.comment,
                     R.style.TextAppearance_Body_Highlight_Red);
         } else {
             holder.comment.setText(comment.comment);
-            holder.comment.setTextAppearance(getContext(), R.style.TextAppearance_Body);
+            TextViewCompat.setTextAppearance(holder.comment, R.style.TextAppearance_Body);
         }
 
         String timestamp = (String) DateUtils.getRelativeTimeSpanString(

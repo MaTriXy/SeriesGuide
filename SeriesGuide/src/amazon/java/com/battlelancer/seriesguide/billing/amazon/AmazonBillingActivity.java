@@ -1,28 +1,13 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.billing.amazon;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.amazon.device.iap.PurchasingService;
 import com.amazon.device.iap.model.Product;
@@ -30,18 +15,21 @@ import com.amazon.device.iap.model.RequestId;
 import com.battlelancer.seriesguide.R;
 import com.battlelancer.seriesguide.ui.BaseActivity;
 import com.battlelancer.seriesguide.util.Utils;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import timber.log.Timber;
 
 public class AmazonBillingActivity extends BaseActivity {
 
-    @Bind(R.id.progressBarAmazonBilling) View progressBar;
-    @Bind(R.id.buttonAmazonBillingSubscribe) Button buttonSubscribe;
-    @Bind(R.id.textViewAmazonBillingSubPrice) TextView textViewPriceSub;
-    @Bind(R.id.buttonAmazonBillingGetPass) Button buttonGetPass;
-    @Bind(R.id.textViewAmazonBillingPricePass) TextView textViewPricePass;
-    @Bind(R.id.textViewAmazonBillingExisting) TextView textViewIsSupporter;
-    @Bind(R.id.buttonAmazonBillingDismiss) Button buttonDismiss;
-    @Bind(R.id.textViewAmazonBillingMoreInfo) View buttonMoreInfo;
+    @BindView(R.id.progressBarAmazonBilling) View progressBar;
+    @BindView(R.id.buttonAmazonBillingSubscribe) Button buttonSubscribe;
+    @BindView(R.id.textViewAmazonBillingSubPrice) TextView textViewPriceSub;
+    @BindView(R.id.buttonAmazonBillingGetPass) Button buttonGetPass;
+    @BindView(R.id.textViewAmazonBillingPricePass) TextView textViewPricePass;
+    @BindView(R.id.textViewAmazonBillingExisting) TextView textViewIsSupporter;
+    @BindView(R.id.buttonPositive) Button dismissButton;
+    @BindView(R.id.buttonNegative) Button hiddenButton;
+    @BindView(R.id.textViewAmazonBillingMoreInfo) View buttonMoreInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +45,10 @@ public class AmazonBillingActivity extends BaseActivity {
     @Override
     protected void setupActionBar() {
         super.setupActionBar();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void setupViews() {
@@ -79,12 +70,14 @@ public class AmazonBillingActivity extends BaseActivity {
             }
         });
 
-        buttonDismiss.setOnClickListener(new View.OnClickListener() {
+        dismissButton.setText(R.string.dismiss);
+        dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
             }
         });
+        hiddenButton.setVisibility(View.GONE);
 
         buttonMoreInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,24 +123,27 @@ public class AmazonBillingActivity extends BaseActivity {
     }
 
     private void subscribe() {
-        final RequestId requestId = PurchasingService.purchase(AmazonSku.SERIESGUIDE_SUB_YEARLY.getSku());
-        Timber.d("subscribe: requestId (" + requestId + ")");
+        final RequestId requestId = PurchasingService.purchase(
+                AmazonSku.SERIESGUIDE_SUB_YEARLY.getSku());
+        Timber.d("subscribe: requestId (%s)", requestId);
     }
 
     private void purchasePass() {
         final RequestId requestId = PurchasingService.purchase(
                 AmazonSku.SERIESGUIDE_PASS.getSku());
-        Timber.d("purchasePass: requestId (" + requestId + ")");
+        Timber.d("purchasePass: requestId (%s)", requestId);
     }
 
     private void dismiss() {
         finish();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(AmazonIapManager.AmazonIapMessageEvent event) {
         Toast.makeText(this, event.messageResId, Toast.LENGTH_LONG).show();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(AmazonIapManager.AmazonIapAvailabilityEvent event) {
         if (progressBar == null || buttonSubscribe == null || buttonGetPass == null
                 || textViewIsSupporter == null) {
@@ -171,6 +167,7 @@ public class AmazonBillingActivity extends BaseActivity {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(AmazonIapManager.AmazonIapProductEvent event) {
         Product product = event.product;
         // display the actual price like "1.23 C"
@@ -188,7 +185,7 @@ public class AmazonBillingActivity extends BaseActivity {
         if (AmazonSku.SERIESGUIDE_PASS.getSku().equals(product.getSku())) {
             if (textViewPricePass != null) {
                 textViewPricePass.setText(
-                        price + "\n" + getString(R.string.billing_price_pass));
+                        String.format("%s\n%s", price, getString(R.string.billing_price_pass)));
             }
         }
     }

@@ -1,20 +1,4 @@
 
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.billing;
 
 import android.app.Notification;
@@ -35,7 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.battlelancer.seriesguide.R;
-import com.battlelancer.seriesguide.SeriesGuideApplication;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.settings.AdvancedSettings;
 import com.battlelancer.seriesguide.ui.BaseActivity;
 import com.battlelancer.seriesguide.ui.SeriesGuidePreferences;
@@ -52,12 +36,13 @@ public class BillingActivity extends BaseActivity {
     // The SKU product ids as set in the Developer Console
     public static final String SKU_X = "x_upgrade";
 
-    public static final String SKU_X_SUB = "x_sub_2014_02";
-
+    public static final String SKU_X_SUB_2016_05 = "x_sub_2016_05";
+    public static final String SKU_X_SUB_2014_02 = "x_sub_2014_02";
     public static final String SKU_X_SUB_LEGACY = "x_subscription";
+    public static final String SKU_X_SUB_NEW_PURCHASES = SKU_X_SUB_2016_05;
 
     // (arbitrary) request code for the purchase flow
-    private static final int RC_REQUEST = 749758;
+    private static final int RC_REQUEST = 21;
 
     private static final String SOME_STRING = "SURPTk9UQ0FSRUlGWU9VUElSQVRFVEhJUw==";
 
@@ -139,7 +124,7 @@ public class BillingActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Timber.d("onActivityResult(" + requestCode + "," + resultCode + "," + data);
+        Timber.d("onActivityResult(%s,%s,%s)", requestCode, resultCode, data);
         // Have we been disposed of in the meantime? If so, quit.
         if (billingHelper == null) {
             return;
@@ -201,7 +186,7 @@ public class BillingActivity extends BaseActivity {
 
             Timber.d("onIabSetupFinished: Successful. Querying inventory.");
             List<String> detailSkus = new ArrayList<>();
-            detailSkus.add(SKU_X_SUB);
+            detailSkus.add(SKU_X_SUB_NEW_PURCHASES);
             billingHelper.queryInventoryAsync(true, detailSkus, queryInventoryFinishedListener);
         }
     };
@@ -225,7 +210,7 @@ public class BillingActivity extends BaseActivity {
             // get sub state
             boolean hasUpgrade = checkForSubscription(BillingActivity.this, inventory);
             // get local sub price
-            SkuDetails skuDetails = inventory.getSkuDetails(SKU_X_SUB);
+            SkuDetails skuDetails = inventory.getSkuDetails(SKU_X_SUB_NEW_PURCHASES);
             if (skuDetails != null) {
                 mSubPrice = skuDetails.getPrice();
             }
@@ -253,15 +238,20 @@ public class BillingActivity extends BaseActivity {
         boolean hasXUpgrade = (premiumPurchase != null && verifyDeveloperPayload(premiumPurchase));
 
         // Does the user have an active unlock all subscription?
-        Purchase xSubLegacy = inventory.getPurchase(SKU_X_SUB_LEGACY);
-        Purchase xSub = inventory.getPurchase(SKU_X_SUB);
-        boolean isSubscribedToX = (xSubLegacy != null && verifyDeveloperPayload(xSubLegacy))
-                || (xSub != null && verifyDeveloperPayload(xSub));
+        Purchase subscriptionPurchase = inventory.getPurchase(SKU_X_SUB_LEGACY);
+        if (subscriptionPurchase == null) {
+            subscriptionPurchase = inventory.getPurchase(SKU_X_SUB_2014_02);
+        }
+        if (subscriptionPurchase == null) {
+            subscriptionPurchase = inventory.getPurchase(SKU_X_SUB_2016_05);
+        }
+        boolean isSubscribedToX = subscriptionPurchase != null
+                && verifyDeveloperPayload(subscriptionPurchase);
 
         if (hasXUpgrade) {
             Timber.d("User has X SUBSCRIPTION for life.");
         } else {
-            Timber.d("User has " + (isSubscribedToX ? "X SUBSCRIPTION" : "NO X SUBSCRIPTION"));
+            Timber.d("User has %s", isSubscribedToX ? "X SUBSCRIPTION" : "NO X SUBSCRIPTION");
         }
 
         // notify the user about a change in subscription state
@@ -313,7 +303,7 @@ public class BillingActivity extends BaseActivity {
         // show the notification
         final NotificationManager nm = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(SeriesGuideApplication.NOTIFICATION_SUBSCRIPTION_ID, notification);
+        nm.notify(SgApp.NOTIFICATION_SUBSCRIPTION_ID, notification);
     }
 
     /**
@@ -338,7 +328,7 @@ public class BillingActivity extends BaseActivity {
 
         setWaitMode(true);
 
-        billingHelper.launchSubscriptionPurchaseFlow(this, SKU_X_SUB, RC_REQUEST,
+        billingHelper.launchSubscriptionPurchaseFlow(this, SKU_X_SUB_NEW_PURCHASES, RC_REQUEST,
                 purchaseFinishedListener, payload);
     }
 
@@ -346,7 +336,7 @@ public class BillingActivity extends BaseActivity {
     IabHelper.OnIabPurchaseFinishedListener purchaseFinishedListener
             = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-            Timber.d("Purchase finished: " + result + ", purchase: " + purchase);
+            Timber.d("Purchase finished: %s, purchase: %s", result, purchase);
 
             // Have we been disposed of in the meantime? If so, quit.
             if (billingHelper == null) {
@@ -369,7 +359,7 @@ public class BillingActivity extends BaseActivity {
 
             Timber.d("Purchase successful.");
 
-            if (purchase.getSku().equals(SKU_X_SUB)) {
+            if (purchase.getSku().equals(SKU_X_SUB_NEW_PURCHASES)) {
                 Timber.d("Purchased X subscription. Congratulating user.");
                 // Save current state until we query again
                 AdvancedSettings.setSupporterState(BillingActivity.this, true);

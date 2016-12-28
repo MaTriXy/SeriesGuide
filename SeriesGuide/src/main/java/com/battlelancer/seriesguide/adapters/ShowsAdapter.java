@@ -1,21 +1,6 @@
-/*
- * Copyright 2015 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.BaseColumns;
@@ -31,8 +16,8 @@ import com.battlelancer.seriesguide.util.Utils;
  */
 public class ShowsAdapter extends BaseShowsAdapter {
 
-    public ShowsAdapter(Context context, OnContextMenuClickListener listener) {
-        super(context, listener);
+    public ShowsAdapter(Activity activity, OnContextMenuClickListener listener) {
+        super(activity, listener);
     }
 
     @Override
@@ -61,6 +46,8 @@ public class ShowsAdapter extends BaseShowsAdapter {
             viewHolder.episodeTime.setText(fieldValue);
         }
 
+        setRemainingCount(context, viewHolder.remainingCount, cursor.getInt(Query.UNWATCHED_COUNT));
+
         // network, day and time
         viewHolder.timeAndNetwork.setText(buildNetworkAndTimeString(context,
                 cursor.getInt(Query.RELEASE_TIME),
@@ -70,8 +57,7 @@ public class ShowsAdapter extends BaseShowsAdapter {
                 cursor.getString(Query.NETWORK)));
 
         // set poster
-        Utils.loadTvdbShowPoster(context, viewHolder.poster,
-                cursor.getString(Query.POSTER));
+        Utils.loadTvdbShowPoster(context, viewHolder.poster, cursor.getString(Query.POSTER));
 
         // context menu
         viewHolder.isHidden = DBUtils.restoreBooleanFromInt(cursor.getInt(Query.HIDDEN));
@@ -94,7 +80,8 @@ public class ShowsAdapter extends BaseShowsAdapter {
                 SeriesGuideContract.Shows.NEXTTEXT, // 10
                 SeriesGuideContract.Shows.NEXTAIRDATETEXT,
                 SeriesGuideContract.Shows.FAVORITE,
-                SeriesGuideContract.Shows.HIDDEN // 13
+                SeriesGuideContract.Shows.HIDDEN,
+                SeriesGuideContract.Shows.UNWATCHED_COUNT // 14
         };
 
         int _ID = 0;
@@ -111,5 +98,6 @@ public class ShowsAdapter extends BaseShowsAdapter {
         int NEXTAIRDATETEXT = 11;
         int FAVORITE = 12;
         int HIDDEN = 13;
+        int UNWATCHED_COUNT = 14;
     }
 }

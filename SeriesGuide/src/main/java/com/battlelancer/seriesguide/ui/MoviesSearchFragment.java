@@ -1,27 +1,11 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
+import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
@@ -45,17 +29,26 @@ import android.widget.GridView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.adapters.MoviesAdapter;
 import com.battlelancer.seriesguide.loaders.TmdbMoviesLoader;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract;
+import com.battlelancer.seriesguide.settings.DisplaySettings;
 import com.battlelancer.seriesguide.settings.SearchSettings;
+import com.battlelancer.seriesguide.ui.dialogs.LanguageChoiceDialogFragment;
+import com.battlelancer.seriesguide.util.LanguageTools;
 import com.battlelancer.seriesguide.util.MovieTools;
 import com.battlelancer.seriesguide.util.SearchHistory;
+import com.battlelancer.seriesguide.util.Utils;
 import com.battlelancer.seriesguide.widgets.EmptyView;
-import com.uwetrottmann.tmdb.entities.Movie;
+import com.uwetrottmann.tmdb2.entities.Movie;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Allows searching for movies on themoviedb.org, displays results in a nice grid.
@@ -65,22 +58,23 @@ public class MoviesSearchFragment extends Fragment implements OnItemClickListene
 
     private static final String SEARCH_QUERY_KEY = "search_query";
 
+    @BindView(R.id.containerMoviesSearchContent) View resultsContainer;
+    @BindView(R.id.progressBarMoviesSearch) View progressBar;
+    @BindView(R.id.gridViewMoviesSearch) GridView resultsGridView;
+    @BindView(R.id.emptyViewMoviesSearch) EmptyView emptyView;
+    @BindView(R.id.editTextMoviesSearch) AutoCompleteTextView searchBox;
+    @BindView(R.id.buttonMoviesSearchClear) View clearButton;
+
     private MoviesAdapter resultsAdapter;
     private SearchHistory searchHistory;
     private ArrayAdapter<String> searchHistoryAdapter;
-
-    @Bind(R.id.containerMoviesSearchContent) View resultsContainer;
-    @Bind(R.id.progressBarMoviesSearch) View progressBar;
-    @Bind(R.id.gridViewMoviesSearch) GridView resultsGridView;
-    @Bind(R.id.emptyViewMoviesSearch) EmptyView emptyView;
-    @Bind(R.id.editTextMoviesSearch) AutoCompleteTextView searchBox;
-    @Bind(R.id.buttonMoviesSearchClear) View clearButton;
+    private Unbinder unbinder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_movies_search, container, false);
-        ButterKnife.bind(this, v);
+        unbinder = ButterKnife.bind(this, v);
 
         // setup grid view
         // enable app bar scrolling out of view only on L or higher
@@ -163,21 +157,45 @@ public class MoviesSearchFragment extends Fragment implements OnItemClickListene
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_history_menu, menu);
+        inflater.inflate(R.menu.movies_search_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_action_search_clear_history) {
+        if (itemId == R.id.menu_action_movies_search_change_language) {
+            LanguageTools.LanguageData languageData = LanguageTools.getMovieLanguageData(
+                    getContext());
+            if (languageData != null) {
+                DialogFragment dialog = LanguageChoiceDialogFragment.newInstance(
+                        languageData.languageIndex);
+                dialog.show(getFragmentManager(), "dialog-language");
+            }
+            return true;
+        }
+        if (itemId == R.id.menu_action_movies_search_clear_history) {
             if (searchHistory != null && searchHistoryAdapter != null) {
                 searchHistory.clearHistory();
                 searchHistoryAdapter.clear();
@@ -215,16 +233,18 @@ public class MoviesSearchFragment extends Fragment implements OnItemClickListene
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Movie movie = resultsAdapter.getItem(position);
+        if (movie == null) {
+            return;
+        }
 
         // launch details activity
         Intent i = new Intent(getActivity(), MovieDetailsActivity.class);
         i.putExtra(MovieDetailsFragment.InitBundle.TMDB_ID, movie.id);
 
-        ActivityCompat.startActivity(getActivity(), i,
-                ActivityOptionsCompat
-                        .makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight())
-                        .toBundle()
-        );
+        MoviesAdapter.ViewHolder viewHolder
+                = (MoviesAdapter.ViewHolder) view.getTag();
+        Utils.startActivityWithTransition(getActivity(), i, viewHolder.poster,
+                R.string.transitionNameMoviePoster);
     }
 
     @Override
@@ -259,19 +279,19 @@ public class MoviesSearchFragment extends Fragment implements OnItemClickListene
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menu_action_movies_watchlist_add: {
-                        MovieTools.addToWatchlist(getContext(), movieTmdbId);
+                        MovieTools.addToWatchlist(SgApp.from(getActivity()), movieTmdbId);
                         return true;
                     }
                     case R.id.menu_action_movies_watchlist_remove: {
-                        MovieTools.removeFromWatchlist(getContext(), movieTmdbId);
+                        MovieTools.removeFromWatchlist(SgApp.from(getActivity()), movieTmdbId);
                         return true;
                     }
                     case R.id.menu_action_movies_collection_add: {
-                        MovieTools.addToCollection(getContext(), movieTmdbId);
+                        MovieTools.addToCollection(SgApp.from(getActivity()), movieTmdbId);
                         return true;
                     }
                     case R.id.menu_action_movies_collection_remove: {
-                        MovieTools.removeFromCollection(getContext(), movieTmdbId);
+                        MovieTools.removeFromCollection(SgApp.from(getActivity()), movieTmdbId);
                         return true;
                     }
                 }
@@ -279,6 +299,21 @@ public class MoviesSearchFragment extends Fragment implements OnItemClickListene
             }
         });
         popupMenu.show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleLanguageEvent(LanguageChoiceDialogFragment.LanguageChangedEvent event) {
+        if (!isAdded()) {
+            return;
+        }
+        String languageCode = getResources().getStringArray(
+                R.array.languageCodesMovies)[event.selectedLanguageIndex];
+        PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
+                .putString(DisplaySettings.KEY_LANGUAGE_MOVIES, languageCode)
+                .apply();
+
+        // just run the current search again
+        search();
     }
 
     private LoaderCallbacks<TmdbMoviesLoader.Result> searchLoaderCallbacks
@@ -290,7 +325,7 @@ public class MoviesSearchFragment extends Fragment implements OnItemClickListene
             if (args != null) {
                 query = args.getString(SEARCH_QUERY_KEY);
             }
-            return new TmdbMoviesLoader(getContext(), query);
+            return new TmdbMoviesLoader(SgApp.from(getActivity()), query);
         }
 
         @Override
@@ -299,7 +334,7 @@ public class MoviesSearchFragment extends Fragment implements OnItemClickListene
             if (!isAdded()) {
                 return;
             }
-            emptyView.setMessage(data.emptyTextResId);
+            emptyView.setMessage(data.emptyText);
             resultsAdapter.setData(data.results);
             setProgressVisible(false, true);
         }

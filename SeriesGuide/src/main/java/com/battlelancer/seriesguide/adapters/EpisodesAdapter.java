@@ -1,20 +1,4 @@
 
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.adapters;
 
 import android.content.Context;
@@ -30,6 +14,7 @@ import com.battlelancer.seriesguide.R;
 import com.battlelancer.seriesguide.settings.DisplaySettings;
 import com.battlelancer.seriesguide.ui.EpisodesFragment.EpisodesQuery;
 import com.battlelancer.seriesguide.util.EpisodeTools;
+import com.battlelancer.seriesguide.util.TextTools;
 import com.battlelancer.seriesguide.util.TimeTools;
 import com.battlelancer.seriesguide.widgets.WatchedBox;
 import com.uwetrottmann.androidutils.CheatSheet;
@@ -119,14 +104,22 @@ public class EpisodesAdapter extends CursorAdapter {
         }
 
         // episode title
-        viewHolder.episodeTitle.setText(mCursor.getString(EpisodesQuery.TITLE));
+        final int watchedFlag = mCursor.getInt(EpisodesQuery.WATCHED);
+        final int episodeNumber = mCursor.getInt(EpisodesQuery.NUMBER);
+        if (EpisodeTools.isUnwatched(watchedFlag) && DisplaySettings.preventSpoilers(mContext)) {
+            // just display the episode number "1x02"
+            int season = mCursor.getInt(EpisodesQuery.SEASON);
+            viewHolder.episodeTitle.setText(
+                    TextTools.getEpisodeNumber(mContext, season, episodeNumber));
+        } else {
+            viewHolder.episodeTitle.setText(mCursor.getString(EpisodesQuery.TITLE));
+        }
 
         // number
-        final int episodeNumber = mCursor.getInt(EpisodesQuery.NUMBER);
         viewHolder.episodeNumber.setText(String.valueOf(episodeNumber));
 
         // watched box
-        viewHolder.watchedBox.setEpisodeFlag(mCursor.getInt(EpisodesQuery.WATCHED));
+        viewHolder.watchedBox.setEpisodeFlag(watchedFlag);
         final int episodeId = mCursor.getInt(EpisodesQuery._ID);
         viewHolder.watchedBox.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -138,7 +131,6 @@ public class EpisodesAdapter extends CursorAdapter {
             }
         });
         viewHolder.watchedBox.setEnabled(true);
-        final int watchedFlag = viewHolder.watchedBox.getEpisodeFlag();
         boolean watched = EpisodeTools.isWatched(watchedFlag);
         viewHolder.watchedBox.setContentDescription(
                 mContext.getString(watched ? R.string.action_unwatched : R.string.action_watched));

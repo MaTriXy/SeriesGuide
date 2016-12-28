@@ -1,30 +1,15 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.extensions;
 
 import android.text.TextUtils;
 import com.battlelancer.seriesguide.R;
 import com.battlelancer.seriesguide.api.Action;
 import com.battlelancer.seriesguide.api.Episode;
+import com.battlelancer.seriesguide.api.Movie;
 import com.battlelancer.seriesguide.api.SeriesGuideExtension;
 import com.battlelancer.seriesguide.util.ServiceUtils;
 
 /**
- * Searches the Google Play TV and movies section for an episode.
+ * Searches the Google Play TV and movies section for an episode or movie.
  */
 public class GooglePlayExtension extends SeriesGuideExtension {
 
@@ -38,11 +23,23 @@ public class GooglePlayExtension extends SeriesGuideExtension {
         if (TextUtils.isEmpty(episode.getShowTitle()) || TextUtils.isEmpty(episode.getTitle())) {
             return;
         }
+        publishGooglePlayAction(episodeIdentifier,
+                String.format("%s %s", episode.getShowTitle(), episode.getTitle()));
+    }
 
+    @Override
+    protected void onRequest(int movieIdentifier, Movie movie) {
+        // we need at least a movie title
+        if (TextUtils.isEmpty(movie.getTitle())) {
+            return;
+        }
+        publishGooglePlayAction(movieIdentifier, movie.getTitle());
+    }
+
+    private void publishGooglePlayAction(int identifier, String searchTerm) {
         publishAction(
-                new Action.Builder(getString(R.string.extension_google_play), episodeIdentifier)
-                        .viewIntent(ServiceUtils.buildGooglePlayIntent(
-                                episode.getShowTitle() + " " + episode.getTitle(),
+                new Action.Builder(getString(R.string.extension_google_play), identifier)
+                        .viewIntent(ServiceUtils.buildGooglePlayIntent(searchTerm,
                                 getApplicationContext()))
                         .build());
     }

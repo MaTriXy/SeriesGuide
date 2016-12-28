@@ -1,31 +1,15 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.loaders;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.items.MovieDetails;
 import com.battlelancer.seriesguide.util.DBUtils;
 import com.battlelancer.seriesguide.util.MovieTools;
-import com.uwetrottmann.androidutils.AndroidUtils;
 import com.uwetrottmann.androidutils.GenericSimpleLoader;
-import com.uwetrottmann.trakt.v2.entities.Ratings;
-import java.util.Date;
+import com.uwetrottmann.tmdb2.entities.Movie;
+import com.uwetrottmann.trakt5.entities.Ratings;
 
 import static com.battlelancer.seriesguide.provider.SeriesGuideContract.Movies;
 
@@ -35,21 +19,19 @@ import static com.battlelancer.seriesguide.provider.SeriesGuideContract.Movies;
  */
 public class MovieLoader extends GenericSimpleLoader<MovieDetails> {
 
+    private final SgApp app;
     private int mTmdbId;
 
-    public MovieLoader(Context context, int tmdbId) {
-        super(context);
+    public MovieLoader(SgApp app, int tmdbId) {
+        super(app);
+        this.app = app;
         mTmdbId = tmdbId;
     }
 
     @Override
     public MovieDetails loadInBackground() {
-        MovieDetails details = new MovieDetails();
-
-        // try loading from trakt and tmdb
-        if (AndroidUtils.isNetworkConnected(getContext())) {
-            details = MovieTools.Download.getMovieDetails(getContext(), mTmdbId);
-        }
+        // try loading from trakt and tmdb, this might return a cached response
+        MovieDetails details = app.getMovieTools().getMovieDetails(mTmdbId);
 
         // update local database
         updateLocalMovie(getContext(), details, mTmdbId);
@@ -86,7 +68,7 @@ public class MovieLoader extends GenericSimpleLoader<MovieDetails> {
             details.traktRatings().votes = movieQuery.getInt(MovieQuery.RATING_VOTES_TRAKT);
         }
         if (details.tmdbMovie() == null) {
-            details.tmdbMovie(new com.uwetrottmann.tmdb.entities.Movie());
+            details.tmdbMovie(new Movie());
             details.tmdbMovie().imdb_id = movieQuery.getString(MovieQuery.IMDB_ID);
             details.tmdbMovie().title = movieQuery.getString(MovieQuery.TITLE);
             details.tmdbMovie().overview = movieQuery.getString(MovieQuery.OVERVIEW);
@@ -96,8 +78,7 @@ public class MovieLoader extends GenericSimpleLoader<MovieDetails> {
             details.tmdbMovie().vote_count = movieQuery.getInt(MovieQuery.RATING_VOTES_TMDB);
             // if stored release date is Long.MAX, movie has no release date
             long releaseDateMs = movieQuery.getLong(MovieQuery.RELEASED_UTC_MS);
-            details.tmdbMovie().release_date = releaseDateMs == Long.MAX_VALUE ? null
-                    : new Date(releaseDateMs);
+            details.tmdbMovie().release_date = MovieTools.movieReleaseDateFrom(releaseDateMs);
         }
 
         // clean up

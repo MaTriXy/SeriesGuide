@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.settings;
 
 import android.content.Context;
@@ -34,6 +18,8 @@ public class DisplaySettings {
     public static final String KEY_THEME = "com.battlelancer.seriesguide.theme";
 
     public static final String KEY_LANGUAGE = "language";
+
+    public static final String KEY_LANGUAGE_MOVIES = "com.battlelancer.seriesguide.languagemovies";
 
     public static final String KEY_LANGUAGE_SEARCH = "com.battlelancer.seriesguide.languagesearch";
 
@@ -60,8 +46,17 @@ public class DisplaySettings {
     public static final String KEY_LAST_ACTIVE_SHOWS_TAB
             = "com.battlelancer.seriesguide.activitytab";
 
+    public static final String KEY_LAST_ACTIVE_LISTS_TAB
+            = "com.battlelancer.seriesguide.listsActiveTab";
+
+    public static final String KEY_LAST_ACTIVE_MOVIES_TAB
+            = "com.battlelancer.seriesguide.moviesActiveTab";
+
     public static final String KEY_DISPLAY_EXACT_DATE =
             "com.battlelancer.seriesguide.shows.exactdate";
+
+    public static final String KEY_PREVENT_SPOILERS =
+            "com.battlelancer.seriesguide.PREVENT_SPOILERS";
 
     /**
      * Returns true for xlarge, xlarge-land or sw720dp screens.
@@ -97,6 +92,15 @@ public class DisplaySettings {
     public static String getContentLanguage(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(KEY_LANGUAGE, LANGUAGE_EN);
+    }
+
+    /**
+     * @return Two letter ISO 639-1 language code plus an extra ISO-3166-1 region tag used by TMDB
+     * as preferred by the user. Or the default language.
+     */
+    public static String getMoviesLanguage(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(KEY_LANGUAGE_MOVIES, context.getString(R.string.movie_default_language));
     }
 
     /**
@@ -162,11 +166,35 @@ public class DisplaySettings {
     }
 
     /**
+     * Return the position of the last selected lists tab.
+     */
+    public static int getLastListsTabPosition(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getInt(KEY_LAST_ACTIVE_LISTS_TAB, 0);
+    }
+
+    /**
+     * Return the position of the last selected movies tab.
+     */
+    public static int getLastMoviesTabPosition(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getInt(KEY_LAST_ACTIVE_MOVIES_TAB, 0);
+    }
+
+    /**
      * Whether to show the exact/absolute date (31.10.2010) instead of a relative time string (in 5
      * days).
      */
     public static boolean isDisplayExactDate(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
                 KEY_DISPLAY_EXACT_DATE, false);
+    }
+
+    /**
+     * Whether the app should hide details potentially spoiling an unwatched episode.
+     */
+    public static boolean preventSpoilers(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
+                KEY_PREVENT_SPOILERS, false);
     }
 }

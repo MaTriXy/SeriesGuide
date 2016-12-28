@@ -11,7 +11,6 @@
   <string name="help">Palīdzība</string>
   <string name="help_and_feedback">Help &amp; Feedback</string>
   <string name="drawer_open">Atvērt navigācijas atvilktni</string>
-  <string name="drawer_close">Aizvērt navigācijas atvilktni</string>
   <!-- Media items -->
   <string name="show">Seriāls</string>
   <string name="episode">Epizode</string>
@@ -25,7 +24,7 @@
   <string name="description_overview">Pārskats</string>
   <string name="description_poster">Rādīt plakātu</string>
   <string name="description_image">Epizodes attēls</string>
-  <string name="description_menu_overflow">More options</string>
+  <string name="description_menu_overflow">Vairāk opciju</string>
   <!-- Actions -->
   <string name="clear">Iztīrīt</string>
   <string name="discard">Atmest</string>
@@ -34,10 +33,13 @@
   <string name="web_search">Web meklēšana</string>
   <string name="add_to_homescreen">Shortcut</string>
   <string name="action_open">Open</string>
+  <string name="sync_manually">Sync manually</string>
+  <string name="sync_and_update">Sync &amp; Update</string>
+  <string name="sync_and_download_all">Sync &amp; Download all</string>
   <!-- Search -->
   <string name="clear_search_history">Dzēst meklēšanas vēsturi</string>
   <string name="search_hint">Meklēt epizodēs</string>
-  <string name="any_language">Any language</string>
+  <string name="any_language">Jebkurā valodā</string>
   <!-- Status messages -->
   <string name="updated">Atjaunināts uz jaunāko versiju.</string>
   <string name="norating">n/a</string>
@@ -46,6 +48,8 @@
   <string name="app_not_available">Nav pieejama aplikācija, lai šo izdarītu.</string>
   <string name="people_empty">Neviena te nav?! Pieskaries lai mēģinātu vēlreiz.</string>
   <string name="database_error">Could not modify data.</string>
+  <string name="reinstall_info">Try to backup in Settings, re-install and restore.</string>
+  <string name="api_error_generic">Could not talk to %s. Try again later.</string>
   <!-- Sharing -->
   <string name="share">Dalīties</string>
   <string name="share_show">Kopīgot seriālu</string>
@@ -54,18 +58,19 @@
   <string name="share_checkout">Iečeko %s</string>
   <string name="addtocalendar">Pievienot kalendāram</string>
   <string name="addtocalendar_failed">Nevar radīt kalendāru pasākumu.</string>
+  <string name="links">Links</string>
   <!-- Comments -->
   <string name="comments">Komentāri</string>
-  <string name="shout_hint">Type a comment (English, 5+ words)</string>
+  <string name="shout_hint">Raksti komentāru (Angliski, 5 + vārdi)</string>
   <string name="shout_invalid">Your comment does not follow the rules!</string>
-  <string name="action_post">Post</string>
+  <string name="action_post">Publikācija</string>
   <string name="isspoiler">Spoileru brīdinājums!</string>
   <string name="no_shouts">Esi pirmais, kas kliedz!</string>
   <string name="refresh">Atsvaidzināt</string>
   <plurals name="replies_plural">
-    <item quantity="one">%d reply</item>
-    <item quantity="zero">%d replies</item>
-    <item quantity="other">%d replies</item>
+    <item quantity="one">%d atbilde</item>
+    <item quantity="zero">%d atbilžu</item>
+    <item quantity="other">%d atbildes</item>
   </plurals>
   <!-- Metadata -->
   <string name="episode_number_absolute">ABSOLŪTAIS</string>
@@ -73,11 +78,9 @@
   <string name="episode_firstaired">Raidīšanas datums</string>
   <string name="episode_firstaired_unknown">Nezināms raidīšanas datums</string>
   <string name="episode_dvdnumber">DVD epizode</string>
-  <string name="show_actors">Aktieri</string>
-  <string name="original_release">Original release</string>
+  <string name="original_release">Oriģināls publikācijas datums</string>
   <string name="show_on_network">kanālā %s</string>
   <string name="show_genres">Žanri</string>
-  <string name="show_runtime">Garums</string>
   <string name="show_contentrating">Satura novērtējums</string>
   <string name="show_release_times">Iznākšanas laiki</string>
   <string name="episode_directors">Režisori</string>
@@ -86,10 +89,9 @@
   <string name="show_isalive">Turpinās</string>
   <string name="show_isnotalive">Beidzies</string>
   <string name="lastEdit">Pēdējais labojums //TVDb</string>
-  <string name="services_watch">Skaties</string>
-  <string name="services_more">Vairāk</string>
   <string name="no_translation">There is no description translated to %1$s available at %2$s.</string>
-  <string name="no_translation_title">Not translated</string>
+  <string name="no_translation_title">Nav tulkots</string>
+  <string name="no_spoilers">Some details are hidden to prevent spoilers. To turn this off go to Settings.</string>
   <!-- Date and Time -->
   <string name="today">šodien</string>
   <string name="now">pašlaik</string>
@@ -115,8 +117,8 @@
   <string name="delete_error">Nebija iespējams noņemt šo šovu. Mēģini vēlreiz.</string>
   <string name="delete_show">Noņemt</string>
   <string name="no_nextepisode">nākamā epizode netika atrasta</string>
-  <string name="context_favorite">Add to favorites</string>
-  <string name="context_unfavorite">Remove from favorites</string>
+  <string name="context_favorite">Pievienot favorītiem</string>
+  <string name="context_unfavorite">Noņemt no favorītiem</string>
   <string name="favorited">Pievienota(-s) pie favorītiem</string>
   <string name="unfavorited">Noņemta(-s) no favorītiem</string>
   <string name="context_hide">Slēpt</string>
@@ -132,21 +134,22 @@
   <string name="action_shows_filter_hidden">Slēptās</string>
   <string name="action_shows_sort">Kārtot seriālus</string>
   <string name="action_shows_sort_title">Nosaukums</string>
-  <string name="action_shows_sort_episode">Nākamā epizode</string>
+  <string name="action_shows_sort_latest_episode">Latest episode</string>
+  <string name="action_shows_sort_oldest_episode">Oldest episode</string>
+  <string name="action_shows_sort_last_watched">Last watched</string>
+  <string name="action_shows_sort_remaining">Remaining episodes</string>
   <string name="action_shows_sort_favorites">Sākot ar izlasi</string>
-  <string name="updateall_yes">Atjaunināt (visus)</string>
-  <string name="menu_update_delta">Atjaunināt (tikai novecojušos)</string>
   <string name="context_updateshow">Atjaunināt</string>
   <string name="context_marknext">Nākamā epizode noskatīta</string>
   <!-- Now -->
-  <string name="now_tab">Now</string>
+  <string name="now_tab">šobrīd</string>
   <string name="recently_watched">Recently watched</string>
   <string name="released_today">Released today</string>
-  <string name="friends_recently">Your trakt friends</string>
-  <string name="now_empty">Nothing going on. Watch some shows!</string>
+  <string name="friends_recently">Trakt draugi</string>
+  <string name="now_empty">Nekas nenotiek. Skatieties šovus!</string>
   <string name="now_movies_empty">Nothing going on. Watch some movies!</string>
   <!-- History -->
-  <string name="user_stream">History</string>
+  <string name="user_stream">Vēsture</string>
   <string name="user_stream_empty">Neeksistē nesena trakt aktivitāte. Iečeko kādus šovus!</string>
   <string name="user_movie_stream_empty">Neeksistē nesenas trakt aktivitātes. Iečeko kādas filmas!</string>
   <!-- Calendar -->
@@ -173,8 +176,8 @@
   <string name="add_empty">Šeit nepastāv nekādu veidu šovi.</string>
   <string name="no_results">Nav rezultātu, mēģiniet ar veseliem vārdiem.</string>
   <string name="action_try_any_language">Try any language</string>
-  <string name="action_try_again">Try again</string>
-  <string name="search_error">Meklēšana neizdevās, mēģiniet vēlreiz vēlāk.</string>
+  <string name="action_try_again">Mēģināt vēlreiz</string>
+  <string name="tvdb_error_does_not_exist">The show does not exist (yet) on TheTVDB. Try again later.</string>
   <string name="add_all">Pievienot visas</string>
   <string name="add_multiple">Visi seriāli tuvākajā laikā parādīsies jūsu seriālu sarakstā.</string>
   <string name="add_started">%s drīz parādīsies tavā šovu sarakstā.</string>
@@ -213,6 +216,7 @@
   <string name="action_movies_sort_title">Nosaukums</string>
   <string name="action_movies_sort_release">Raidīšanas datums</string>
   <!-- Statistics -->
+  <string name="statistics_failed">Could not calculate statistics.</string>
   <string name="statistics_shows">Šovi</string>
   <string name="statistics_episodes">Epizodes</string>
   <string name="statistics_movies">Filmas</string>
@@ -238,10 +242,10 @@
     <item quantity="other">%d minutes</item>
   </plurals>
   <!-- Hexagon -->
-  <string name="hexagon_warning">Experimental!</string>
+  <string name="hexagon_warning">Experimental</string>
   <string name="hexagon_description">Connect to the cloud to backup and sync your shows and movies.</string>
   <string name="hexagon_warning_lists">Lists are not included.</string>
-  <string name="hexagon_warning_trakt">When using SeriesGuide Cloud, changes on trakt will not sync down to SeriesGuide.</string>
+  <string name="hexagon_warning_trakt">While SeriesGuide Cloud is connected, trakt sync will be disabled.</string>
   <string name="hexagon_signin">Ielogojies</string>
   <string name="hexagon_signed_in">Tu esi savienojies ar SeriesGuide mākoni.</string>
   <string name="hexagon_signout">Izlogoties</string>
@@ -251,7 +255,6 @@
   <string name="hexagon_remove_account_success">Account obliterated.</string>
   <string name="hexagon_remove_account_failure">Could not remove account.</string>
   <string name="hexagon_remove_account_confirmation">Removing your account will delete all shows and movies from SeriesGuide Cloud. Make sure to remove it on other connected devices as well.</string>
-  <string name="hexagon_api_error">Could not talk to SeriesGuide Cloud. Try again later.</string>
   <string name="hexagon_api_queued">Sending to SeriesGuide Cloud.</string>
   <string name="hexagon_permission_missing">To use SeriesGuide Cloud, allow access to your accounts.</string>
   <string name="hexagon_google_play_missing">To use SeriesGuide Cloud, Google Play Services are required.</string>
@@ -268,7 +271,6 @@
   <string name="traktcheckin_wait">Es gaidīšu</string>
   <string name="trakt_success">Sent to trakt.</string>
   <string name="trakt_error_credentials">Kaut kas izgāzās. Lūdzu pārbaudi savus datus un mēģini vēlreiz.</string>
-  <string name="trakt_error_general">Saruna ar trakt izgāzās. Mēģini vēlreiz.</string>
   <string name="trakt_error_not_exists">Not (yet) available on trakt. Try again later.</string>
   <string name="trakt_notice_not_exists">Can not (yet) be tracked with trakt.</string>
   <!-- Connect trakt -->
@@ -278,7 +280,7 @@
   <string name="trakt_reconnect">Connect SeriesGuide to trakt</string>
   <string name="trakt_reconnect_details">Check your trakt credentials</string>
   <string name="username">Lietotājvārds</string>
-  <string name="waitplease">Vienu momentu, lūdzu...</string>
+  <string name="waitplease">Vienu momentu, lūdzu&#8230;</string>
   <string name="connect">Savienot</string>
   <string name="disconnect">Atvienot</string>
   <string name="use_integrated_browser">Use integrated browser</string>
@@ -325,14 +327,13 @@
   <string name="pref_onlyseasonepssummary">Īpašās epizodes pazūd no visurienes, izņemot sezonu sarakstu</string>
   <string name="pref_exactdates">Display exact dates</string>
   <string name="pref_exactdates_summary">\"October 31\" instead of \"in 3 days\"</string>
-  <string name="pref_seasonsorting">Kārtot epizodes pēc...</string>
-  <string name="pref_episodesorting">Kārtot epizodes pēc...</string>
+  <string name="pref_nospoilers">Prevent spoilers</string>
+  <string name="pref_nospoilers_summary">Hide details until an episode is watched</string>
+  <string name="pref_seasonsorting">Kārtot epizodes pēc&#8230;</string>
+  <string name="pref_episodesorting">Kārtot epizodes pēc&#8230;</string>
   <string name="pref_language">Preferred content language</string>
   <string name="pref_updatewifionly">Bildes tikai caur WiFi</string>
   <string name="pref_updatewifionlysummary">To reduce data charges, don\'t download over mobile or metered networks</string>
-  <string name="about">Par SeriesGuide</string>
-  <string name="pref_autoaddshows">Pievienot jaunus trakt šovus</string>
-  <string name="pref_autoaddshowssummary">Automātiski pievienot šovus no tavas trakt aktivitāšu straumes</string>
   <!-- About screen -->
   <string name="licence_tvdb">This app uses data and images by TheTVDB licensed under CC BY-NC 4.0.</string>
   <string name="licence_themoviedb">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
@@ -367,8 +368,7 @@
   <string name="pref_theme">Theme</string>
   <!-- Other advanced settings -->
   <string name="pref_other">Citi</string>
-  <string name="pref_autoupdate">Ieslēgt automātiskos atjauninājumus</string>
-  <string name="pref_autoupdatesummary">Periodiski atjaunot tavus šovus</string>
+  <string name="pref_autoupdatesummary">Automatically sync and update SeriesGuide data</string>
   <string name="pref_autobackup">Auto Backup</string>
   <string name="pref_autobackupsummary">Weekly backup of your shows, lists and movies</string>
   <string name="backup">Dublēt/Atjaunot</string>
@@ -378,7 +378,7 @@
   <string name="pref_offsetsummary">Nobīdīt raidlaikus %s stundas</string>
   <string name="clear_cache">Iztukšot attēlu kešatmiņu</string>
   <string name="clear_cache_summary">Noņemt visus kešatmiņā ievietotos attēlus no ierīces</string>
-  <string name="pref_ganalyticssummary">Saglabā datus par funkciju lietošanu, lai palīdzētu uzlabot SeriesGuide</string>
+  <string name="pref_ganalyticssummary">Send anonymous usage statistics to a Google service</string>
   <!-- Backup and Restore -->
   <string name="backup_full_dump">Ietvert visus metadatus, kā piemēram aprakstus, aktierus un vērtējumus.</string>
   <string name="backup_path">Dublējuma mape</string>
@@ -433,8 +433,6 @@
   <string name="notification_release_earlier_hour">1 stundu pirms</string>
   <!-- Legacy Widgets -->
   <string name="smallwidget">SeriesGuide (neliels)</string>
-  <string name="bigwidget">SeriesGuide (vidēji liels)</string>
-  <string name="largewidget">SeriesGuide (liels)</string>
   <!-- List Widget -->
   <string name="hide_watched">Slēpt jau redzētās epizodes</string>
   <string name="pref_widget_opacity">Logrīka fons</string>
@@ -448,7 +446,7 @@
   <!-- DashClock extension -->
   <string name="dashclock_extension_label">Epizode tuvojas</string>
   <string name="dashclock_extension_description">Uzrāda nākamās tavu SeriesGuide šovu epizodes.</string>
-  <string name="dashclock_pref_upcoming_threshold">Uz rādīt epizodi...</string>
+  <string name="dashclock_pref_upcoming_threshold">Uz rādīt epizodi&#8230;</string>
   <!-- Google In-App Billing -->
   <string name="onlyx">Only for supporters</string>
   <string name="action_upgrade">Unlock all features</string>
@@ -467,7 +465,6 @@
   <string name="subscription_failed">Purchase not completed.</string>
   <string name="pass_unavailable">X Pass is currently not available.</string>
   <!-- Extensions -->
-  <string name="extensions">Papildinājumi</string>
   <string name="action_extensions_configure">Personalizēt papildinājumus</string>
   <string name="action_extensions_add">Pievienot papildinājumus</string>
   <string name="action_extensions_limit">Iegūsti X lai iegūtu vairāk papildinājumus</string>
@@ -483,4 +480,13 @@
   <string name="description_extension_web_search">Meklēt lapas un bildes</string>
   <!-- People -->
   <string name="person_biography">Biography</string>
+  <!-- Feedback -->
+  <string name="feedback_question_enjoy">Are you enjoying SeriesGuide?</string>
+  <string name="feedback_action_yes">Yes!</string>
+  <string name="feedback_action_notreally">Not really</string>
+  <string name="feedback_question_rate_google">Rate it on Google Play?</string>
+  <string name="feedback_question_rate_amazon">Rate it on Amazon?</string>
+  <string name="feedback_question_feedback">Tell me how to improve it?</string>
+  <string name="feedback_action_ok">OK, sure</string>
+  <string name="feedback_action_nothanks">No, thanks</string>
 </resources>

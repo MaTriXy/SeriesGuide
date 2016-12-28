@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.util;
 
 import android.content.Context;
@@ -28,11 +12,12 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.os.AsyncTaskCompat;
 import com.battlelancer.seriesguide.R;
-import com.battlelancer.seriesguide.thetvdbapi.TheTVDB;
+import com.battlelancer.seriesguide.thetvdbapi.TvdbTools;
 import com.battlelancer.seriesguide.ui.OverviewActivity;
 import com.battlelancer.seriesguide.ui.OverviewFragment;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 import java.io.IOException;
 import timber.log.Timber;
@@ -61,6 +46,7 @@ public final class ShortcutUtils {
      */
     public static void createShortcut(Context localContext, final String showTitle,
             final String posterPath, final int showTvdbId) {
+        // do not pass activity reference to AsyncTask, activity might leak if destroyed
         final Context context = localContext.getApplicationContext();
 
         AsyncTask<Void, Void, Intent> shortCutTask = new AsyncTask<Void, Void, Intent>() {
@@ -71,18 +57,18 @@ public final class ShortcutUtils {
                 Bitmap posterBitmap;
 
                 try {
-                    final String posterUrl = TheTVDB.buildPosterUrl(posterPath);
-                    posterBitmap = ServiceUtils.getPicasso(context)
+                    final String posterUrl = TvdbTools.buildPosterUrl(posterPath);
+                    posterBitmap = Picasso.with(context)
                             .load(posterUrl)
                             .centerCrop()
                             .memoryPolicy(MemoryPolicy.NO_STORE)
                             .networkPolicy(NetworkPolicy.NO_STORE)
-                            .resizeDimen(R.dimen.show_poster_small_width,
-                                    R.dimen.show_poster_small_height)
+                            .resizeDimen(R.dimen.show_poster_width_default,
+                                    R.dimen.show_poster_height_default)
                             .transform(new RoundedCornerTransformation(posterUrl, 10f))
                             .get();
                 } catch (IOException e) {
-                    Timber.e(e, "Could not load show poster for shortcut " + posterPath);
+                    Timber.e(e, "Could not load show poster for shortcut %s", posterPath);
                     posterBitmap = null;
                 }
 

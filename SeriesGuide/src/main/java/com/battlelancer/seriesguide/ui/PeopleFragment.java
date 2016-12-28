@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
 import android.content.Context;
@@ -29,13 +13,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import butterknife.ButterKnife;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.adapters.PeopleAdapter;
 import com.battlelancer.seriesguide.loaders.MovieCreditsLoader;
 import com.battlelancer.seriesguide.loaders.ShowCreditsLoader;
 import com.battlelancer.seriesguide.util.PeopleListHelper;
 import com.battlelancer.seriesguide.widgets.EmptyView;
 import com.uwetrottmann.androidutils.AndroidUtils;
-import com.uwetrottmann.tmdb.entities.Credits;
+import com.uwetrottmann.tmdb2.entities.Credits;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 /**
@@ -146,7 +131,8 @@ public class PeopleFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 PeopleListHelper.Person person = mAdapter.getItem(position);
-                mListener.showPerson(view, person.tmdbId);
+                PeopleAdapter.ViewHolder viewHolder = (PeopleAdapter.ViewHolder) view.getTag();
+                mListener.showPerson(viewHolder.headshot, person.tmdbId);
             }
         });
 
@@ -230,9 +216,10 @@ public class PeopleFragment extends Fragment {
             setProgressVisibility(true);
 
             if (mMediaType == PeopleActivity.MediaType.MOVIE) {
-                return new MovieCreditsLoader(getActivity(), mTmdbId);
+                return new MovieCreditsLoader((SgApp) getActivity().getApplication(), mTmdbId);
             } else {
-                return new ShowCreditsLoader(getActivity(), mTmdbId, false);
+                return new ShowCreditsLoader((SgApp) getActivity().getApplication(), mTmdbId,
+                        false);
             }
         }
 

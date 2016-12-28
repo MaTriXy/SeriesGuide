@@ -1,19 +1,3 @@
-/*
- * Copyright 2016 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.util.tasks;
 
 import android.content.ContentProviderOperation;
@@ -24,14 +8,13 @@ import com.battlelancer.seriesguide.backend.HexagonTools;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract;
 import com.battlelancer.seriesguide.ui.ListsActivity;
 import com.battlelancer.seriesguide.util.DBUtils;
-import com.uwetrottmann.androidutils.AndroidUtils;
 import com.uwetrottmann.seriesguide.backend.lists.Lists;
 import com.uwetrottmann.seriesguide.backend.lists.model.SgList;
 import com.uwetrottmann.seriesguide.backend.lists.model.SgListList;
-import de.greenrobot.event.EventBus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 import timber.log.Timber;
 
 /**
@@ -55,12 +38,8 @@ public class ReorderListsTask extends BaseActionTask {
     }
 
     @Override
-    protected Integer doInBackground(Void... params) {
+    protected Integer doBackgroundAction(Void... params) {
         if (isSendingToHexagon()) {
-            if (!AndroidUtils.isNetworkConnected(getContext())) {
-                return ERROR_NETWORK;
-            }
-
             Lists listsService = HexagonTools.getListsService(getContext());
             if (listsService == null) {
                 return ERROR_HEXAGON_API; // no longer signed in
@@ -73,7 +52,7 @@ public class ReorderListsTask extends BaseActionTask {
             try {
                 listsService.save(wrapper).execute();
             } catch (IOException e) {
-                Timber.e(e, "doInBackground: failed to save reordered lists to hexagon.");
+                HexagonTools.trackFailedRequest(getContext(), "reorder lists", e);
                 return ERROR_HEXAGON_API;
             }
         }

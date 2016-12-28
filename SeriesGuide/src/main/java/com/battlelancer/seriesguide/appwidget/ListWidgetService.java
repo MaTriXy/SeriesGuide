@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.appwidget;
 
 import android.appwidget.AppWidgetManager;
@@ -35,9 +19,10 @@ import com.battlelancer.seriesguide.settings.AdvancedSettings;
 import com.battlelancer.seriesguide.settings.DisplaySettings;
 import com.battlelancer.seriesguide.settings.ShowsDistillationSettings;
 import com.battlelancer.seriesguide.settings.WidgetSettings;
-import com.battlelancer.seriesguide.thetvdbapi.TheTVDB;
+import com.battlelancer.seriesguide.thetvdbapi.TvdbTools;
 import com.battlelancer.seriesguide.ui.EpisodesActivity;
 import com.battlelancer.seriesguide.util.DBUtils;
+import com.battlelancer.seriesguide.util.EpisodeTools;
 import com.battlelancer.seriesguide.util.ServiceUtils;
 import com.battlelancer.seriesguide.util.TextTools;
 import com.battlelancer.seriesguide.util.TimeTools;
@@ -49,7 +34,7 @@ public class ListWidgetService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new ListRemoteViewsFactory(this.getApplicationContext(), intent);
+        return new ListRemoteViewsFactory(getApplicationContext(), intent);
     }
 
     class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
@@ -190,8 +175,22 @@ public class ListWidgetService extends RemoteViewsService {
                     ShowsQuery.EPISODE_NUMBER : CalendarAdapter.Query.NUMBER);
             String title = dataCursor.getString(isShowQuery ?
                     ShowsQuery.EPISODE_TITLE : CalendarAdapter.Query.TITLE);
-            rv.setTextViewText(R.id.textViewWidgetEpisode,
-                    TextTools.getNextEpisodeString(context, seasonNumber, episodeNumber, title));
+            boolean preventSpoilers = DisplaySettings.preventSpoilers(context);
+            if (!isShowQuery) {
+                int episodeFlag = dataCursor.getInt(CalendarAdapter.Query.WATCHED);
+                preventSpoilers = preventSpoilers && EpisodeTools.isUnwatched(episodeFlag);
+            }
+            String nextEpisodeString;
+            if (preventSpoilers) {
+                // just display the episode number
+                nextEpisodeString = TextTools.getEpisodeNumber(context, seasonNumber,
+                        episodeNumber);
+            } else {
+                // display episode number and title
+                nextEpisodeString = TextTools.getNextEpisodeString(context, seasonNumber,
+                        episodeNumber, title);
+            }
+            rv.setTextViewText(R.id.textViewWidgetEpisode, nextEpisodeString);
 
             // relative release time
             Date actualRelease = TimeTools.applyUserOffset(context,
@@ -221,14 +220,22 @@ public class ListWidgetService extends RemoteViewsService {
             // show poster
             String posterPath = dataCursor.getString(isShowQuery
                     ? ShowsQuery.SHOW_POSTER : CalendarAdapter.Query.SHOW_POSTER);
+            maybeSetPoster(rv, posterPath);
+
+            // Return the remote views object.
+            return rv;
+        }
+
+        private void maybeSetPoster(RemoteViews rv, String posterPath) {
             Bitmap poster;
             try {
-                poster = ServiceUtils.loadWithPicasso(context, TheTVDB.buildPosterUrl(posterPath))
+                poster = ServiceUtils.loadWithPicasso(context,
+                        TvdbTools.buildPosterUrl(posterPath))
                         .centerCrop()
                         .resizeDimen(R.dimen.widget_item_width, R.dimen.widget_item_height)
                         .get();
             } catch (IOException e) {
-                Timber.w(e, "getViewAt: Loading show poster for widget item failed");
+                Timber.e(e, "maybeSetPoster: failed.");
                 poster = null;
             }
             if (poster != null) {
@@ -236,9 +243,6 @@ public class ListWidgetService extends RemoteViewsService {
             } else {
                 rv.setImageViewResource(R.id.widgetPoster, R.drawable.ic_image_missing);
             }
-
-            // Return the remote views object.
-            return rv;
         }
 
         @Override

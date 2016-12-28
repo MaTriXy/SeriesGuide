@@ -1,23 +1,8 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
 import android.app.ProgressDialog;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.net.Uri;
@@ -25,6 +10,7 @@ import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -37,13 +23,15 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.adapters.TabStripAdapter;
 import com.battlelancer.seriesguide.items.SearchResult;
 import com.battlelancer.seriesguide.settings.SearchSettings;
@@ -54,7 +42,12 @@ import com.battlelancer.seriesguide.util.SearchHistory;
 import com.battlelancer.seriesguide.util.TaskManager;
 import com.battlelancer.seriesguide.widgets.SlidingTabLayout;
 import com.google.android.gms.actions.SearchIntents;
-import de.greenrobot.event.EventBus;
+import com.uwetrottmann.androidutils.AndroidUtils;
+import org.greenrobot.eventbus.EventBus;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Handles search intents and displays a {@link EpisodeSearchFragment} when needed or redirects
@@ -105,11 +98,11 @@ public class SearchActivity extends BaseNavDrawerActivity implements
         }
     }
 
-    @Bind(R.id.containerSearchBar) View searchContainer;
-    @Bind(R.id.editTextSearchBar) AutoCompleteTextView searchView;
-    @Bind(R.id.imageButtonSearchClear) View clearButton;
-    @Bind(R.id.tabsSearch) SlidingTabLayout tabs;
-    @Bind(R.id.pagerSearch) ViewPager viewPager;
+    @BindView(R.id.containerSearchBar) View searchContainer;
+    @BindView(R.id.editTextSearchBar) AutoCompleteTextView searchView;
+    @BindView(R.id.imageButtonSearchClear) View clearButton;
+    @BindView(R.id.tabsSearch) SlidingTabLayout tabs;
+    @BindView(R.id.pagerSearch) ViewPager viewPager;
     private ProgressDialog progressDialog;
 
     private SearchHistory searchHistory;
@@ -237,7 +230,26 @@ public class SearchActivity extends BaseNavDrawerActivity implements
             if (defaultTab < tabsAdapter.getCount()) {
                 viewPager.setCurrentItem(defaultTab);
             }
+            if (defaultTab == ADDED_TAB_POSITION || defaultTab == EPISODES_TAB_POSITION) {
+                showSoftKeyboardOnSearchView();
+            }
+        } else {
+            // also show keyboard when showing first tab (added tab)
+            showSoftKeyboardOnSearchView();
         }
+    }
+
+    private void showSoftKeyboardOnSearchView() {
+        searchView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (searchView.requestFocus()) {
+                    InputMethodManager imm = (InputMethodManager)
+                            getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }
+        }, 200); // have to add a little delay (http://stackoverflow.com/a/27540921/1000543)
     }
 
     private static void addTraktTab(TabStripAdapter tabsAdapter, @StringRes int titleResId,
@@ -311,7 +323,51 @@ public class SearchActivity extends BaseNavDrawerActivity implements
             String id = data.getLastPathSegment();
             displayEpisode(id);
             finish();
+        } else if (Intent.ACTION_SEND.equals(action)) {
+            // text share intents from other apps
+            if ("text/plain".equals(intent.getType())) {
+                handleSharedText(intent.getStringExtra(Intent.EXTRA_TEXT));
+            }
         }
+    }
+
+    private void handleSharedText(@Nullable String sharedText) {
+        if (TextUtils.isEmpty(sharedText)) {
+            return;
+        }
+
+        // try to match TVDB URLs
+        // match season and episode pages first
+        Pattern tvdbSeriesIdPattern = Pattern.compile(".*?thetvdb\\.com.*?seriesid=([0-9]*)");
+        int showTvdbId = matchShowTvdbId(tvdbSeriesIdPattern, sharedText);
+        if (showTvdbId <= 0) {
+            // match show pages
+            Pattern tvdbIdPattern = Pattern.compile(".*?thetvdb\\.com.*?id=([0-9]*)");
+            showTvdbId = matchShowTvdbId(tvdbIdPattern, sharedText);
+        }
+
+        if (showTvdbId > 0) {
+            // found an id, display the add dialog
+            AddShowDialogFragment.showAddDialog(showTvdbId, getSupportFragmentManager());
+        } else {
+            // no id, populate the search field instead
+            viewPager.setCurrentItem(SEARCH_TAB_POSITION);
+            searchView.setText(sharedText);
+        }
+    }
+
+    private int matchShowTvdbId(Pattern pattern, String text) {
+        int showTvdbId = -1;
+
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            try {
+                showTvdbId = Integer.parseInt(matcher.group(1));
+            } catch (NumberFormatException ignored) {
+            }
+        }
+
+        return showTvdbId;
     }
 
     private void triggerLocalSearch(String query) {
@@ -408,13 +464,14 @@ public class SearchActivity extends BaseNavDrawerActivity implements
 
     @Override
     public void onAddShow(SearchResult show) {
-        TaskManager.getInstance(this).performAddTask(show);
+        TaskManager.getInstance(this).performAddTask(SgApp.from(this), show);
     }
 
     /**
      * Called from {@link com.battlelancer.seriesguide.util.RemoveShowWorkerFragment}.
      */
     @SuppressWarnings("UnusedParameters")
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(RemoveShowWorkerFragment.OnRemovingShowEvent event) {
         showProgressDialog();
     }
@@ -423,11 +480,13 @@ public class SearchActivity extends BaseNavDrawerActivity implements
      * Called from {@link com.battlelancer.seriesguide.util.RemoveShowWorkerFragment}.
      */
     @SuppressWarnings("UnusedParameters")
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(RemoveShowWorkerFragment.OnShowRemovedEvent event) {
         hideProgressDialog();
     }
 
     @SuppressWarnings("UnusedParameters")
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(TvdbAddFragment.ClearSearchHistoryEvent event) {
         if (searchHistory != null && searchHistoryAdapter != null) {
             searchHistory.clearHistory();
@@ -472,5 +531,14 @@ public class SearchActivity extends BaseNavDrawerActivity implements
 
         // display add dialog
         AddShowDialogFragment.showAddDialog(showTvdbId, getSupportFragmentManager());
+    }
+
+    @Override
+    protected View getSnackbarParentView() {
+        if (AndroidUtils.isLollipopOrHigher()) {
+            return findViewById(R.id.coordinatorLayoutSearch);
+        } else {
+            return super.getSnackbarParentView();
+        }
     }
 }

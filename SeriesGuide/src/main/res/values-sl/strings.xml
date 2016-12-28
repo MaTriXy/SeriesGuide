@@ -9,9 +9,8 @@
   <string name="search">Iskanje</string>
   <string name="preferences">Nastavitve</string>
   <string name="help">Pomoč</string>
-  <string name="help_and_feedback">Help &amp; Feedback</string>
+  <string name="help_and_feedback">Pomoč &amp; povratne informacije</string>
   <string name="drawer_open">Odpri navigacijsko okno</string>
-  <string name="drawer_close">Zapri navigacijsko okno</string>
   <!-- Media items -->
   <string name="show">Prikaži</string>
   <string name="episode">Epizoda</string>
@@ -34,18 +33,23 @@
   <string name="web_search">Spletno iskanje</string>
   <string name="add_to_homescreen">Bližnjica</string>
   <string name="action_open">Odpri</string>
+  <string name="sync_manually">Sync manually</string>
+  <string name="sync_and_update">Sync &amp; Update</string>
+  <string name="sync_and_download_all">Sync &amp; Download all</string>
   <!-- Search -->
   <string name="clear_search_history">Izbriši zgodovino iskanja</string>
   <string name="search_hint">Iskanje epizode</string>
-  <string name="any_language">Any language</string>
+  <string name="any_language">Katerikoli jezik</string>
   <!-- Status messages -->
   <string name="updated">Posodobljeno na najnovejšo verzijo.</string>
   <string name="norating">n/a</string>
   <string name="unknown">neznano</string>
   <string name="offline">Vzpostavite povezavo z omrežjem in nato poskusite znova.</string>
   <string name="app_not_available">Za obravnavo tega ni na voljo nobene aplikacije.</string>
-  <string name="people_empty">Nobody here?! Touch to try again.</string>
+  <string name="people_empty">Nihče tukaj?! Dotik in poskusite znova.</string>
   <string name="database_error">Podatkov ni bilo mogoče spremeniti.</string>
+  <string name="reinstall_info">Try to backup in Settings, re-install and restore.</string>
+  <string name="api_error_generic">Could not talk to %s. Try again later.</string>
   <!-- Sharing -->
   <string name="share">Deli</string>
   <string name="share_show">Deli oddajo</string>
@@ -54,10 +58,11 @@
   <string name="share_checkout">Oglejte si %s</string>
   <string name="addtocalendar">Dodaj v koledar</string>
   <string name="addtocalendar_failed">Dogodka v koledarju ni bilo mogoče ustvariti.</string>
+  <string name="links">Povezave</string>
   <!-- Comments -->
   <string name="comments">Komentarji</string>
-  <string name="shout_hint">Type a comment (English, 5+ words)</string>
-  <string name="shout_invalid">Your comment does not follow the rules!</string>
+  <string name="shout_hint">Vnesite komentar (v angleščini, več kot 5 besed)</string>
+  <string name="shout_invalid">Vaš komentar ne upošteva pravil!</string>
   <string name="action_post">Objavi</string>
   <string name="isspoiler">Pozor! Razkrita vsebina!</string>
   <string name="no_shouts">Bodi prvi(a), ki bo zaklical(a)!</string>
@@ -66,7 +71,7 @@
     <item quantity="one">%d reply</item>
     <item quantity="two">%d replies</item>
     <item quantity="few">%d replies</item>
-    <item quantity="other">%d replies</item>
+    <item quantity="other">%d odgovorov</item>
   </plurals>
   <!-- Metadata -->
   <string name="episode_number_absolute">ABSOLUTNO</string>
@@ -74,23 +79,20 @@
   <string name="episode_firstaired">Datum izdaje</string>
   <string name="episode_firstaired_unknown">Neznan datum izdaje</string>
   <string name="episode_dvdnumber">DVD epizoda</string>
-  <string name="show_actors">Igralci</string>
   <string name="original_release">Originalna izdaja</string>
   <string name="show_on_network">na %s</string>
   <string name="show_genres">Žanri</string>
-  <string name="show_runtime">Dolžina</string>
   <string name="show_contentrating">Primernost vsebine</string>
-  <string name="show_release_times">Release times</string>
+  <string name="show_release_times">Opombe ob izdaji</string>
   <string name="episode_directors">Režiserji</string>
   <string name="episode_gueststars">Gostujoči igralci</string>
   <string name="episode_writers">Pisci</string>
   <string name="show_isalive">Se nadaljuje</string>
   <string name="show_isnotalive">Končano</string>
   <string name="lastEdit">Zadnja sprememba // TVDb</string>
-  <string name="services_watch">Gledaj</string>
-  <string name="services_more">Več</string>
   <string name="no_translation">There is no description translated to %1$s available at %2$s.</string>
-  <string name="no_translation_title">Not translated</string>
+  <string name="no_translation_title">Ni prevedeno</string>
+  <string name="no_spoilers">Some details are hidden to prevent spoilers. To turn this off go to Settings.</string>
   <!-- Date and Time -->
   <string name="today">danes</string>
   <string name="now">zdaj</string>
@@ -133,10 +135,11 @@
   <string name="action_shows_filter_hidden">Skrito</string>
   <string name="action_shows_sort">Razvrsti oddaje</string>
   <string name="action_shows_sort_title">Naslov</string>
-  <string name="action_shows_sort_episode">Naslednja epizoda</string>
+  <string name="action_shows_sort_latest_episode">Latest episode</string>
+  <string name="action_shows_sort_oldest_episode">Oldest episode</string>
+  <string name="action_shows_sort_last_watched">Last watched</string>
+  <string name="action_shows_sort_remaining">Remaining episodes</string>
   <string name="action_shows_sort_favorites">Najprej priljubljene</string>
-  <string name="updateall_yes">Posodobi (vse)</string>
-  <string name="menu_update_delta">Posodobi (samo zastarele)</string>
   <string name="context_updateshow">Posodobi</string>
   <string name="context_marknext">Pogledana naslednja epizoda</string>
   <!-- Now -->
@@ -175,7 +178,7 @@
   <string name="no_results">Ni zadetkov. Poizkusi s celimi besedami.</string>
   <string name="action_try_any_language">Try any language</string>
   <string name="action_try_again">Try again</string>
-  <string name="search_error">Iskanje ni uspelo, poskusite znova pozneje.</string>
+  <string name="tvdb_error_does_not_exist">The show does not exist (yet) on TheTVDB. Try again later.</string>
   <string name="add_all">Dodaj vse</string>
   <string name="add_multiple">Vse oddaje se bodo v kratkem pojavile v tvojem spisku oddaj.</string>
   <string name="add_started">%s will appear in your show list shortly.</string>
@@ -214,6 +217,7 @@
   <string name="action_movies_sort_title">Naslov</string>
   <string name="action_movies_sort_release">Datum izdaje</string>
   <!-- Statistics -->
+  <string name="statistics_failed">Could not calculate statistics.</string>
   <string name="statistics_shows">Oddaje</string>
   <string name="statistics_episodes">Epizode</string>
   <string name="statistics_movies">Filmi</string>
@@ -245,7 +249,7 @@
   <string name="hexagon_warning">Preizkusno!</string>
   <string name="hexagon_description">Connect to the cloud to backup and sync your shows and movies.</string>
   <string name="hexagon_warning_lists">Seznami niso vključeni.</string>
-  <string name="hexagon_warning_trakt">When using SeriesGuide Cloud, changes on trakt will not sync down to SeriesGuide.</string>
+  <string name="hexagon_warning_trakt">While SeriesGuide Cloud is connected, trakt sync will be disabled.</string>
   <string name="hexagon_signin">Prijava</string>
   <string name="hexagon_signed_in">Povezani ste v SeriesGuide oblak.</string>
   <string name="hexagon_signout">Izpis</string>
@@ -255,7 +259,6 @@
   <string name="hexagon_remove_account_success">Account obliterated.</string>
   <string name="hexagon_remove_account_failure">Računa ni bilo mogoče odstraniti.</string>
   <string name="hexagon_remove_account_confirmation">Removing your account will delete all shows and movies from SeriesGuide Cloud. Make sure to remove it on other connected devices as well.</string>
-  <string name="hexagon_api_error">Could not talk to SeriesGuide Cloud. Try again later.</string>
   <string name="hexagon_api_queued">Sending to SeriesGuide Cloud.</string>
   <string name="hexagon_permission_missing">To use SeriesGuide Cloud, allow access to your accounts.</string>
   <string name="hexagon_google_play_missing">To use SeriesGuide Cloud, Google Play Services are required.</string>
@@ -272,7 +275,6 @@
   <string name="traktcheckin_wait">Počakal bom</string>
   <string name="trakt_success">Sent to trakt.</string>
   <string name="trakt_error_credentials">Something went wrong. Check your trakt credentials and try again.</string>
-  <string name="trakt_error_general">Could not talk to trakt. Try again later.</string>
   <string name="trakt_error_not_exists">Not (yet) available on trakt. Try again later.</string>
   <string name="trakt_notice_not_exists">Can not (yet) be tracked with trakt.</string>
   <!-- Connect trakt -->
@@ -330,14 +332,13 @@
   <string name="pref_onlyseasonepssummary">Posebne epizode izginejo od povsod, razen s spiska sezone</string>
   <string name="pref_exactdates">Display exact dates</string>
   <string name="pref_exactdates_summary">\"October 31\" instead of \"in 3 days\"</string>
+  <string name="pref_nospoilers">Prevent spoilers</string>
+  <string name="pref_nospoilers_summary">Hide details until an episode is watched</string>
   <string name="pref_seasonsorting">Sezono razporedi po&#8230;</string>
   <string name="pref_episodesorting">Epizode razporedi po&#8230;</string>
   <string name="pref_language">Preferred content language</string>
   <string name="pref_updatewifionly">Slike samo preko Wi-Fi</string>
   <string name="pref_updatewifionlysummary">To reduce data charges, don\'t download over mobile or metered networks</string>
-  <string name="about">O SeriesGuide</string>
-  <string name="pref_autoaddshows">Dodaj nove trakt oddaje</string>
-  <string name="pref_autoaddshowssummary">Avtomatsko dodaj oddaje iz svoje trakt aktivnosti</string>
   <!-- About screen -->
   <string name="licence_tvdb">This app uses data and images by TheTVDB licensed under CC BY-NC 4.0.</string>
   <string name="licence_themoviedb">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
@@ -372,8 +373,7 @@
   <string name="pref_theme">Tema</string>
   <!-- Other advanced settings -->
   <string name="pref_other">Ostalo</string>
-  <string name="pref_autoupdate">Vklopite samodejne posodobitve</string>
-  <string name="pref_autoupdatesummary">Periodično posodobi svoje oddaje</string>
+  <string name="pref_autoupdatesummary">Automatically sync and update SeriesGuide data</string>
   <string name="pref_autobackup">Auto Backup</string>
   <string name="pref_autobackupsummary">Weekly backup of your shows, lists and movies</string>
   <string name="backup">Varnostno kopiranje/Obnovitev</string>
@@ -383,7 +383,7 @@
   <string name="pref_offsetsummary">Zamakni čas predvajanja za %s ur</string>
   <string name="clear_cache">Izbriši predp. slik</string>
   <string name="clear_cache_summary">Odstrani vse predpomnjene slike iz naprave</string>
-  <string name="pref_ganalyticssummary">Sledenje uporabe funkcij za izboljšanje SeriesGuide</string>
+  <string name="pref_ganalyticssummary">Send anonymous usage statistics to a Google service</string>
   <!-- Backup and Restore -->
   <string name="backup_full_dump">Include all meta-data like descriptions, actors and ratings.</string>
   <string name="backup_path">Backup mapa</string>
@@ -438,8 +438,6 @@
   <string name="notification_release_earlier_hour">eno uro prej</string>
   <!-- Legacy Widgets -->
   <string name="smallwidget">SeriesGuide (majhen)</string>
-  <string name="bigwidget">SeriesGuide (srednji)</string>
-  <string name="largewidget">SeriesGuide (velik)</string>
   <!-- List Widget -->
   <string name="hide_watched">Skrij gledane epizode</string>
   <string name="pref_widget_opacity">Widget background</string>
@@ -472,7 +470,6 @@
   <string name="subscription_failed">Purchase not completed.</string>
   <string name="pass_unavailable">X Pass is currently not available.</string>
   <!-- Extensions -->
-  <string name="extensions">Extensions</string>
   <string name="action_extensions_configure">Customize extensions</string>
   <string name="action_extensions_add">Add extension</string>
   <string name="action_extensions_limit">Get X to add more extensions</string>
@@ -488,4 +485,13 @@
   <string name="description_extension_web_search">Search for websites and images</string>
   <!-- People -->
   <string name="person_biography">Biography</string>
+  <!-- Feedback -->
+  <string name="feedback_question_enjoy">Are you enjoying SeriesGuide?</string>
+  <string name="feedback_action_yes">Yes!</string>
+  <string name="feedback_action_notreally">Not really</string>
+  <string name="feedback_question_rate_google">Rate it on Google Play?</string>
+  <string name="feedback_question_rate_amazon">Rate it on Amazon?</string>
+  <string name="feedback_question_feedback">Tell me how to improve it?</string>
+  <string name="feedback_action_ok">OK, sure</string>
+  <string name="feedback_action_nothanks">No, thanks</string>
 </resources>

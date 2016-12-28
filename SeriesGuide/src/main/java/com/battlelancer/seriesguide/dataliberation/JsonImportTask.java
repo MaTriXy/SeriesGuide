@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.dataliberation;
 
 import android.content.ContentValues;
@@ -51,7 +35,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import timber.log.Timber;
@@ -109,7 +92,7 @@ public class JsonImportTask extends AsyncTask<Void, Integer, Integer> {
 
     private JsonImportTask(Context context) {
         this.context = context.getApplicationContext();
-        languageCodes = this.context.getResources().getStringArray(R.array.languageData);
+        languageCodes = this.context.getResources().getStringArray(R.array.languageCodesShows);
     }
 
     @Override
@@ -214,6 +197,10 @@ public class JsonImportTask extends AsyncTask<Void, Integer, Integer> {
                 pfd = context.getContentResolver().openFileDescriptor(backupFileUri, "r");
             } catch (FileNotFoundException | SecurityException e) {
                 Timber.e(e, "Backup file not found.");
+                return ERROR_FILE_ACCESS;
+            }
+            if (pfd == null) {
+                Timber.e("File descriptor is null.");
                 return ERROR_FILE_ACCESS;
             }
 
@@ -336,14 +323,14 @@ public class JsonImportTask extends AsyncTask<Void, Integer, Integer> {
     }
 
     private void addShowToDatabase(Show show) {
-        if (show.tvdbId <= 0) {
+        if (show.tvdb_id <= 0) {
             // valid id required
             return;
         }
 
         // Insert the show
         ContentValues showValues = new ContentValues();
-        showValues.put(Shows._ID, show.tvdbId);
+        showValues.put(Shows._ID, show.tvdb_id);
         showValues.put(Shows.TITLE, show.title == null ? "" : show.title);
         showValues.put(Shows.TITLE_NOARTICLE, DBUtils.trimLeadingArticle(show.title));
         showValues.put(Shows.FAVORITE, show.favorite);
@@ -362,19 +349,20 @@ public class JsonImportTask extends AsyncTask<Void, Integer, Integer> {
         showValues.put(Shows.RELEASE_WEEKDAY, show.release_weekday);
         showValues.put(Shows.RELEASE_TIMEZONE, show.release_timezone);
         showValues.put(Shows.RELEASE_COUNTRY, show.country);
-        showValues.put(Shows.LASTWATCHEDID, show.lastWatchedEpisode);
+        showValues.put(Shows.LASTWATCHEDID, show.last_watched_episode);
+        showValues.put(Shows.LASTWATCHED_MS, show.last_watched_ms);
         showValues.put(Shows.POSTER, show.poster);
-        showValues.put(Shows.CONTENTRATING, show.contentRating);
+        showValues.put(Shows.CONTENTRATING, show.content_rating);
         if (show.runtime < 0) {
             show.runtime = 0;
         }
         showValues.put(Shows.RUNTIME, show.runtime);
         showValues.put(Shows.NETWORK, show.network);
-        showValues.put(Shows.IMDBID, show.imdbId);
-        if (show.traktId != null && show.traktId > 0) {
-            showValues.put(Shows.TRAKT_ID, show.traktId);
+        showValues.put(Shows.IMDBID, show.imdb_id);
+        if (show.trakt_id != null && show.trakt_id > 0) {
+            showValues.put(Shows.TRAKT_ID, show.trakt_id);
         }
-        showValues.put(Shows.FIRST_RELEASE, show.firstAired);
+        showValues.put(Shows.FIRST_RELEASE, show.first_aired);
         if (show.rating_user < 0 || show.rating_user > 10) {
             show.rating_user = 0;
         }
@@ -391,11 +379,11 @@ public class JsonImportTask extends AsyncTask<Void, Integer, Integer> {
         }
         showValues.put(Shows.RATING_VOTES, show.rating_votes);
         showValues.put(Shows.GENRES, show.genres);
-        if (show.lastUpdated > System.currentTimeMillis()) {
-            show.lastUpdated = 0;
+        if (show.last_updated > System.currentTimeMillis()) {
+            show.last_updated = 0;
         }
-        showValues.put(Shows.LASTUPDATED, show.lastUpdated);
-        showValues.put(Shows.LASTEDIT, show.lastEdited);
+        showValues.put(Shows.LASTUPDATED, show.last_updated);
+        showValues.put(Shows.LASTEDIT, show.last_edited);
 
         context.getContentResolver().insert(Shows.CONTENT_URI, showValues);
 
@@ -435,7 +423,7 @@ public class JsonImportTask extends AsyncTask<Void, Integer, Integer> {
             // add the season...
             ContentValues seasonValues = new ContentValues();
             seasonValues.put(Seasons._ID, season.tvdbId);
-            seasonValues.put(Shows.REF_SHOW_ID, show.tvdbId);
+            seasonValues.put(Shows.REF_SHOW_ID, show.tvdb_id);
             if (season.season < 0) {
                 season.season = 0;
             }
@@ -452,7 +440,7 @@ public class JsonImportTask extends AsyncTask<Void, Integer, Integer> {
 
                 ContentValues episodeValues = new ContentValues();
                 episodeValues.put(Episodes._ID, episode.tvdbId);
-                episodeValues.put(Shows.REF_SHOW_ID, show.tvdbId);
+                episodeValues.put(Shows.REF_SHOW_ID, show.tvdb_id);
                 episodeValues.put(Seasons.REF_SEASON_ID, season.tvdbId);
                 if (episode.episode < 0) {
                     episode.episode = 0;
@@ -510,38 +498,6 @@ public class JsonImportTask extends AsyncTask<Void, Integer, Integer> {
         };
     }
 
-    private int importLists(File importPath) {
-        File backupLists = new File(importPath, JsonExportTask.EXPORT_JSON_FILE_LISTS);
-        if (!backupLists.exists() || !backupLists.canRead()) {
-            // Skip lists if the file is not accessible
-            return SUCCESS;
-        }
-
-        // Access JSON from backup folder to create new database
-        try {
-            InputStream in = new FileInputStream(backupLists);
-
-            Gson gson = new Gson();
-
-            JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-            reader.beginArray();
-
-            while (reader.hasNext()) {
-                List list = gson.fromJson(reader, List.class);
-                addListToDatabase(list);
-            }
-
-            reader.endArray();
-            reader.close();
-        } catch (JsonParseException | IOException | IllegalStateException e) {
-            // the given Json might not be valid or unreadable
-            Timber.e(e, "JSON lists import failed");
-            return ERROR;
-        }
-
-        return SUCCESS;
-    }
-
     private void addListToDatabase(List list) {
         // Insert the list
         ContentValues values = new ContentValues();
@@ -579,39 +535,6 @@ public class JsonImportTask extends AsyncTask<Void, Integer, Integer> {
 
         ContentValues[] itemsArray = new ContentValues[items.size()];
         context.getContentResolver().bulkInsert(ListItems.CONTENT_URI, items.toArray(itemsArray));
-    }
-
-    private int importMovies(File importPath) {
-        context.getContentResolver().delete(Movies.CONTENT_URI, null, null);
-        File backupMovies = new File(importPath, JsonExportTask.EXPORT_JSON_FILE_MOVIES);
-        if (!backupMovies.exists() || !backupMovies.canRead()) {
-            // Skip movies if the file is not available
-            return SUCCESS;
-        }
-
-        // Access JSON from backup folder to create new database
-        try {
-            InputStream in = new FileInputStream(backupMovies);
-
-            Gson gson = new Gson();
-
-            JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-            reader.beginArray();
-
-            while (reader.hasNext()) {
-                Movie movie = gson.fromJson(reader, Movie.class);
-                addMovieToDatabase(movie);
-            }
-
-            reader.endArray();
-            reader.close();
-        } catch (JsonParseException | IOException | IllegalStateException e) {
-            // the given Json might not be valid or unreadable
-            Timber.e(e, "JSON movies import failed");
-            return ERROR;
-        }
-
-        return SUCCESS;
     }
 
     private void addMovieToDatabase(Movie movie) {

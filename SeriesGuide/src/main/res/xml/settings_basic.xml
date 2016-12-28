@@ -9,6 +9,13 @@
 
     <PreferenceCategory android:title="@string/shows">
 
+        <ListPreference
+            android:defaultValue="@string/show_default_language"
+            android:entries="@array/languagesShows"
+            android:entryValues="@array/languageCodesShows"
+            android:key="language"
+            android:title="@string/pref_language" />
+
         <CheckBoxPreference
             android:defaultValue="False"
             android:key="onlyFutureEpisodes"
@@ -26,6 +33,12 @@
             android:key="com.battlelancer.seriesguide.shows.exactdate"
             android:summary="@string/pref_exactdates_summary"
             android:title="@string/pref_exactdates" />
+
+        <CheckBoxPreference
+            android:defaultValue="False"
+            android:key="com.battlelancer.seriesguide.PREVENT_SPOILERS"
+            android:summary="@string/pref_nospoilers_summary"
+            android:title="@string/pref_nospoilers" />
 
         <ListPreference
             android:defaultValue="0"

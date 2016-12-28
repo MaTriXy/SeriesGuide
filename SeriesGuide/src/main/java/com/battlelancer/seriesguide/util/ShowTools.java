@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.util;
 
 import android.content.ContentProviderOperation;
@@ -21,16 +5,19 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.os.AsyncTaskCompat;
+import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.backend.HexagonTools;
 import com.battlelancer.seriesguide.backend.settings.HexagonSettings;
 import com.battlelancer.seriesguide.enums.NetworkResult;
@@ -39,14 +26,12 @@ import com.battlelancer.seriesguide.items.SearchResult;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract;
 import com.battlelancer.seriesguide.sync.SgSyncAdapter;
 import com.battlelancer.seriesguide.util.tasks.AddShowToWatchlistTask;
-import com.battlelancer.seriesguide.util.tasks.RateShowTask;
 import com.battlelancer.seriesguide.util.tasks.RemoveShowFromWatchlistTask;
 import com.google.api.client.util.DateTime;
 import com.uwetrottmann.androidutils.AndroidUtils;
 import com.uwetrottmann.seriesguide.backend.shows.Shows;
 import com.uwetrottmann.seriesguide.backend.shows.model.Show;
 import com.uwetrottmann.seriesguide.backend.shows.model.ShowList;
-import com.uwetrottmann.trakt.v2.enums.Rating;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,21 +62,10 @@ public class ShowTools {
         int UNKNOWN = -1;
     }
 
-    private static final int SHOWS_MAX_BATCH_SIZE = 100;
+    private final Context context;
 
-    private static ShowTools _instance;
-
-    private final Context mContext;
-
-    public static synchronized ShowTools get(Context context) {
-        if (_instance == null) {
-            _instance = new ShowTools(context.getApplicationContext());
-        }
-        return _instance;
-    }
-
-    private ShowTools(Context context) {
-        mContext = context;
+    public ShowTools(Context context) {
+        this.context = context;
     }
 
     /**
@@ -101,8 +75,8 @@ public class ShowTools {
      * @return One of {@link com.battlelancer.seriesguide.enums.NetworkResult}.
      */
     public int removeShow(int showTvdbId) {
-        if (HexagonTools.isSignedIn(mContext)) {
-            if (!AndroidUtils.isNetworkConnected(mContext)) {
+        if (HexagonTools.isSignedIn(context)) {
+            if (!AndroidUtils.isNetworkConnected(context)) {
                 return NetworkResult.OFFLINE;
             }
             // send to cloud
@@ -113,7 +87,7 @@ public class ShowTools {
         // also saves memory by applying batches early
 
         // SEARCH DATABASE ENTRIES
-        final Cursor episodes = mContext.getContentResolver().query(
+        final Cursor episodes = context.getContentResolver().query(
                 SeriesGuideContract.Episodes.buildEpisodesOfShowUri(showTvdbId), new String[] {
                         SeriesGuideContract.Episodes._ID
                 }, null, null, null
@@ -135,7 +109,7 @@ public class ShowTools {
                     SeriesGuideContract.EpisodeSearch.buildDocIdUri(episodeTvdbId)).build());
         }
         try {
-            DBUtils.applyInSmallBatches(mContext, batch);
+            DBUtils.applyInSmallBatches(context, batch);
         } catch (OperationApplicationException e) {
             Timber.e(e, "Removing episode search entries failed");
             return Result.ERROR;
@@ -151,16 +125,16 @@ public class ShowTools {
         batch.add(ContentProviderOperation.newDelete(
                 SeriesGuideContract.Shows.buildShowUri(showTvdbId)).build());
         try {
-            DBUtils.applyInSmallBatches(mContext, batch);
+            DBUtils.applyInSmallBatches(context, batch);
         } catch (OperationApplicationException e) {
             Timber.e(e, "Removing episodes, seasons and show failed");
             return Result.ERROR;
         }
 
         // make sure other loaders (activity, overview, details, search) are notified
-        mContext.getContentResolver().notifyChange(
+        context.getContentResolver().notifyChange(
                 SeriesGuideContract.Episodes.CONTENT_URI_WITHSHOW, null);
-        mContext.getContentResolver().notifyChange(
+        context.getContentResolver().notifyChange(
                 SeriesGuideContract.Shows.CONTENT_URI_FILTER, null);
 
         return Result.SUCCESS;
@@ -193,8 +167,8 @@ public class ShowTools {
      * Saves new favorite flag to the local database and, if signed in, up into the cloud as well.
      */
     public void storeIsFavorite(int showTvdbId, boolean isFavorite) {
-        if (HexagonTools.isSignedIn(mContext)) {
-            if (Utils.isNotConnected(mContext, true)) {
+        if (HexagonTools.isSignedIn(context)) {
+            if (Utils.isNotConnected(context, true)) {
                 return;
             }
             // send to cloud
@@ -207,19 +181,19 @@ public class ShowTools {
         // save to local database
         ContentValues values = new ContentValues();
         values.put(SeriesGuideContract.Shows.FAVORITE, isFavorite);
-        mContext.getContentResolver().update(
+        context.getContentResolver().update(
                 SeriesGuideContract.Shows.buildShowUri(showTvdbId), values, null, null);
 
         // also notify URIs used by search and lists
-        mContext.getContentResolver()
+        context.getContentResolver()
                 .notifyChange(SeriesGuideContract.Shows.CONTENT_URI_FILTER, null);
-        mContext.getContentResolver()
+        context.getContentResolver()
                 .notifyChange(SeriesGuideContract.ListItems.CONTENT_WITH_DETAILS_URI, null);
 
         // favorite status may determine eligibility for notifications
-        Utils.runNotificationService(mContext);
+        Utils.runNotificationService(context);
 
-        Toast.makeText(mContext, mContext.getString(isFavorite ?
+        Toast.makeText(context, context.getString(isFavorite ?
                 R.string.favorited : R.string.unfavorited), Toast.LENGTH_SHORT).show();
     }
 
@@ -227,8 +201,8 @@ public class ShowTools {
      * Saves new hidden flag to the local database and, if signed in, up into the cloud as well.
      */
     public void storeIsHidden(int showTvdbId, boolean isHidden) {
-        if (HexagonTools.isSignedIn(mContext)) {
-            if (Utils.isNotConnected(mContext, true)) {
+        if (HexagonTools.isSignedIn(context)) {
+            if (Utils.isNotConnected(context, true)) {
                 return;
             }
             // send to cloud
@@ -241,20 +215,20 @@ public class ShowTools {
         // save to local database
         ContentValues values = new ContentValues();
         values.put(SeriesGuideContract.Shows.HIDDEN, isHidden);
-        mContext.getContentResolver().update(
+        context.getContentResolver().update(
                 SeriesGuideContract.Shows.buildShowUri(showTvdbId), values, null, null);
 
         // also notify filter URI used by search
-        mContext.getContentResolver()
+        context.getContentResolver()
                 .notifyChange(SeriesGuideContract.Shows.CONTENT_URI_FILTER, null);
 
-        Toast.makeText(mContext, mContext.getString(isHidden ?
+        Toast.makeText(context, context.getString(isHidden ?
                 R.string.hidden : R.string.unhidden), Toast.LENGTH_SHORT).show();
     }
 
     public void storeLanguage(final int showTvdbId, final String languageCode) {
-        if (HexagonTools.isSignedIn(mContext)) {
-            if (Utils.isNotConnected(mContext, true)) {
+        if (HexagonTools.isSignedIn(context)) {
+            if (Utils.isNotConnected(context, true)) {
                 return;
             }
             // send to cloud
@@ -272,56 +246,49 @@ public class ShowTools {
                 // change language
                 ContentValues values = new ContentValues();
                 values.put(SeriesGuideContract.Shows.LANGUAGE, languageCode);
-                mContext.getContentResolver()
+                context.getContentResolver()
                         .update(SeriesGuideContract.Shows.buildShowUri(showTvdbId), values, null,
                                 null);
                 // reset episode last edit time so all get updated
                 values = new ContentValues();
                 values.put(SeriesGuideContract.Episodes.LAST_EDITED, 0);
-                mContext.getContentResolver()
+                context.getContentResolver()
                         .update(SeriesGuideContract.Episodes.buildEpisodesOfShowUri(showTvdbId),
                                 values, null, null);
                 // trigger update
-                SgSyncAdapter.requestSyncImmediate(mContext, SgSyncAdapter.SyncType.SINGLE,
+                SgSyncAdapter.requestSyncImmediate(context, SgSyncAdapter.SyncType.SINGLE,
                         showTvdbId, false);
             }
         };
         AsyncTask.THREAD_POOL_EXECUTOR.execute(runnable);
 
         // show immediate feedback, also if offline and sync won't go through
-        if (AndroidUtils.isNetworkConnected(mContext)) {
+        if (AndroidUtils.isNetworkConnected(context)) {
             // notify about upcoming sync
-            Toast.makeText(mContext, R.string.update_scheduled, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.update_scheduled, Toast.LENGTH_SHORT).show();
         } else {
             // offline
-            Toast.makeText(mContext, R.string.update_no_connection, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.update_no_connection, Toast.LENGTH_LONG).show();
         }
     }
 
     /**
      * Add a show to the users trakt watchlist.
      */
-    public static void addToWatchlist(Context context, int showTvdbId) {
-        AsyncTaskCompat.executeParallel(new AddShowToWatchlistTask(context, showTvdbId));
-    }
-
-    /**
-     * Store the rating for the given episode in the database and send it to trakt.
-     */
-    public static void rate(Context context, int showTvdbId, Rating rating) {
-        AsyncTaskCompat.executeParallel(new RateShowTask(context, rating, showTvdbId));
+    public static void addToWatchlist(SgApp app, int showTvdbId) {
+        AsyncTaskCompat.executeParallel(new AddShowToWatchlistTask(app, showTvdbId));
     }
 
     /**
      * Remove a show from the users trakt watchlist.
      */
-    public static void removeFromWatchlist(Context context, int showTvdbId) {
-        AsyncTaskCompat.executeParallel(new RemoveShowFromWatchlistTask(context, showTvdbId));
+    public static void removeFromWatchlist(SgApp app, int showTvdbId) {
+        AsyncTaskCompat.executeParallel(new RemoveShowFromWatchlistTask(app, showTvdbId));
     }
 
     private void uploadShowAsync(Show show) {
         AsyncTaskCompat.executeParallel(
-                new ShowsUploadTask(mContext, show)
+                new ShowsUploadTask(context, show)
         );
     }
 
@@ -385,7 +352,7 @@ public class ShowTools {
                 }
                 showsService.save(showList).execute();
             } catch (IOException e) {
-                Timber.e(e, "toHexagon: failed to upload shows");
+                HexagonTools.trackFailedRequest(context, "save shows", e);
                 return false;
             }
 
@@ -455,7 +422,7 @@ public class ShowTools {
                         return false;
                     }
 
-                    Shows.Get request = showsService.get().setLimit(SHOWS_MAX_BATCH_SIZE);
+                    Shows.Get request = showsService.get(); // use default server limit
                     if (hasMergedShows) {
                         // only get changed shows (otherwise returns all)
                         request.setUpdatedSince(lastSyncTime);
@@ -480,7 +447,7 @@ public class ShowTools {
                         hasMoreShows = false;
                     }
                 } catch (IOException e) {
-                    Timber.e(e, "fromHexagon: failed to download shows");
+                    HexagonTools.trackFailedRequest(context, "get shows", e);
                     return false;
                 }
 
@@ -594,6 +561,31 @@ public class ShowTools {
         }
     }
 
+    public static boolean addLastWatchedUpdateOpIfNewer(Context context,
+            ArrayList<ContentProviderOperation> batch, int showTvdbId, long lastWatchedMsNew) {
+        Uri uri = SeriesGuideContract.Shows.buildShowUri(showTvdbId);
+        Cursor query = context.getContentResolver().query(uri, new String[] {
+                SeriesGuideContract.Shows.LASTWATCHED_MS }, null, null, null);
+        if (query == null) {
+            Timber.e("addLastWatchedTimeUpdateOpIfNewer: query was null.");
+            return false;
+        }
+        if (!query.moveToFirst()) {
+            Timber.e("addLastWatchedTimeUpdateOpIfNewer: query has no results.");
+            query.close();
+            return false;
+        }
+        long lastWatchedMs = query.getLong(0);
+        query.close();
+
+        if (lastWatchedMs < lastWatchedMsNew) {
+            batch.add(ContentProviderOperation.newUpdate(uri)
+                    .withValue(SeriesGuideContract.Shows.LASTWATCHED_MS, lastWatchedMsNew)
+                    .build());
+        }
+        return true;
+    }
+
     /**
      * Returns the trakt id of a show. Returns {@code null} if the query failed, there is no trakt
      * id or if it is invalid.
@@ -637,6 +629,32 @@ public class ShowTools {
 
         while (shows.moveToNext()) {
             existingShows.add(shows.getInt(0));
+        }
+
+        shows.close();
+
+        return existingShows;
+    }
+
+    /**
+     * Returns a set of the TVDb ids of all shows in the local database mapped to their poster path
+     * (null if there is no poster).
+     *
+     * @return null if there was an error, empty list if there are no shows.
+     */
+    @Nullable
+    public static SparseArrayCompat<String> getShowTvdbIdsAndPosters(Context context) {
+        SparseArrayCompat<String> existingShows = new SparseArrayCompat<>();
+
+        Cursor shows = context.getContentResolver().query(SeriesGuideContract.Shows.CONTENT_URI,
+                new String[] { SeriesGuideContract.Shows._ID, SeriesGuideContract.Shows.POSTER },
+                null, null, null);
+        if (shows == null) {
+            return null;
+        }
+
+        while (shows.moveToNext()) {
+            existingShows.put(shows.getInt(0), shows.getString(1));
         }
 
         shows.close();

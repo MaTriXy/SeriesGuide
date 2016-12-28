@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.appwidget;
 
 import android.annotation.TargetApi;
@@ -32,7 +16,6 @@ import com.battlelancer.seriesguide.util.Utils;
  * Shows settings fragment for a specific app widget, hosted inside a {@link ListWidgetConfigure}
  * activity.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ListWidgetPreferenceFragment extends BaseSettingsFragment {
 
     @SuppressWarnings("FieldCanBeLocal") private SharedPreferences.OnSharedPreferenceChangeListener
@@ -68,7 +51,7 @@ public class ListWidgetPreferenceFragment extends BaseSettingsFragment {
         typePref.setTitle(R.string.pref_widget_type);
         typePref.setEntries(R.array.widgetType);
         typePref.setEntryValues(R.array.widgetTypeData);
-        typePref.setDefaultValue("0");
+        typePref.setDefaultValue(getString(R.string.widget_default_type));
         typePref.setPositiveButtonText(null);
         typePref.setNegativeButtonText(null);
         preferenceScreen.addPreference(typePref);
@@ -79,7 +62,7 @@ public class ListWidgetPreferenceFragment extends BaseSettingsFragment {
         sortPref.setTitle(R.string.action_shows_sort);
         sortPref.setEntries(R.array.widgetShowSortOrder);
         sortPref.setEntryValues(R.array.widgetShowSortOrderData);
-        sortPref.setDefaultValue("0");
+        sortPref.setDefaultValue(getString(R.string.widget_default_show_sort_order));
         sortPref.setPositiveButtonText(null);
         sortPref.setNegativeButtonText(null);
         preferenceScreen.addPreference(sortPref);
@@ -143,9 +126,13 @@ public class ListWidgetPreferenceFragment extends BaseSettingsFragment {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                     String key) {
+                if (!isAdded()) {
+                    return; // no longer attached to activity
+                }
                 if (typePref.getKey().equals(key)) {
                     String newTypeValue = typePref.getValue();
-                    boolean displayingShows = "2".equals(newTypeValue);
+                    boolean displayingShows = getString(R.string.widget_type_shows)
+                            .equals(newTypeValue);
                     sortPref.setEnabled(displayingShows);
                     hideWatchedPreference.setEnabled(!displayingShows);
                 }

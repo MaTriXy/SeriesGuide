@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
 import android.annotation.SuppressLint;
@@ -21,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -36,9 +19,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import butterknife.ButterKnife;
 import com.battlelancer.seriesguide.BuildConfig;
 import com.battlelancer.seriesguide.R;
-import com.battlelancer.seriesguide.SeriesGuideApplication;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.adapters.TabStripAdapter;
 import com.battlelancer.seriesguide.api.Intents;
 import com.battlelancer.seriesguide.billing.IabHelper;
@@ -52,21 +36,23 @@ import com.battlelancer.seriesguide.settings.DisplaySettings;
 import com.battlelancer.seriesguide.settings.TraktSettings;
 import com.battlelancer.seriesguide.sync.AccountUtils;
 import com.battlelancer.seriesguide.sync.SgSyncAdapter;
-import com.battlelancer.seriesguide.ui.FirstRunFragment.OnFirstRunDismissedListener;
 import com.battlelancer.seriesguide.ui.dialogs.AddShowDialogFragment;
+import com.battlelancer.seriesguide.util.ActivityTools;
 import com.battlelancer.seriesguide.util.DBUtils;
 import com.battlelancer.seriesguide.util.EpisodeTools;
 import com.battlelancer.seriesguide.util.RemoveShowWorkerFragment;
 import com.battlelancer.seriesguide.util.TaskManager;
 import com.battlelancer.seriesguide.util.Utils;
 import com.battlelancer.seriesguide.widgets.SlidingTabLayout;
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Provides the apps main screen, displaying a list of shows and their next episodes.
  */
 public class ShowsActivity extends BaseTopActivity implements
-        AddShowDialogFragment.OnAddShowListener, OnFirstRunDismissedListener {
+        AddShowDialogFragment.OnAddShowListener {
 
     protected static final String TAG = "Shows";
 
@@ -85,6 +71,7 @@ public class ShowsActivity extends BaseTopActivity implements
     private ViewPager viewPager;
     private ProgressDialog mProgressDialog;
 
+    @SuppressWarnings("unused")
     public interface InitBundle {
 
         String SELECTED_TAB = "selectedtab";
@@ -113,7 +100,7 @@ public class ShowsActivity extends BaseTopActivity implements
         NotificationService.handleDeleteIntent(this, getIntent());
 
         // handle implicit intents from other apps
-        if (handleViewIntents()) {
+        if (handleViewIntents(getIntent())) {
             finish();
             return;
         }
@@ -139,24 +126,24 @@ public class ShowsActivity extends BaseTopActivity implements
      *
      * @return true if a show or episode is viewed directly and this activity should finish.
      */
-    private boolean handleViewIntents() {
-        String action = getIntent().getAction();
+    private boolean handleViewIntents(Intent intent) {
+        String action = intent.getAction();
         if (TextUtils.isEmpty(action)) {
             return false;
         }
 
-        Intent intent = null;
+        Intent viewIntent = null;
 
         // view an episode
         if (Intents.ACTION_VIEW_EPISODE.equals(action)) {
-            int episodeTvdbId = getIntent().getIntExtra(Intents.EXTRA_EPISODE_TVDBID, 0);
+            int episodeTvdbId = intent.getIntExtra(Intents.EXTRA_EPISODE_TVDBID, 0);
             if (episodeTvdbId > 0 && EpisodeTools.isEpisodeExists(this, episodeTvdbId)) {
                 // episode exists, display it
-                intent = new Intent(this, EpisodesActivity.class)
+                viewIntent = new Intent(this, EpisodesActivity.class)
                         .putExtra(EpisodesActivity.InitBundle.EPISODE_TVDBID, episodeTvdbId);
             } else {
                 // no such episode, offer to add show
-                int showTvdbId = getIntent().getIntExtra(Intents.EXTRA_SHOW_TVDBID, 0);
+                int showTvdbId = intent.getIntExtra(Intents.EXTRA_SHOW_TVDBID, 0);
                 if (showTvdbId > 0) {
                     AddShowDialogFragment.showAddDialog(showTvdbId, getSupportFragmentManager());
                 }
@@ -164,13 +151,13 @@ public class ShowsActivity extends BaseTopActivity implements
         }
         // view a show
         else if (Intents.ACTION_VIEW_SHOW.equals(action)) {
-            int showTvdbId = getIntent().getIntExtra(Intents.EXTRA_SHOW_TVDBID, 0);
+            int showTvdbId = intent.getIntExtra(Intents.EXTRA_SHOW_TVDBID, 0);
             if (showTvdbId <= 0) {
                 return false;
             }
             if (DBUtils.isShowExists(this, showTvdbId)) {
                 // show exists, display it
-                intent = new Intent(this, OverviewActivity.class)
+                viewIntent = new Intent(this, OverviewActivity.class)
                         .putExtra(OverviewFragment.InitBundle.SHOW_TVDBID, showTvdbId);
             } else {
                 // no such show, offer to add it
@@ -178,8 +165,8 @@ public class ShowsActivity extends BaseTopActivity implements
             }
         }
 
-        if (intent != null) {
-            startActivity(intent);
+        if (viewIntent != null) {
+            startActivity(viewIntent);
             return true;
         }
 
@@ -198,8 +185,7 @@ public class ShowsActivity extends BaseTopActivity implements
 
     private void setupViews() {
         // setup floating action button for adding shows
-        FloatingActionButton buttonAddShow = (FloatingActionButton) findViewById(
-                R.id.buttonShowsAdd);
+        FloatingActionButton buttonAddShow = ButterKnife.findById(this, R.id.buttonShowsAdd);
         buttonAddShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,12 +198,8 @@ public class ShowsActivity extends BaseTopActivity implements
         tabsAdapter = new ShowsTabPageAdapter(getSupportFragmentManager(), this, viewPager,
                 (SlidingTabLayout) findViewById(R.id.tabLayoutTabs), buttonAddShow);
 
-        // shows tab (or first run fragment)
-        if (!FirstRunFragment.hasSeenFirstRunFragment(this)) {
-            tabsAdapter.addTab(R.string.shows, FirstRunFragment.class, null);
-        } else {
-            tabsAdapter.addTab(R.string.shows, ShowsFragment.class, null);
-        }
+        // shows tab
+        tabsAdapter.addTab(R.string.shows, ShowsFragment.class, null);
 
         // now tab
         tabsAdapter.addTab(R.string.now_tab, ShowsNowFragment.class, null);
@@ -298,7 +280,11 @@ public class ShowsActivity extends BaseTopActivity implements
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        setInitialTab(intent.getExtras());
+        // handle intents that just want to view a specific show/episode
+        if (!handleViewIntents(intent)) {
+            // if no special intent, restore the last selected tab
+            setInitialTab(intent.getExtras());
+        }
     }
 
     @Override
@@ -327,6 +313,11 @@ public class ShowsActivity extends BaseTopActivity implements
             // pause Amazon IAP
             AmazonIapManager.get().deactivate();
         }
+
+        // save selected tab index
+        PreferenceManager.getDefaultSharedPreferences(this).edit()
+                .putInt(DisplaySettings.KEY_LAST_ACTIVE_SHOWS_TAB, viewPager.getCurrentItem())
+                .apply();
     }
 
     @Override
@@ -384,13 +375,14 @@ public class ShowsActivity extends BaseTopActivity implements
      */
     @Override
     public void onAddShow(SearchResult show) {
-        TaskManager.getInstance(this).performAddTask(show);
+        TaskManager.getInstance(this).performAddTask(SgApp.from(this), show);
     }
 
     /**
      * Called from {@link com.battlelancer.seriesguide.util.RemoveShowWorkerFragment}.
      */
     @SuppressWarnings("UnusedParameters")
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(RemoveShowWorkerFragment.OnRemovingShowEvent event) {
         showProgressDialog();
     }
@@ -399,6 +391,7 @@ public class ShowsActivity extends BaseTopActivity implements
      * Called from {@link com.battlelancer.seriesguide.util.RemoveShowWorkerFragment}.
      */
     @SuppressWarnings("UnusedParameters")
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(RemoveShowWorkerFragment.OnShowRemovedEvent event) {
         hideProgressDialog();
     }
@@ -435,7 +428,7 @@ public class ShowsActivity extends BaseTopActivity implements
              *
              * NOTE: see version codes for upgrade description.
              */
-            if (lastVersion < SeriesGuideApplication.RELEASE_VERSION_12_BETA5) {
+            if (lastVersion < SgApp.RELEASE_VERSION_12_BETA5) {
                 // flag all episodes as outdated
                 ContentValues values = new ContentValues();
                 values.put(SeriesGuideContract.Episodes.LAST_EDITED, 0);
@@ -444,18 +437,21 @@ public class ShowsActivity extends BaseTopActivity implements
                 // sync is triggered in last condition
                 // (if we are in here we will definitely hit the ones below)
             }
-            if (lastVersion < SeriesGuideApplication.RELEASE_VERSION_16_BETA1) {
+            if (lastVersion < SgApp.RELEASE_VERSION_16_BETA1) {
                 Utils.clearLegacyExternalFileCache(this);
             }
-            if (lastVersion < SeriesGuideApplication.RELEASE_VERSION_23_BETA4) {
+            if (lastVersion < SgApp.RELEASE_VERSION_23_BETA4) {
                 // make next trakt sync download watched movies
                 TraktSettings.resetMoviesLastActivity(this);
             }
-            if (lastVersion < SeriesGuideApplication.RELEASE_VERSION_26_BETA3) {
+            if (lastVersion < SgApp.RELEASE_VERSION_26_BETA3) {
                 // flag all shows outdated so delta sync will pick up, if full sync gets aborted
                 scheduleAllShowsUpdate();
                 // force a sync
                 SgSyncAdapter.requestSyncImmediate(this, SgSyncAdapter.SyncType.FULL, 0, true);
+            }
+            if (lastVersion < SgApp.RELEASE_VERSION_34_BETA4) {
+                ActivityTools.populateShowsLastWatchedTime(this);
             }
 
             // set this as lastVersion
@@ -473,10 +469,8 @@ public class ShowsActivity extends BaseTopActivity implements
     }
 
     @Override
-    public void onFirstRunDismissed() {
-        // replace the first run fragment with a show fragment
-        tabsAdapter.updateTab(R.string.shows, ShowsFragment.class, null, 0);
-        tabsAdapter.notifyTabsChanged();
+    protected View getSnackbarParentView() {
+        return findViewById(R.id.rootLayoutShows);
     }
 
     /**
@@ -486,24 +480,13 @@ public class ShowsActivity extends BaseTopActivity implements
     public static class ShowsTabPageAdapter extends TabStripAdapter
             implements ViewPager.OnPageChangeListener {
 
-        private final SharedPreferences prefs;
         private final FloatingActionButton floatingActionButton;
 
         public ShowsTabPageAdapter(FragmentManager fm, Context context, ViewPager pager,
                 SlidingTabLayout tabs, FloatingActionButton floatingActionButton) {
             super(fm, context, pager, tabs);
-            prefs = PreferenceManager.getDefaultSharedPreferences(context);
             this.floatingActionButton = floatingActionButton;
             tabs.setOnPageChangeListener(this);
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            if (object instanceof FirstRunFragment) {
-                return POSITION_NONE;
-            } else {
-                return super.getItemPosition(object);
-            }
         }
 
         @Override
@@ -516,8 +499,6 @@ public class ShowsActivity extends BaseTopActivity implements
 
         @Override
         public void onPageSelected(int position) {
-            // save selected tab index
-            prefs.edit().putInt(DisplaySettings.KEY_LAST_ACTIVE_SHOWS_TAB, position).apply();
             // only display add show button on Shows tab
             if (position == InitBundle.INDEX_TAB_SHOWS) {
                 floatingActionButton.show();

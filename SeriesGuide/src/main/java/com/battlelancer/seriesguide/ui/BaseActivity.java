@@ -1,27 +1,13 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -35,13 +21,16 @@ import com.battlelancer.seriesguide.util.AddShowTask;
 import com.battlelancer.seriesguide.util.DBUtils;
 import com.battlelancer.seriesguide.util.TaskManager;
 import com.battlelancer.seriesguide.util.TraktTask;
+import com.battlelancer.seriesguide.widgets.FirstRunView;
 import com.google.android.gms.analytics.GoogleAnalytics;
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Provides some common functionality across all activities like setting the theme, navigation
  * shortcuts and triggering AutoUpdates and AutoBackups. <p> Also registers with {@link
- * de.greenrobot.event.EventBus#getDefault()} by default to handle various common events, see {@link
+ * EventBus#getDefault()} by default to handle various common events, see {@link
  * #registerEventBus()} and {@link #unregisterEventBus()} to prevent that.
  */
 public abstract class BaseActivity extends AppCompatActivity {
@@ -82,8 +71,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Override this to avoid registering with {@link de.greenrobot.event.EventBus#getDefault()} in
-     * {@link #onStart()}.
+     * Override this to avoid registering with {@link EventBus#getDefault()} in {@link #onStart()}.
      *
      * <p> See {@link #unregisterEventBus()} as well.
      */
@@ -104,8 +92,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Override this to avoid unregistering from {@link de.greenrobot.event.EventBus#getDefault()}
-     * in {@link #onStop()}.
+     * Override this to avoid unregistering from {@link EventBus#getDefault()} in {@link
+     * #onStop()}.
      *
      * <p> See {@link #registerEventBus()} as well.
      */
@@ -117,22 +105,38 @@ public abstract class BaseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                    // This activity is NOT part of this app's task, so create a new task
+                    // when navigating up, with a synthesized back stack.
+                    TaskStackBuilder.create(this)
+                            // Add all of this activity's parents to the back stack
+                            .addNextIntentWithParentStack(upIntent)
+                            // Navigate up to the closest parent
+                            .startActivities();
+                } else {
+                    // This activity is part of this app's task, so simply
+                    // navigate up to the logical parent activity.
+                    NavUtils.navigateUpTo(this, upIntent);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Subscribe
     public void onEvent(AddShowTask.OnShowAddedEvent event) {
         // display status toast about adding shows
         event.handle(this);
     }
 
+    @Subscribe
     public void onEvent(TraktTask.TraktActionCompleteEvent event) {
         // display status toast about trakt action
         event.handle(this);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(DBUtils.DatabaseErrorEvent event) {
         event.handle(this);
     }
@@ -149,7 +153,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             // only show warning if the user is done with first run
-            if (FirstRunFragment.hasSeenFirstRunFragment(this)) {
+            if (FirstRunView.hasSeenFirstRunFragment(this)) {
                 onShowAutoBackupPermissionWarning();
             }
             return false;

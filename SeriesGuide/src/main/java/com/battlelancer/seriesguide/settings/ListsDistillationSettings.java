@@ -1,24 +1,9 @@
-/*
- * Copyright 2015 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.settings;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract;
+import com.battlelancer.seriesguide.settings.ShowsDistillationSettings.ShowsSortOrder;
 
 /**
  * Provides settings used to sort displayed list items in {@link com.battlelancer.seriesguide.ui.ListsFragment}.
@@ -36,25 +21,30 @@ public class ListsDistillationSettings {
     public static String getSortQuery(Context context) {
         int sortOrderId = getSortOrderId(context);
 
-        if (sortOrderId == ListsSortOrder.TITLE_REVERSE_ALHPABETICAL_ID) {
-            if (DisplaySettings.isSortOrderIgnoringArticles(context)) {
-                return SeriesGuideContract.ListItems.SORT_TITLE_NOARTICLE_REVERSE;
-            } else {
-                return SeriesGuideContract.ListItems.SORT_TITLE_REVERSE;
-            }
-        }
-        if (sortOrderId == ListsSortOrder.NEWEST_EPISODE_FIRST_ID) {
-            return SeriesGuideContract.ListItems.SORT_NEWEST_EPISODE_FIRST;
-        }
-        if (sortOrderId == ListsSortOrder.OLDEST_EPISODE_FIRST_ID) {
-            return SeriesGuideContract.ListItems.SORT_OLDEST_EPISODE_FIRST;
+        // convert to show sort order id
+        switch (sortOrderId) {
+            case ListsSortOrder.LATEST_EPISODE_ID:
+                sortOrderId = ShowsSortOrder.LATEST_EPISODE_ID;
+                break;
+            case ListsSortOrder.OLDEST_EPISODE_ID:
+                sortOrderId = ShowsSortOrder.OLDEST_EPISODE_ID;
+                break;
+            case ListsSortOrder.LAST_WATCHED_ID:
+                sortOrderId = ShowsSortOrder.LAST_WATCHED_ID;
+                break;
+            case ListsSortOrder.LEAST_REMAINING_EPISODES_ID:
+                sortOrderId = ShowsSortOrder.LEAST_REMAINING_EPISODES_ID;
+                break;
+            default:
+                sortOrderId = ShowsSortOrder.TITLE_ID;
+                break;
         }
 
-        if (DisplaySettings.isSortOrderIgnoringArticles(context)) {
-            return SeriesGuideContract.ListItems.SORT_TITLE_NOARTICLE;
-        } else {
-            return SeriesGuideContract.ListItems.SORT_TITLE;
-        }
+        String baseQuery = ShowsDistillationSettings.getSortQuery(sortOrderId, false,
+                DisplaySettings.isSortOrderIgnoringArticles(context));
+
+        // append sorting by list type
+        return baseQuery + "," + SeriesGuideContract.ListItems.SORT_TYPE;
     }
 
     /**
@@ -68,8 +58,11 @@ public class ListsDistillationSettings {
 
     public interface ListsSortOrder {
         int TITLE_ALPHABETICAL_ID = 0;
-        int TITLE_REVERSE_ALHPABETICAL_ID = 1;
-        int NEWEST_EPISODE_FIRST_ID = 2;
-        int OLDEST_EPISODE_FIRST_ID = 3;
+        // @deprecated Only supporting alphabetical sort order going forward.
+        // int TITLE_REVERSE_ALHPABETICAL_ID = 1;
+        int LATEST_EPISODE_ID = 2;
+        int OLDEST_EPISODE_ID = 3;
+        int LAST_WATCHED_ID = 4;
+        int LEAST_REMAINING_EPISODES_ID = 5;
     }
 }

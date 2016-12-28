@@ -8,10 +8,9 @@
   <string name="statistics">Статистика</string>
   <string name="search">Поиск</string>
   <string name="preferences">Настройки</string>
-  <string name="help">Справка</string>
+  <string name="help">Помощь</string>
   <string name="help_and_feedback">Помощь и обратная связь</string>
   <string name="drawer_open">Открыть навигационную панель</string>
-  <string name="drawer_close">Закрыть навигационную панель</string>
   <!-- Media items -->
   <string name="show">Инфо</string>
   <string name="episode">Эпизод</string>
@@ -34,6 +33,9 @@
   <string name="web_search">Веб-поиск</string>
   <string name="add_to_homescreen">Ярлык</string>
   <string name="action_open">Открыть</string>
+  <string name="sync_manually">Синхронизировать вручную</string>
+  <string name="sync_and_update">Синхронизировать и обновить</string>
+  <string name="sync_and_download_all">Синхронизировать и загрузить все</string>
   <!-- Search -->
   <string name="clear_search_history">Очистить историю поиска</string>
   <string name="search_hint">Поиск эпизодов</string>
@@ -46,6 +48,8 @@
   <string name="app_not_available">Нет приложения для обработки этой команды.</string>
   <string name="people_empty">Никого нет? Коснитесь, чтобы попробовать еще раз.</string>
   <string name="database_error">Не получается модифицирофавать данные.</string>
+  <string name="reinstall_info">Попробуйте сделать бэкап в настройках, переустановите приложение и восстановите данные.</string>
+  <string name="api_error_generic">Не могу связаться с %s. Попробуйте позже.</string>
   <!-- Sharing -->
   <string name="share">Отправить</string>
   <string name="share_show">Поделиться сериалом</string>
@@ -54,6 +58,7 @@
   <string name="share_checkout">Проверить %s</string>
   <string name="addtocalendar">Добавить в календарь</string>
   <string name="addtocalendar_failed">Не удалось создать событие календаря.</string>
+  <string name="links">Ссылки</string>
   <!-- Comments -->
   <string name="comments">Комментарии</string>
   <string name="shout_hint">Введите комментарий (На английском, более 5 слов)</string>
@@ -70,26 +75,23 @@
   <!-- Metadata -->
   <string name="episode_number_absolute">НОМЕР</string>
   <string name="episode_number_disk">DVD</string>
-  <string name="episode_firstaired">Дата выпуска</string>
+  <string name="episode_firstaired">Дата выхода</string>
   <string name="episode_firstaired_unknown">Дата выхода неизвестна</string>
   <string name="episode_dvdnumber">DVD эпизод</string>
-  <string name="show_actors">Актёры</string>
   <string name="original_release">Оригинальное издание</string>
   <string name="show_on_network">на %s</string>
   <string name="show_genres">Жанры</string>
-  <string name="show_runtime">Продолжительность</string>
   <string name="show_contentrating">Возрастные ограничения</string>
   <string name="show_release_times">Время выпуска</string>
   <string name="episode_directors">Режиссёры</string>
   <string name="episode_gueststars">Приглашенные звёзды</string>
   <string name="episode_writers">Сценаристы</string>
   <string name="show_isalive">Продолжается</string>
-  <string name="show_isnotalive">Закончился</string>
+  <string name="show_isnotalive">Завершён</string>
   <string name="lastEdit">Последние изменения / / TVDb</string>
-  <string name="services_watch">Смотреть</string>
-  <string name="services_more">Подробнее</string>
   <string name="no_translation">Перевод описания с %1$s недоступно для %2$s.</string>
   <string name="no_translation_title">Не переведено</string>
+  <string name="no_spoilers">Некоторые детали скрыты, чтобы предотвратить спойлеры. Чтобы отключить эту функцию, перейдите в Настройки.</string>
   <!-- Date and Time -->
   <string name="today">сегодня</string>
   <string name="now">сейчас</string>
@@ -132,17 +134,18 @@
   <string name="action_shows_filter_hidden">Скрытые</string>
   <string name="action_shows_sort">Сортировать сериалы</string>
   <string name="action_shows_sort_title">Название</string>
-  <string name="action_shows_sort_episode">Следующий эпизод</string>
+  <string name="action_shows_sort_latest_episode">Последний эпизод</string>
+  <string name="action_shows_sort_oldest_episode">Старейший эпизод</string>
+  <string name="action_shows_sort_last_watched">Последний просмотренный</string>
+  <string name="action_shows_sort_remaining">Оставшиеся эпизоды</string>
   <string name="action_shows_sort_favorites">Сначала избранные</string>
-  <string name="updateall_yes">Обновить (все)</string>
-  <string name="menu_update_delta">Обновить (только устаревшие)</string>
   <string name="context_updateshow">Обновить</string>
   <string name="context_marknext">Смотреть следующий эпизод</string>
   <!-- Now -->
   <string name="now_tab">Сейчас</string>
   <string name="recently_watched">Недавно просмотренные</string>
   <string name="released_today">Вышедшие сегодня</string>
-  <string name="friends_recently">Ваши Trakt друзья</string>
+  <string name="friends_recently">Ваши друзья с Trakt</string>
   <string name="now_empty">Ничего нового. Посмотрите другие сериалы!</string>
   <string name="now_movies_empty">Ничего нового. Посмотрите несколько фильмов!</string>
   <!-- History -->
@@ -157,7 +160,7 @@
   <string name="only_favorites">Только избранные сериалы</string>
   <string name="pref_infinite_scrolling">Бесконечный календарь</string>
   <!-- Updating -->
-  <string name="update_scheduled">Обновление...</string>
+  <string name="update_scheduled">Обновление&#8230;</string>
   <string name="update_no_connection">Для обновления подключитесь к Интернет.</string>
   <string name="update_inprogress">Выполняется обновление, попробуйте еще раз позже.</string>
   <!-- Seasons -->
@@ -174,7 +177,7 @@
   <string name="no_results">Результатов нет, попробуйте полное название.</string>
   <string name="action_try_any_language">Попробовать любой язык</string>
   <string name="action_try_again">Повторить попытку</string>
-  <string name="search_error">Найти не удалось, повторите попытку позже.</string>
+  <string name="tvdb_error_does_not_exist">Сериала не существует (пока) на TheTVDB. Попробуйте позже.</string>
   <string name="add_all">Добавить все</string>
   <string name="add_multiple">Все сериалы скоро появятся в вашем списке.</string>
   <string name="add_started">%s скоро появится в вашем списке.</string>
@@ -213,6 +216,7 @@
   <string name="action_movies_sort_title">Название</string>
   <string name="action_movies_sort_release">Дата выпуска</string>
   <!-- Statistics -->
+  <string name="statistics_failed">Не удалось рассчитать статистику.</string>
   <string name="statistics_shows">Сериалы</string>
   <string name="statistics_episodes">Эпизоды</string>
   <string name="statistics_movies">Фильмы</string>
@@ -224,24 +228,24 @@
   <string name="runtime_movies_watchlist">Общее время в списке просмотра</string>
   <plurals name="days_plural">
     <item quantity="one">%d день</item>
-    <item quantity="few">%d days</item>
+    <item quantity="few">%d дня</item>
     <item quantity="other">%d дней</item>
   </plurals>
   <plurals name="hours_plural">
     <item quantity="one">%d час</item>
-    <item quantity="few">%d hours</item>
+    <item quantity="few">%d час</item>
     <item quantity="other">%d часов</item>
   </plurals>
   <plurals name="minutes_plural">
     <item quantity="one">%d минута</item>
-    <item quantity="few">%d minutes</item>
+    <item quantity="few">%d минута</item>
     <item quantity="other">%d минут</item>
   </plurals>
   <!-- Hexagon -->
   <string name="hexagon_warning">Экспериментальный!</string>
   <string name="hexagon_description">Подключитесь к облаку для резервного копирования и синхронизации ваших сериалов и фильмов.</string>
   <string name="hexagon_warning_lists">Списки не включены.</string>
-  <string name="hexagon_warning_trakt">При использовании SeriesGuide Cloud, изменения на trakt.tv не будут синхронизироваться с SeriesGuide.</string>
+  <string name="hexagon_warning_trakt">Пока подключен SeriesGuide Cloud, синхронизация с trakt будет отключена.</string>
   <string name="hexagon_signin">Войти</string>
   <string name="hexagon_signed_in">Вы подключены к SeriesGuide Cloud.</string>
   <string name="hexagon_signout">Выйти</string>
@@ -251,7 +255,6 @@
   <string name="hexagon_remove_account_success">Аккаунт уничтожен.</string>
   <string name="hexagon_remove_account_failure">Не удалось удалить аккаунт.</string>
   <string name="hexagon_remove_account_confirmation">При удалении аккаунта будут удалены все сериалы и фильмы из SeriesGuide Cloud. Также убедитесь в том, что он удалён на других подключенных устройствах.</string>
-  <string name="hexagon_api_error">Нет доступа к облаку SeriesGuid. Повторите попытку позже.</string>
   <string name="hexagon_api_queued">Отправка в облако SeriesGuide.</string>
   <string name="hexagon_permission_missing">Чтобы использовать облако SeriesGuide, разрешите доступ к вашим аккаунтам.</string>
   <string name="hexagon_google_play_missing">Чтобы использовать облако SeriesGuide, требуются службы Google Play.</string>
@@ -265,12 +268,11 @@
   <string name="checkin_canceled_success_trakt">Отменена регистрация на trakt.</string>
   <string name="traktcheckin_cancel">Отменить</string>
   <string name="traktcheckin_inprogress">Вы уже зарегистрировались в другом эпизоде или фильме. Вы можете заменить предыдущую регистрацию или подождать %s и попробовать снова.</string>
-  <string name="traktcheckin_wait">Согласен</string>
+  <string name="traktcheckin_wait">Я подожду</string>
   <string name="trakt_success">Отправлено в trakt.</string>
   <string name="trakt_error_credentials">Что-то пошло не так. Пожалуйста, проверьте ваши учётные данные и повторите попытку.</string>
-  <string name="trakt_error_general">Trakt не отвечает. Повторите попытку позже.</string>
-  <string name="trakt_error_not_exists">(Пока) недоступен на trakt. Попробуйте позже.</string>
-  <string name="trakt_notice_not_exists">(Пока) не может быть отслежен с помощью trakt.</string>
+  <string name="trakt_error_not_exists">На данный момент недоступен на trakt. Попробуйте позже.</string>
+  <string name="trakt_notice_not_exists">На данный не может быть отслежен с помощью trakt.</string>
   <!-- Connect trakt -->
   <string name="trakt_account">Аккаунт trakt</string>
   <string name="trakt_connect_instructions">На следующей странице войдите в свой аккаунт на trakt или создайте новый. После этого, предоставьте SeriesGuide доступ к вашему аккаунту на trakt.</string>
@@ -302,7 +304,7 @@
   <string name="rating9">Превосходно</string>
   <plurals name="votes">
     <item quantity="one">%d голос</item>
-    <item quantity="few">%d votes</item>
+    <item quantity="few">%d голос</item>
     <item quantity="other">%d голосов</item>
   </plurals>
   <!-- Check Ins -->
@@ -325,18 +327,17 @@
   <string name="pref_onlyseasonepssummary">Особые эпизоды исчезают везде кроме списка сезона</string>
   <string name="pref_exactdates">Отображать точные даты</string>
   <string name="pref_exactdates_summary">\"31 октября\" вместо \"Через 3 дня\"</string>
-  <string name="pref_seasonsorting">Сортировка сезонов по</string>
-  <string name="pref_episodesorting">Сортировка эпизодов по</string>
+  <string name="pref_nospoilers">Предотвратить спойлеры</string>
+  <string name="pref_nospoilers_summary">Скрывать подробности, пока эпизод не просмотрен</string>
+  <string name="pref_seasonsorting">Сортировка сезонов по&#8230;</string>
+  <string name="pref_episodesorting">Сортировка эпизодов по&#8230;</string>
   <string name="pref_language">Предпочтительный язык контента</string>
   <string name="pref_updatewifionly">Картинки только через Wi-Fi</string>
   <string name="pref_updatewifionlysummary">Чтобы сократить расходы на передачу данных, не скачивать через мобильные сети</string>
-  <string name="about">О SeriesGuide</string>
-  <string name="pref_autoaddshows">Добавить новые сериалы из trakt</string>
-  <string name="pref_autoaddshowssummary">Автоматически добавлять сериалы из trakt</string>
   <!-- About screen -->
-  <string name="licence_tvdb">Это приложение использует данные и картинки сервиса TheTVDB под лицензией CC BY-NC 4.0.</string>
+  <string name="licence_tvdb">Это приложение использует данные и изображения сервиса TheTVDB под лицензией CC BY-NC 4.0.</string>
   <string name="licence_themoviedb">Это приложение использует TMDb API, но это API не поддерживается и не одобрено самим сервисом TMDb.</string>
-  <string name="licence_trakt">Это приложение использует данные и картинки сервиса Trakt.</string>
+  <string name="licence_trakt">Это приложение использует данные и изображения сервиса Trakt.</string>
   <string name="about_open_source">SeriesGuide сделан с использованием открытого программного обеспечения.</string>
   <string name="licences_and_credits">Лицензии и кредиты</string>
   <!-- Sort -->
@@ -367,8 +368,7 @@
   <string name="pref_theme">Тема</string>
   <!-- Other advanced settings -->
   <string name="pref_other">Другое</string>
-  <string name="pref_autoupdate">Автоматическое обновление</string>
-  <string name="pref_autoupdatesummary">Переодически обновлять сериалы</string>
+  <string name="pref_autoupdatesummary">Автоматически синхронизировать и обновлять данные SeriesGuide</string>
   <string name="pref_autobackup">Автоматическое резервное копирование</string>
   <string name="pref_autobackupsummary">Еженедельное резервное копирование ваших сериалов, списков и фильмов</string>
   <string name="backup">Резервное копирование/восстановление</string>
@@ -378,16 +378,16 @@
   <string name="pref_offsetsummary">Смещение времени эфира на %s часов</string>
   <string name="clear_cache">Очистить кэш изображений</string>
   <string name="clear_cache_summary">Удалить все кэшированные изображения с Вашего устройства</string>
-  <string name="pref_ganalyticssummary">Отслеживать использование функций приложения, чтобы улучшить SeriesGuide</string>
+  <string name="pref_ganalyticssummary">Отправлять анонимную статистику использования в сервис Google</string>
   <!-- Backup and Restore -->
   <string name="backup_full_dump">Включить все данные: описания, актеры и рейтинги.</string>
   <string name="backup_path">Папка резервного копирования</string>
   <string name="backup_version">Версия базы данных</string>
   <string name="backup_failed_file_access">Не могу произвести резервное копирование. Файл резервной копии не может быть найден или к нему нет доступа.</string>
-  <string name="backup_inprogress">Резервное копирование базы данных...</string>
+  <string name="backup_inprogress">Резервное копирование базы данных&#8230;</string>
   <string name="backup_success">Резервное копирование прошло успешно.</string>
   <string name="backup_failed">Не удалось выполнить резервное копирование.</string>
-  <string name="import_inprogress">Восстановление базы данных...</string>
+  <string name="import_inprogress">Восстановление базы данных&#8230;</string>
   <string name="import_failed_nosd">Не удается восстановить резервную копию. Папка резервного копирования не доступна.</string>
   <string name="import_failed_nofile">Существует не читаемый файл резервной копии.</string>
   <string name="import_failed_noread">Невозможно прочитать файл резервной копии.</string>
@@ -433,8 +433,6 @@
   <string name="notification_release_earlier_hour">один час до начала</string>
   <!-- Legacy Widgets -->
   <string name="smallwidget">SeriesGuide (малый)</string>
-  <string name="bigwidget">SeriesGuide (средний)</string>
-  <string name="largewidget">SeriesGuide (большой)</string>
   <!-- List Widget -->
   <string name="hide_watched">Скрывать просмотренные эпизоды</string>
   <string name="pref_widget_opacity">Фон виджета</string>
@@ -448,7 +446,7 @@
   <!-- DashClock extension -->
   <string name="dashclock_extension_label">Предстоящий</string>
   <string name="dashclock_extension_description">Отображает следующий предстоящий эпизод ваших SeriesGuide сериалов.</string>
-  <string name="dashclock_pref_upcoming_threshold">Эпизоды скоро</string>
+  <string name="dashclock_pref_upcoming_threshold">Эпизоды скоро&#8230;</string>
   <!-- Google In-App Billing -->
   <string name="onlyx">Только для пожертвовавших</string>
   <string name="action_upgrade">Разблокировать все возможности</string>
@@ -467,7 +465,6 @@
   <string name="subscription_failed">Покупка не завершена.</string>
   <string name="pass_unavailable">X Pass в данный момент не доступен.</string>
   <!-- Extensions -->
-  <string name="extensions">Расширения</string>
   <string name="action_extensions_configure">Настроить расширения</string>
   <string name="action_extensions_add">Добавить расширение</string>
   <string name="action_extensions_limit">Получите X, чтобы добавить больше расширений</string>
@@ -483,4 +480,13 @@
   <string name="description_extension_web_search">Поиск веб-сайтов и изображений</string>
   <!-- People -->
   <string name="person_biography">Биография</string>
+  <!-- Feedback -->
+  <string name="feedback_question_enjoy">Вам нравится SeriesGuide?</string>
+  <string name="feedback_action_yes">Да!</string>
+  <string name="feedback_action_notreally">Не совсем</string>
+  <string name="feedback_question_rate_google">Оценить его на Google Play?</string>
+  <string name="feedback_question_rate_amazon">Оценить его на Amazon?</string>
+  <string name="feedback_question_feedback">Расскажите мне, как его улучшить?</string>
+  <string name="feedback_action_ok">Да, конечно</string>
+  <string name="feedback_action_nothanks">Нет, спасибо</string>
 </resources>

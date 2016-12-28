@@ -1,20 +1,3 @@
-
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui.dialogs;
 
 import android.content.Context;
@@ -29,6 +12,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -52,7 +36,6 @@ import com.battlelancer.seriesguide.provider.SeriesGuideContract.Shows;
 import com.battlelancer.seriesguide.provider.SeriesGuideDatabase.Tables;
 import com.battlelancer.seriesguide.util.ListsTools;
 import com.battlelancer.seriesguide.util.SeasonTools;
-import com.battlelancer.seriesguide.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +43,7 @@ import java.util.List;
  * Displays a dialog displaying all lists, allowing to add the given show, season or episode to any
  * number of them.
  */
-public class ManageListsDialogFragment extends DialogFragment implements
+public class ManageListsDialogFragment extends AppCompatDialogFragment implements
         LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {
 
     public static ManageListsDialogFragment newInstance(int itemTvdbId,
@@ -208,12 +191,6 @@ public class ManageListsDialogFragment extends DialogFragment implements
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Utils.trackView(getActivity(), "Manage Lists Dialog");
-    }
-
-    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Checkable checkable = (Checkable) view;
         checkable.toggle();
@@ -257,7 +234,6 @@ public class ManageListsDialogFragment extends DialogFragment implements
         public void bindView(View view, Context context, Cursor cursor) {
             CheckedTextView checkedView = (CheckedTextView) view.findViewById(android.R.id.text1);
             checkedView.setText(cursor.getString(ListsQuery.NAME));
-            checkedView.setTextAppearance(context, R.style.TextAppearance);
 
             int position = cursor.getPosition();
 

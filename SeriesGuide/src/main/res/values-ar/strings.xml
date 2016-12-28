@@ -11,7 +11,6 @@
   <string name="help">مساعدة</string>
   <string name="help_and_feedback">مساعدة واقتراحات</string>
   <string name="drawer_open">فتح لوحة الملاحة</string>
-  <string name="drawer_close">إغلاق لوحة الملاحة</string>
   <!-- Media items -->
   <string name="show">العرض</string>
   <string name="episode">الحلقة</string>
@@ -25,27 +24,32 @@
   <string name="description_overview">نظرة عامة</string>
   <string name="description_poster">إظهار الملصقات</string>
   <string name="description_image">صورة الحلقة</string>
-  <string name="description_menu_overflow">خيارات اخرى</string>
+  <string name="description_menu_overflow">خيارات أخرى</string>
   <!-- Actions -->
   <string name="clear">تنظيف</string>
   <string name="discard">تجاهل</string>
   <string name="save_selection">حفظ التحديد</string>
   <string name="action_display_all">عرض الكل</string>
   <string name="web_search">البحث في الويب</string>
-  <string name="add_to_homescreen">إختصار</string>
-  <string name="action_open">إفتح</string>
+  <string name="add_to_homescreen">اختصار</string>
+  <string name="action_open">افتح</string>
+  <string name="sync_manually">Sync manually</string>
+  <string name="sync_and_update">Sync &amp; Update</string>
+  <string name="sync_and_download_all">Sync &amp; Download all</string>
   <!-- Search -->
   <string name="clear_search_history">إزالة تاريخ البحث</string>
   <string name="search_hint">البحث عن الحلقات</string>
-  <string name="any_language">اي لغة</string>
+  <string name="any_language">أي لغة</string>
   <!-- Status messages -->
   <string name="updated">تم التحديث إلى الإصدار الأخير.</string>
   <string name="norating">لا يوجد</string>
   <string name="unknown">غير معروف</string>
-  <string name="offline">إتصل بالشبكة، ثم حاول مرة أخرى.</string>
+  <string name="offline">اتصل بشبكة، ثم حاول مرة أخرى.</string>
   <string name="app_not_available">ليس هناك تطبيق متاح للتعامل مع هذا.</string>
   <string name="people_empty">لا أحد هنا ؟! قم باللمس من أجل المحاولة مرة أخرى.</string>
   <string name="database_error">لا يمكن تعديل البيانات.</string>
+  <string name="reinstall_info">Try to backup in Settings, re-install and restore.</string>
+  <string name="api_error_generic">Could not talk to %s. Try again later.</string>
   <!-- Sharing -->
   <string name="share">المشاركة</string>
   <string name="share_show">مشاركة العرض</string>
@@ -54,13 +58,14 @@
   <string name="share_checkout">تتحق من %s</string>
   <string name="addtocalendar">إضافة إلى التقويم</string>
   <string name="addtocalendar_failed">.لا يمكن إنشاء حدث تقويم</string>
+  <string name="links">الروابط</string>
   <!-- Comments -->
   <string name="comments">التعليقات</string>
   <string name="shout_hint">اكتب تعليق (الإنجليزية، 5 + كلمات)</string>
   <string name="shout_invalid">إن تعليقك مخالف للقواعد!</string>
-  <string name="action_post">أنشر</string>
-  <string name="isspoiler">تنبيه</string>
-  <string name="no_shouts">أكتب أول تعليق</string>
+  <string name="action_post">انشر</string>
+  <string name="isspoiler">تنبيه حرق!</string>
+  <string name="no_shouts">كم أول من يعلّق!</string>
   <string name="refresh">تحديث</string>
   <plurals name="replies_plural">
     <item quantity="one">%d ردود</item>
@@ -76,11 +81,9 @@
   <string name="episode_firstaired">تاريخ الإصدار</string>
   <string name="episode_firstaired_unknown">تاريخ الإصدار غير معروف</string>
   <string name="episode_dvdnumber">حلقة دي في دي</string>
-  <string name="show_actors">الممثلون</string>
   <string name="original_release">الإصدار الأصلي</string>
   <string name="show_on_network">خلال %s</string>
   <string name="show_genres">الأنواع</string>
-  <string name="show_runtime">وقت التشغيل</string>
   <string name="show_contentrating">تقييم المحتوى</string>
   <string name="show_release_times">أوقات العرض</string>
   <string name="episode_directors">الإدارة</string>
@@ -89,10 +92,9 @@
   <string name="show_isalive">مستمر</string>
   <string name="show_isnotalive">انتهى</string>
   <string name="lastEdit">آخر تحرير//TVDb</string>
-  <string name="services_watch">شاهد</string>
-  <string name="services_more">المزيد</string>
   <string name="no_translation">لا يوجد وصف باللغة %1$s على موقع %2$s.</string>
-  <string name="no_translation_title">Not translated</string>
+  <string name="no_translation_title">غير مترجمة</string>
+  <string name="no_spoilers">يتم إخفاء بعض التفاصيل لمنع المفسدين. لإيقاف هذا الانتقال إلى إعدادات.</string>
   <!-- Date and Time -->
   <string name="today">اليوم</string>
   <string name="now">الآن</string>
@@ -135,10 +137,11 @@
   <string name="action_shows_filter_hidden">المخفي</string>
   <string name="action_shows_sort">ترتيب المسلسلات</string>
   <string name="action_shows_sort_title">العنوان</string>
-  <string name="action_shows_sort_episode">الحلقة القادمة</string>
+  <string name="action_shows_sort_latest_episode">Latest episode</string>
+  <string name="action_shows_sort_oldest_episode">Oldest episode</string>
+  <string name="action_shows_sort_last_watched">Last watched</string>
+  <string name="action_shows_sort_remaining">Remaining episodes</string>
   <string name="action_shows_sort_favorites">المفضلة أولاً</string>
-  <string name="updateall_yes">تحديث (الكل)</string>
-  <string name="menu_update_delta">تحديث (الغير محدثة فقط)</string>
   <string name="context_updateshow">تحديث</string>
   <string name="context_marknext">شاهد الحلقة التالية</string>
   <!-- Now -->
@@ -177,7 +180,7 @@
   <string name="no_results">.لا نتائج, جرّب كلمات كاملة</string>
   <string name="action_try_any_language">حاول بأي لغة</string>
   <string name="action_try_again">حاول مرة أخرى</string>
-  <string name="search_error">.البحث فشل، حاول مرة أخرى لاحقاً</string>
+  <string name="tvdb_error_does_not_exist">The show does not exist (yet) on TheTVDB. Try again later.</string>
   <string name="add_all">إضافة الكل </string>
   <string name="add_multiple">كافة البرامج سوف تظهر في قائمة برامجك قريبا</string>
   <string name="add_started">%s سوف تظهر في قائمة العرض الخاص بك قريبا.</string>
@@ -198,7 +201,7 @@
   <string name="list_empty">يمكنك إضافة المسلسلات, المواسم أو الحلقات لهذه القائمة.</string>
   <string name="action_lists_sort">ترتيب القوائم</string>
   <string name="action_lists_reorder">إعادة ترتيب القوائم</string>
-  <string name="error_name_already_exists">A list with this name already exists</string>
+  <string name="error_name_already_exists">يوجد بالفعل قائمة بهذا الإسم</string>
   <!-- Movies -->
   <string name="movies_collection">مجموعة</string>
   <string name="movies_watchlist">قائمة المشاهدة</string>
@@ -216,6 +219,7 @@
   <string name="action_movies_sort_title">العنوان</string>
   <string name="action_movies_sort_release">تاريخ الإصدار</string>
   <!-- Statistics -->
+  <string name="statistics_failed">خطأ في الإحصائيات.</string>
   <string name="statistics_shows">المسلسلات</string>
   <string name="statistics_episodes">الحلقات</string>
   <string name="statistics_movies">الأفلام</string>
@@ -253,7 +257,7 @@
   <string name="hexagon_warning">تجريبي</string>
   <string name="hexagon_description">اتصل بالسحابة لتقوم بالنسخ الإحتياطي و مزامنة مسلسلات و أفلامك.</string>
   <string name="hexagon_warning_lists">القوائم غير متوفرة.</string>
-  <string name="hexagon_warning_trakt">عندمة تستعمل سحابة SeriesGuide إي تغييرات في موقع trakt لن يتم مزامنتها في SeriesGuide.</string>
+  <string name="hexagon_warning_trakt">بينما سحابة سيريسجويدي متصل، سيتم تعطيل المزامنة trakt.</string>
   <string name="hexagon_signin">تسجيل الدخول</string>
   <string name="hexagon_signed_in">أنت متصل بسحابة التخزين الخاصة بدليل المسلسلات.</string>
   <string name="hexagon_signout">تسجيل الخروج</string>
@@ -263,7 +267,6 @@
   <string name="hexagon_remove_account_success">تم إلغاء الحساب.</string>
   <string name="hexagon_remove_account_failure">لم نستطع إزالة حسابك</string>
   <string name="hexagon_remove_account_confirmation">إزالة حسابك ستؤدي إلى إلغاء كل مسلسلاتك و افلامك من سحابة SeriesGuide. تأكد من إزالته من الأجهزة الأخرى المتصلة أيضا.</string>
-  <string name="hexagon_api_error">لا يمكن التحدث لسحابة دليل المسلسلات. حاول مرة أخرى.</string>
   <string name="hexagon_api_queued">جار الإرسال إلى سحابة دليل المسلسلات.</string>
   <string name="hexagon_permission_missing">حتى تستخدم سحابة برنامج دليل المسلسلات، إسمح بالوصول إلى حسابك.</string>
   <string name="hexagon_google_play_missing">حتى تستخدم سحابة برنامج دليل المسلسلات، لابد من توفر خدمات قوقل بلاي.</string>
@@ -280,7 +283,6 @@
   <string name="traktcheckin_wait">سوف أنتظر</string>
   <string name="trakt_success">تم إرسالها إلى Trakt.</string>
   <string name="trakt_error_credentials">حدث خطأ ما. يرجى التحقق من بيانات اعتمادك وحاول مرة أخرى.</string>
-  <string name="trakt_error_general">لايمكن التحدث إلى التراكت. حاول مرة أخرى.</string>
   <string name="trakt_error_not_exists">غير متوفر (حتى الآن) على trakt. حاول مرة أخرى.</string>
   <string name="trakt_notice_not_exists">لا يمكن تتبعه بواسطة trakt بعد.</string>
   <!-- Connect trakt -->
@@ -340,14 +342,13 @@
   <string name="pref_onlyseasonepssummary">سيتم إخفاء الحلقات الخاصة من كل مكان عدا من قائمة الموسم</string>
   <string name="pref_exactdates">عرض التواريخ بشكل دقيق</string>
   <string name="pref_exactdates_summary">\"31 أكتوبر\" بدلاً من \"في 3 أيام\"</string>
+  <string name="pref_nospoilers">منع المفسدين</string>
+  <string name="pref_nospoilers_summary">إخفاء التفاصيل حتى هو شاهد الحلقة</string>
   <string name="pref_seasonsorting">ترتيب المواسم حسب&#8230;</string>
   <string name="pref_episodesorting">ترتيب الحلقات حسب&#8230;</string>
   <string name="pref_language">اللغة المفضلة</string>
   <string name="pref_updatewifionly">تحميل الصور بواسطة الواي فاي فقط</string>
   <string name="pref_updatewifionlysummary">لتخفيض الكلفة، لا تحمّل عبر شبكات الجوال أو الشبكات الغير مجانية</string>
-  <string name="about">حول دليل المسلسلات</string>
-  <string name="pref_autoaddshows">إضافة المسلسلات الجديدة من موقع التراكت</string>
-  <string name="pref_autoaddshowssummary">إضافة المسلسلات تلقائياً من حسابك الموجود على موقع Trakt</string>
   <!-- About screen -->
   <string name="licence_tvdb">هذا البرنامج يستخدم صور و بيانات من TheTVDB مرخصة من قبل CC BY-NC 4.0.</string>
   <string name="licence_themoviedb">هذا البرنامج يستخدم وصلة TMDb ولكنه غير مدعوم ولامعتمد من TMDb.</string>
@@ -382,10 +383,9 @@
   <string name="pref_theme">التصميم</string>
   <!-- Other advanced settings -->
   <string name="pref_other">أخرى</string>
-  <string name="pref_autoupdate">تشغيل التحديث التلقائي</string>
-  <string name="pref_autoupdatesummary">تحديث المسلسلات بشكل دوري</string>
+  <string name="pref_autoupdatesummary">Automatically sync and update SeriesGuide data</string>
   <string name="pref_autobackup">نسخ احتياطي تلقائي</string>
-  <string name="pref_autobackupsummary">Weekly backup of your shows, lists and movies</string>
+  <string name="pref_autobackupsummary">نسخ إحتياطي أسبوعي للمسلسلات، القوائم والأفلام</string>
   <string name="backup">النسخ الإحتياطي / الإستعادة</string>
   <string name="backup_summary">لعمل نسخ إحتياطي للمسلسلات أو إستعادتها</string>
   <string name="pref_number">تنسيق الأرقام</string>
@@ -393,17 +393,17 @@
   <string name="pref_offsetsummary">بدء وقت العرض قبل %s ساعات</string>
   <string name="clear_cache">تنظيف ذاكرة التخزين المؤقتة للصور</string>
   <string name="clear_cache_summary">إزالة جميع الصور المخزنة مؤقتاً من الجهاز</string>
-  <string name="pref_ganalyticssummary">تقوم هذه الأداة بتتبع استخدام الميزات للمساعدة في تحسين برنامج دليل المسلسلات</string>
+  <string name="pref_ganalyticssummary">سيتم إرسال إحصاءات مجهولة الهوية لخدمة جوجل</string>
   <!-- Backup and Restore -->
   <string name="backup_full_dump">تشمل جميع البيانات الفوقية مثل الوصف، والممثلين ودرجات التقييم.</string>
   <string name="backup_path">مجلد النسخ الإحتياطي</string>
   <string name="backup_version">إصدار قاعدة البيانات</string>
-  <string name="backup_failed_file_access">Can\'t backup. A backup file can not be found or accessed.</string>
+  <string name="backup_failed_file_access">لايمكن عمل نسخ إحتياطي، ملف النسخة الإحتياطي لايمكن إجاده أو لا يمكن الوصل إليه.</string>
   <string name="backup_inprogress">جار عمل نسخ إحتياطي لقاعدة البيانات&#8230;</string>
   <string name="backup_success">لقد نجحت عملية النسخ الإحتياطي.</string>
   <string name="backup_failed">فشل النسخ الاحتياطي.</string>
   <string name="import_inprogress">استعادة قاعدة البيانات&#8230;</string>
-  <string name="import_failed_nosd">Can\'t restore backup. The backup folder is not available.</string>
+  <string name="import_failed_nosd">لايمكن إستعادة النسخ الإحتياطي، مجلد النسخ الإحتياطي غير متوفر.</string>
   <string name="import_failed_nofile">لا يوجد ملف نسخ إحتياطي للقراءة.</string>
   <string name="import_failed_noread">.ملف النسخ الاحتياطي غير قابل للقراءة</string>
   <string name="dbupgradefailed">قد تكون النسخة الاحتياطية قديمة جداً أو فارغة. ملاحظة: قم باستعادة ما قبل النسخة2.0 في النسخة 1.9.0 أولاً</string>
@@ -413,12 +413,12 @@
   <string name="import_button">استعادة</string>
   <string name="backup_question">سوف يتم الكتابة فوق ملف النسخ الإحتياطي الحالي الموجود في مجلد النسخ الإحتياطي!</string>
   <string name="import_question">سيتم فقدان قائمة المعرض الحالي! تأكد من أن ملف النسخة الاحتياطية داخل مجلد النسخ الاحتياطي.</string>
-  <string name="import_warning">I understand my current shows, lists and movies will be replaced!</string>
+  <string name="import_warning">أنا أفهم أن المسلسلات الحالية، القوائم والأفلام سوف تستبدل!</string>
   <string name="last_auto_backup">آخر عملية نسخ تلقائية: %s</string>
   <string name="restore_auto_backup">استعادة النسخ الاحتياطي التلقائي</string>
-  <string name="dataliberation_permission_missing">To backup or restore, allow access to your files.</string>
-  <string name="autobackup_permission_missing">To use auto backup, allow access to your files.</string>
-  <string name="autobackup_files_missing">To use auto backup, select valid backup files.</string>
+  <string name="dataliberation_permission_missing">لعمل نسخ إحتياطي أو إستعادتها، وافق بالسماح للوصول إلى الملفات الخاصة بك.</string>
+  <string name="autobackup_permission_missing">لإستخدام النسخ الإحتياطي التلقائي، وافق بالسماح للوصول إلى الملفات الخاصة بك.</string>
+  <string name="autobackup_files_missing">لإستخدام النسخ الإحتياطي التلقائي، حدد ملفات النسخ الإحتياطية الصالحة.</string>
   <string name="no_file_selected">لم يتم إختيار أي ملف</string>
   <string name="action_select_file">حدد ملف</string>
   <string name="backup_use_default_files">إستخدم النسخ الإحتياطي الإفتراضي</string>
@@ -448,8 +448,6 @@
   <string name="notification_release_earlier_hour">قبل ساعة</string>
   <!-- Legacy Widgets -->
   <string name="smallwidget">دليل المسلسلات (صغير)</string>
-  <string name="bigwidget">دليل المسلسلات (وسط)</string>
-  <string name="largewidget">دليل المسلسلات (كبير)</string>
   <!-- List Widget -->
   <string name="hide_watched">إخفاء الحلقات المشاهدة</string>
   <string name="pref_widget_opacity">خلفية القطعة العائمة</string>
@@ -482,7 +480,6 @@
   <string name="subscription_failed">الشراء لم يكتمل.</string>
   <string name="pass_unavailable">X Pass غير متوفر حاليا.</string>
   <!-- Extensions -->
-  <string name="extensions">الإضافات</string>
   <string name="action_extensions_configure">تخصيص الإضافات</string>
   <string name="action_extensions_add">إضافة ملحق</string>
   <string name="action_extensions_limit">أحصل على النسخة المدفوعة لإضافة المزيد من الملحقات</string>
@@ -498,4 +495,13 @@
   <string name="description_extension_web_search">البحث عن المواقع و الصور</string>
   <!-- People -->
   <string name="person_biography">السيرة الذاتية</string>
+  <!-- Feedback -->
+  <string name="feedback_question_enjoy">هل انت راض و مستمتع ب SeriesGuide؟</string>
+  <string name="feedback_action_yes">تم!</string>
+  <string name="feedback_action_notreally">ليس في الحقيقة</string>
+  <string name="feedback_question_rate_google">قيم على Google Play؟</string>
+  <string name="feedback_question_rate_amazon">صنفه في الأمازون؟</string>
+  <string name="feedback_question_feedback">اخبرني كيف احسنها ؟</string>
+  <string name="feedback_action_ok">بالتأكيد</string>
+  <string name="feedback_action_nothanks">لا، شكرا</string>
 </resources>

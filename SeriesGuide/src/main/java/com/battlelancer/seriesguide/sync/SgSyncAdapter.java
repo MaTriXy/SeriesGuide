@@ -1,20 +1,4 @@
 
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.sync;
 
 import android.accounts.Account;
@@ -28,11 +12,13 @@ import android.content.SyncResult;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.widget.Toast;
 import com.battlelancer.seriesguide.R;
-import com.battlelancer.seriesguide.SeriesGuideApplication;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.backend.HexagonTools;
 import com.battlelancer.seriesguide.items.SearchResult;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract.Episodes;
@@ -41,33 +27,38 @@ import com.battlelancer.seriesguide.settings.TmdbSettings;
 import com.battlelancer.seriesguide.settings.TraktCredentials;
 import com.battlelancer.seriesguide.settings.TraktSettings;
 import com.battlelancer.seriesguide.settings.UpdateSettings;
-import com.battlelancer.seriesguide.thetvdbapi.TheTVDB;
 import com.battlelancer.seriesguide.thetvdbapi.TvdbException;
+import com.battlelancer.seriesguide.thetvdbapi.TvdbTools;
+import com.battlelancer.seriesguide.tmdbapi.SgTmdb;
 import com.battlelancer.seriesguide.util.DBUtils;
 import com.battlelancer.seriesguide.util.MovieTools;
-import com.battlelancer.seriesguide.util.ServiceUtils;
 import com.battlelancer.seriesguide.util.ShowTools;
 import com.battlelancer.seriesguide.util.TaskManager;
 import com.battlelancer.seriesguide.util.TraktTools;
 import com.battlelancer.seriesguide.util.Utils;
 import com.uwetrottmann.androidutils.AndroidUtils;
-import com.uwetrottmann.tmdb.entities.Configuration;
-import com.uwetrottmann.trakt.v2.TraktV2;
-import com.uwetrottmann.trakt.v2.entities.LastActivities;
-import com.uwetrottmann.trakt.v2.entities.LastActivityMore;
-import com.uwetrottmann.trakt.v2.exceptions.OAuthUnauthorizedException;
+import com.uwetrottmann.tmdb2.entities.Configuration;
+import com.uwetrottmann.tmdb2.services.ConfigurationService;
+import com.uwetrottmann.trakt5.entities.LastActivities;
+import com.uwetrottmann.trakt5.entities.LastActivityMore;
+import dagger.Lazy;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import retrofit.RetrofitError;
+import javax.inject.Inject;
+import retrofit2.Response;
 import timber.log.Timber;
 
 /**
  * {@link AbstractThreadedSyncAdapter} which updates the show library.
  */
 public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
+
+    private final SgApp app;
+    @Inject Lazy<ConfigurationService> tmdbConfigService;
 
     public enum SyncType {
 
@@ -114,7 +105,7 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
         // guard against scheduling too many sync requests
         Account account = AccountUtils.getAccount(context);
         if (account == null ||
-                ContentResolver.isSyncPending(account, SeriesGuideApplication.CONTENT_AUTHORITY)) {
+                ContentResolver.isSyncPending(account, SgApp.CONTENT_AUTHORITY)) {
             return;
         }
 
@@ -126,13 +117,13 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     /**
-     * Schedules a sync for a single show if {@link com.battlelancer.seriesguide.thetvdbapi.TheTVDB#isUpdateShow(android.content.Context,
+     * Schedules a sync for a single show if {@link TvdbTools#isUpdateShow(android.content.Context,
      * int)} returns true.
      *
      * <p> <em>Note: Runs a content provider op, so you should do this on a background thread.</em>
      */
     public static void requestSyncIfTime(Context context, int showTvdbId) {
-        if (TheTVDB.isUpdateShow(context, showTvdbId)) {
+        if (TvdbTools.isUpdateShow(context, showTvdbId)) {
             SgSyncAdapter.requestSyncIfConnected(context, SyncType.SINGLE, showTvdbId);
         }
     }
@@ -199,7 +190,7 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
             return;
         }
         ContentResolver.requestSync(account,
-                SeriesGuideApplication.CONTENT_AUTHORITY, args);
+                SgApp.CONTENT_AUTHORITY, args);
     }
 
     /**
@@ -210,7 +201,7 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
         if (account == null) {
             return;
         }
-        ContentResolver.setSyncAutomatically(account, SeriesGuideApplication.CONTENT_AUTHORITY,
+        ContentResolver.setSyncAutomatically(account, SgApp.CONTENT_AUTHORITY,
                 sync);
     }
 
@@ -219,11 +210,8 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
      */
     public static boolean isSyncAutomatically(Context context) {
         Account account = AccountUtils.getAccount(context);
-        if (account == null) {
-            return false;
-        }
-        return ContentResolver.getSyncAutomatically(account,
-                SeriesGuideApplication.CONTENT_AUTHORITY);
+        return account != null && ContentResolver.getSyncAutomatically(account,
+                SgApp.CONTENT_AUTHORITY);
     }
 
     /**
@@ -236,15 +224,17 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
             return false;
         }
         boolean isSyncActive = ContentResolver.isSyncActive(account,
-                SeriesGuideApplication.CONTENT_AUTHORITY);
+                SgApp.CONTENT_AUTHORITY);
         if (isSyncActive && isDisplayWarning) {
             Toast.makeText(context, R.string.update_inprogress, Toast.LENGTH_LONG).show();
         }
         return isSyncActive;
     }
 
-    public SgSyncAdapter(Context context, boolean autoInitialize) {
-        super(context, autoInitialize);
+    public SgSyncAdapter(SgApp app, boolean autoInitialize) {
+        super(app, autoInitialize);
+        this.app = app;
+        app.getServicesComponent().inject(this);
         Timber.d("Creating sync adapter");
     }
 
@@ -260,7 +250,7 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
         final boolean syncImmediately = extras.getBoolean(SyncInitBundle.SYNC_IMMEDIATE, false);
         final SyncType syncType = SyncType.from(
                 extras.getInt(SyncInitBundle.SYNC_TYPE, SyncType.DELTA.id));
-        Timber.i("Syncing..." + syncType + (syncImmediately ? "_IMMEDIATE" : "_REGULAR"));
+        Timber.i("Syncing...%s%s", syncType, (syncImmediately ? "_IMMEDIATE" : "_REGULAR"));
 
         // should we sync?
         final long currentTime = System.currentTimeMillis();
@@ -284,6 +274,10 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
             };
         } else {
             showsToUpdate = getShowsToUpdate(syncType, currentTime);
+            if (showsToUpdate == null) {
+                Timber.e("Syncing...ABORT_SHOW_QUERY_FAILED");
+                return;
+            }
         }
 
         // from here on we need more sophisticated abort handling, so keep track of errors
@@ -303,7 +297,7 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
             }
 
             try {
-                TheTVDB.updateShow(getContext(), id);
+                TvdbTools.getInstance(app).updateShow(id);
 
                 // make sure other loaders (activity, overview, details) are notified
                 resolver.notifyChange(Episodes.CONTENT_URI_WITHSHOW, null);
@@ -323,7 +317,7 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
 
             // get latest TMDb configuration
             Timber.d("Syncing...TMDb config");
-            getTmdbConfiguration(getContext(), prefs);
+            getTmdbConfiguration(prefs);
 
             // sync with Hexagon or trakt
             final HashSet<Integer> showsExisting = ShowTools.getShowTvdbIdsAsSet(getContext());
@@ -333,16 +327,16 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
             } else {
                 if (HexagonTools.isSignedIn(getContext())) {
                     // sync with hexagon...
-                    boolean success = HexagonTools.syncWithHexagon(getContext(), showsExisting,
-                            showsNew);
+                    Timber.d("Syncing...Hexagon");
+                    boolean success = HexagonTools.syncWithHexagon(app, showsExisting, showsNew);
                     // don't overwrite failure
                     if (resultCode == UpdateResult.SUCCESS) {
                         resultCode = success ? UpdateResult.SUCCESS : UpdateResult.INCOMPLETE;
                     }
                 } else {
                     // ...OR sync with trakt
-                    UpdateResult resultTrakt = performTraktSync(getContext(), showsExisting,
-                            currentTime);
+                    Timber.d("Syncing...trakt");
+                    UpdateResult resultTrakt = performTraktSync(showsExisting, currentTime);
                     // don't overwrite failure
                     if (resultCode == UpdateResult.SUCCESS) {
                         resultCode = resultTrakt;
@@ -352,7 +346,7 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
                     if (showsNew.size() > 0) {
                         List<SearchResult> showsNewList = new LinkedList<>(showsNew.values());
                         TaskManager.getInstance(getContext())
-                                .performAddTask(showsNewList, true, false);
+                                .performAddTask(app, showsNewList, true, false);
                     }
                 }
 
@@ -401,77 +395,85 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
         // There could have been new episodes added after an update
         Utils.runNotificationService(getContext());
 
-        Timber.i("Syncing..." + resultCode.toString());
+        Timber.i("Syncing...%s", resultCode.toString());
     }
 
     /**
      * Returns an array of show ids to update.
      */
+    @Nullable
     private int[] getShowsToUpdate(SyncType syncType, long currentTime) {
         switch (syncType) {
-            case FULL:
+            case FULL: {
                 // get all show IDs for a full update
-                final Cursor shows = getContext().getContentResolver().query(Shows.CONTENT_URI,
+                final Cursor showsQuery = getContext().getContentResolver().query(Shows.CONTENT_URI,
                         new String[] {
                                 Shows._ID
                         }, null, null, null
                 );
-
-                int[] showIds = new int[shows.getCount()];
-                int i = 0;
-                while (shows.moveToNext()) {
-                    showIds[i] = shows.getInt(0);
-                    i++;
+                if (showsQuery == null) {
+                    return null;
                 }
 
-                shows.close();
-
+                int[] showIds = new int[showsQuery.getCount()];
+                int i = 0;
+                while (showsQuery.moveToNext()) {
+                    showIds[i] = showsQuery.getInt(0);
+                    i++;
+                }
+                showsQuery.close();
                 return showIds;
+            }
             case DELTA:
             default:
                 // Get shows which have not been updated for a certain time.
-                return TheTVDB.deltaUpdateShows(currentTime, getContext());
+                return TvdbTools.deltaUpdateShows(currentTime, getContext());
         }
     }
 
     /**
      * Downloads and stores the latest image url configuration from themoviedb.org.
      */
-    private static void getTmdbConfiguration(Context context, SharedPreferences prefs) {
+    private void getTmdbConfiguration(SharedPreferences prefs) {
         try {
-            Configuration config = ServiceUtils.getTmdb(context)
-                    .configurationService().configuration();
-            if (config != null && config.images != null
-                    && !TextUtils.isEmpty(config.images.secure_base_url)) {
-                prefs.edit()
-                        .putString(TmdbSettings.KEY_TMDB_BASE_URL, config.images.secure_base_url)
-                        .apply();
+            Response<Configuration> response = tmdbConfigService.get().configuration().execute();
+            if (response.isSuccessful()) {
+                Configuration config = response.body();
+                if (config != null && config.images != null
+                        && !TextUtils.isEmpty(config.images.secure_base_url)) {
+                    prefs.edit()
+                            .putString(TmdbSettings.KEY_TMDB_BASE_URL,
+                                    config.images.secure_base_url)
+                            .apply();
+                }
+            } else {
+                SgTmdb.trackFailedRequest(getContext(), "get config", response);
             }
-        } catch (RetrofitError e) {
-            Timber.e(e, "Downloading TMDb config failed");
+        } catch (IOException e) {
+            SgTmdb.trackFailedRequest(getContext(), "get config", e);
         }
     }
 
-    private static UpdateResult performTraktSync(Context context, HashSet<Integer> localShows,
-            long currentTime) {
-        if (!TraktCredentials.get(context).hasCredentials()) {
+    private UpdateResult performTraktSync(HashSet<Integer> localShows, long currentTime) {
+        if (!TraktCredentials.get(getContext()).hasCredentials()) {
             Timber.d("performTraktSync: no auth, skip");
             return UpdateResult.SUCCESS;
         }
 
-        if (!AndroidUtils.isNetworkConnected(context)) {
+        if (!AndroidUtils.isNetworkConnected(getContext())) {
             return UpdateResult.INCOMPLETE;
         }
 
         // get last activity timestamps
-        LastActivities lastActivity = getTraktLastActivity(context);
+        TraktTools traktTools = app.getTraktTools();
+        LastActivities lastActivity = traktTools.getLastActivity();
         if (lastActivity == null) {
             // trakt is likely offline or busy, try later
             Timber.e("performTraktSync: last activity download failed");
             return UpdateResult.INCOMPLETE;
         }
 
-        if (!AndroidUtils.isNetworkConnected(context)) {
+        if (!AndroidUtils.isNetworkConnected(getContext())) {
             return UpdateResult.INCOMPLETE;
         }
 
@@ -479,80 +481,61 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
             Timber.d("performTraktSync: no local shows, skip shows");
         } else {
             // download and upload episode watched and collected flags
-            if (performTraktEpisodeSync(context, localShows, lastActivity.episodes, currentTime)
+            if (performTraktEpisodeSync(localShows, lastActivity.episodes, currentTime)
                     != UpdateResult.SUCCESS) {
                 return UpdateResult.INCOMPLETE;
             }
 
-            if (!AndroidUtils.isNetworkConnected(context)) {
+            if (!AndroidUtils.isNetworkConnected(getContext())) {
                 return UpdateResult.INCOMPLETE;
             }
 
             // download show ratings
-            if (TraktTools.downloadShowRatings(context, lastActivity.shows)
+            if (traktTools.downloadShowRatings(lastActivity.shows.rated_at)
                     != UpdateResult.SUCCESS) {
                 return UpdateResult.INCOMPLETE;
             }
 
-            if (!AndroidUtils.isNetworkConnected(context)) {
+            if (!AndroidUtils.isNetworkConnected(getContext())) {
                 return UpdateResult.INCOMPLETE;
             }
 
             // download episode ratings
-            if (TraktTools.downloadEpisodeRatings(context, lastActivity.episodes)
+            if (traktTools.downloadEpisodeRatings(lastActivity.episodes.rated_at)
                     != UpdateResult.SUCCESS) {
                 return UpdateResult.INCOMPLETE;
             }
 
-            if (!AndroidUtils.isNetworkConnected(context)) {
+            if (!AndroidUtils.isNetworkConnected(getContext())) {
                 return UpdateResult.INCOMPLETE;
             }
         }
 
         // sync watchlist and collection with trakt
-        if (MovieTools.Download.syncMovieListsWithTrakt(context, lastActivity.movies)
+        if (app.getMovieTools().syncMovieListsWithTrakt(lastActivity.movies)
                 != UpdateResult.SUCCESS) {
             return UpdateResult.INCOMPLETE;
         }
 
-        if (!AndroidUtils.isNetworkConnected(context)) {
+        if (!AndroidUtils.isNetworkConnected(getContext())) {
             return UpdateResult.INCOMPLETE;
         }
 
         // download watched movies
-        if (TraktTools.downloadWatchedMovies(context, lastActivity.movies.watched_at)
+        if (traktTools.downloadWatchedMovies(lastActivity.movies.watched_at)
                 != UpdateResult.SUCCESS) {
             return UpdateResult.INCOMPLETE;
         }
 
         // clean up any useless movies (not watched or not in any list)
-        MovieTools.deleteUnusedMovies(context);
+        MovieTools.deleteUnusedMovies(getContext());
 
-        if (!AndroidUtils.isNetworkConnected(context)) {
+        if (!AndroidUtils.isNetworkConnected(getContext())) {
             return UpdateResult.INCOMPLETE;
         }
 
         // download movie ratings
-        return TraktTools.downloadMovieRatings(context, lastActivity.movies.rated_at);
-    }
-
-    private static LastActivities getTraktLastActivity(Context context) {
-        Timber.d("performTraktSync: get last activity");
-
-        TraktV2 trakt = ServiceUtils.getTraktV2WithAuth(context);
-        if (trakt == null) {
-            return null;
-        }
-
-        try {
-            return trakt.sync().lastActivities();
-        } catch (RetrofitError e) {
-            Timber.e(e, "Failed to get trakt last activity");
-        } catch (OAuthUnauthorizedException e) {
-            TraktCredentials.get(context).setCredentialsInvalid();
-        }
-
-        return null;
+        return traktTools.downloadMovieRatings(lastActivity.movies.rated_at);
     }
 
     /**
@@ -561,23 +544,23 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
      * <p> Do <b>NOT</b> call if there are no local shows to avoid unnecessary work.
      */
     @SuppressLint("CommitPrefEdits")
-    private static UpdateResult performTraktEpisodeSync(Context context,
-            HashSet<Integer> localShows, LastActivityMore lastActivity, long currentTime) {
+    private UpdateResult performTraktEpisodeSync(@NonNull HashSet<Integer> localShows,
+            @NonNull LastActivityMore lastActivity, long currentTime) {
         // do we need to merge data instead of overwriting with data from trakt?
-        boolean isInitialSync = !TraktSettings.hasMergedEpisodes(context);
+        boolean isInitialSync = !TraktSettings.hasMergedEpisodes(getContext());
 
         // download watched and collected flags
         // if initial sync, upload any flags missing on trakt
         // otherwise clear all local flags not on trakt
-        int resultCode = TraktTools.syncEpisodeFlags(context, localShows, lastActivity,
+        int resultCode = app.getTraktTools().syncEpisodeFlags(localShows, lastActivity,
                 isInitialSync);
 
         if (resultCode < 0) {
             return UpdateResult.INCOMPLETE;
         }
 
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context)
-                .edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(
+                getContext()).edit();
         if (isInitialSync) {
             // success, set initial sync as complete
             editor.putBoolean(TraktSettings.KEY_HAS_MERGED_EPISODES, true);
@@ -585,8 +568,6 @@ public class SgSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // success, set last sync time to now
         editor.putLong(TraktSettings.KEY_LAST_FULL_EPISODE_SYNC, currentTime);
-        Timber.d("performTraktEpisodeSync: success, last sync at " + currentTime);
-
         editor.commit();
 
         return UpdateResult.SUCCESS;

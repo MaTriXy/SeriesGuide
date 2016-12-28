@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.adapters;
 
 import android.content.Context;
@@ -26,14 +10,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.battlelancer.seriesguide.R;
 import com.battlelancer.seriesguide.api.SeriesGuideExtension;
 import com.battlelancer.seriesguide.extensions.ExtensionManager;
 import com.battlelancer.seriesguide.extensions.ExtensionsConfigurationFragment;
 import com.battlelancer.seriesguide.util.Utils;
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Creates views for a list of {@link com.battlelancer.seriesguide.extensions.ExtensionManager.Extension}.
@@ -159,7 +143,7 @@ public class ExtensionsAdapter extends ArrayAdapter<ExtensionManager.Extension> 
                                             true),
                             true
                     );
-                    ExtensionManager.getInstance(getContext()).clearEpisodeActionsCache();
+                    ExtensionManager.getInstance(getContext()).clearActionsCache();
                     return true;
                 case R.id.menu_action_extension_disable:
                     EventBus.getDefault()
@@ -171,10 +155,10 @@ public class ExtensionsAdapter extends ArrayAdapter<ExtensionManager.Extension> 
     }
 
     static class ViewHolder {
-        @Bind(R.id.imageViewItemExtensionIcon) ImageView icon;
-        @Bind(R.id.textViewItemExtensionTitle) TextView title;
-        @Bind(R.id.textViewItemExtensionDescription) TextView description;
-        @Bind(R.id.imageViewItemExtensionSettings) ImageView settings;
+        @BindView(R.id.imageViewItemExtensionIcon) ImageView icon;
+        @BindView(R.id.textViewItemExtensionTitle) TextView title;
+        @BindView(R.id.textViewItemExtensionDescription) TextView description;
+        @BindView(R.id.imageViewItemExtensionSettings) ImageView settings;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

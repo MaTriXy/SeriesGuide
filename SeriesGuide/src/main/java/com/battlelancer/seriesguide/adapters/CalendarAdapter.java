@@ -1,23 +1,9 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.util.LongSparseArray;
 import android.support.v4.widget.CursorAdapter;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -26,9 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.adapters.model.HeaderData;
 import com.battlelancer.seriesguide.enums.EpisodeFlags;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract;
+import com.battlelancer.seriesguide.provider.SeriesGuideContract.Episodes;
 import com.battlelancer.seriesguide.provider.SeriesGuideDatabase;
 import com.battlelancer.seriesguide.settings.DisplaySettings;
 import com.battlelancer.seriesguide.ui.CalendarFragment;
@@ -42,9 +30,7 @@ import com.uwetrottmann.androidutils.CheatSheet;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Adapter for {@link CalendarFragment} with optimizations for image loading for smoother
@@ -52,6 +38,7 @@ import java.util.Map;
  */
 public class CalendarAdapter extends CursorAdapter implements StickyGridHeadersBaseAdapter {
 
+    private final SgApp app;
     private LayoutInflater mLayoutInflater;
 
     private List<HeaderData> mHeaders;
@@ -59,9 +46,10 @@ public class CalendarAdapter extends CursorAdapter implements StickyGridHeadersB
 
     private Calendar mCalendar;
 
-    public CalendarAdapter(Context context) {
-        super(context, null, 0);
-        mLayoutInflater = (LayoutInflater) context
+    public CalendarAdapter(Activity activity) {
+        super(activity, null, 0);
+        app = SgApp.from(activity);
+        mLayoutInflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mCalendar = Calendar.getInstance();
     }
@@ -89,15 +77,16 @@ public class CalendarAdapter extends CursorAdapter implements StickyGridHeadersB
                 WatchedBox box = (WatchedBox) v;
                 // disable button, will be re-enabled on data reload once action completes
                 box.setEnabled(false);
-                EpisodeTools.episodeWatched(context, showTvdbId, episodeTvdbId, season, episode,
+                EpisodeTools.episodeWatched(app, showTvdbId, episodeTvdbId, season, episode,
                         EpisodeTools.isWatched(box.getEpisodeFlag()) ? EpisodeFlags.UNWATCHED
                                 : EpisodeFlags.WATCHED
                 );
             }
         });
-        viewHolder.watchedBox.setEpisodeFlag(cursor.getInt(Query.WATCHED));
+        int episodeFlag = cursor.getInt(Query.WATCHED);
+        viewHolder.watchedBox.setEpisodeFlag(episodeFlag);
         viewHolder.watchedBox.setEnabled(true);
-        boolean watched = EpisodeTools.isWatched(viewHolder.watchedBox.getEpisodeFlag());
+        boolean watched = EpisodeTools.isWatched(episodeFlag);
         viewHolder.watchedBox.setContentDescription(
                 context.getString(watched ? R.string.action_unwatched : R.string.action_watched));
         CheatSheet.setup(viewHolder.watchedBox,
@@ -108,8 +97,14 @@ public class CalendarAdapter extends CursorAdapter implements StickyGridHeadersB
         viewHolder.show.setText(cursor.getString(Query.SHOW_TITLE));
 
         // episode number and title
-        viewHolder.episode.setText(TextTools.getNextEpisodeString(context, season, episode,
-                cursor.getString(Query.TITLE)));
+        if (EpisodeTools.isUnwatched(episodeFlag) && DisplaySettings.preventSpoilers(context)) {
+            // just show the number
+            viewHolder.episode.setText(TextTools.getEpisodeNumber(context, season, episode));
+        } else {
+            // show number and title
+            viewHolder.episode.setText(TextTools.getNextEpisodeString(context, season, episode,
+                    cursor.getString(Query.TITLE)));
+        }
 
         // timestamp, absolute time and network
         StringBuilder releaseInfo = new StringBuilder();
@@ -245,18 +240,20 @@ public class CalendarAdapter extends CursorAdapter implements StickyGridHeadersB
     }
 
     protected List<HeaderData> generateHeaderList() {
-        if (getCount() == 0 || !mIsShowingHeaders) {
+        int count = getCount();
+        if (count == 0 || !mIsShowingHeaders) {
             return null;
         }
 
-        Map<Long, HeaderData> mapping = new HashMap<>();
+        // pre-size to 30 as we display 30 days == headers at most
+        LongSparseArray<HeaderData> mapping = new LongSparseArray<>(30);
         List<HeaderData> headers = new ArrayList<>();
 
-        for (int i = 0; i < getCount(); i++) {
-            long headerId = getHeaderId(i);
+        for (int position = 0; position < count; position++) {
+            long headerId = getHeaderId(position);
             HeaderData headerData = mapping.get(headerId);
             if (headerData == null) {
-                headerData = new HeaderData(i);
+                headerData = new HeaderData(position);
                 headers.add(headerData);
             }
             headerData.incrementCount();
@@ -269,34 +266,35 @@ public class CalendarAdapter extends CursorAdapter implements StickyGridHeadersB
     public interface Query {
 
         String[] PROJECTION = new String[] {
-                SeriesGuideDatabase.Tables.EPISODES + "." + SeriesGuideContract.Episodes._ID,
-                SeriesGuideContract.Episodes.TITLE,
-                SeriesGuideContract.Episodes.NUMBER,
-                SeriesGuideContract.Episodes.SEASON,
-                SeriesGuideContract.Episodes.FIRSTAIREDMS,
-                SeriesGuideContract.Episodes.WATCHED,
-                SeriesGuideContract.Episodes.COLLECTED,
+                SeriesGuideDatabase.Tables.EPISODES + "." + Episodes._ID,
+                Episodes.TITLE,
+                Episodes.NUMBER,
+                Episodes.SEASON,
+                Episodes.FIRSTAIREDMS,
+                Episodes.WATCHED,
+                Episodes.COLLECTED,
                 SeriesGuideContract.Shows.REF_SHOW_ID,
                 SeriesGuideContract.Shows.TITLE,
                 SeriesGuideContract.Shows.NETWORK,
                 SeriesGuideContract.Shows.POSTER
         };
 
-        String QUERY_UPCOMING = SeriesGuideContract.Episodes.FIRSTAIREDMS + ">=? AND "
-                + SeriesGuideContract.Episodes.FIRSTAIREDMS
+        String QUERY_UPCOMING = Episodes.FIRSTAIREDMS + ">=? AND "
+                + Episodes.FIRSTAIREDMS
                 + "<? AND " + SeriesGuideContract.Shows.SELECTION_NO_HIDDEN;
 
-        String QUERY_RECENT = SeriesGuideContract.Episodes.FIRSTAIREDMS + "<? AND "
-                + SeriesGuideContract.Episodes.FIRSTAIREDMS + ">? AND "
+        String QUERY_RECENT = Episodes.SELECTION_HAS_RELEASE_DATE + " AND "
+                + Episodes.FIRSTAIREDMS + "<? AND "
+                + Episodes.FIRSTAIREDMS + ">? AND "
                 + SeriesGuideContract.Shows.SELECTION_NO_HIDDEN;
 
-        String SORTING_UPCOMING = SeriesGuideContract.Episodes.FIRSTAIREDMS + " ASC,"
-                + SeriesGuideContract.Shows.TITLE + " ASC,"
-                + SeriesGuideContract.Episodes.NUMBER + " ASC";
+        String SORTING_UPCOMING = Episodes.FIRSTAIREDMS + " ASC,"
+                + SeriesGuideContract.Shows.SORT_TITLE + ","
+                + Episodes.NUMBER + " ASC";
 
-        String SORTING_RECENT = SeriesGuideContract.Episodes.FIRSTAIREDMS + " DESC,"
-                + SeriesGuideContract.Shows.TITLE + " ASC,"
-                + SeriesGuideContract.Episodes.NUMBER + " DESC";
+        String SORTING_RECENT = Episodes.FIRSTAIREDMS + " DESC,"
+                + SeriesGuideContract.Shows.SORT_TITLE + ","
+                + Episodes.NUMBER + " DESC";
 
         int _ID = 0;
         int TITLE = 1;

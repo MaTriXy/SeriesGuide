@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
 import android.content.Intent;
@@ -22,8 +6,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -40,6 +22,7 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import com.battlelancer.seriesguide.Constants;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.adapters.EpisodesAdapter;
 import com.battlelancer.seriesguide.adapters.EpisodesAdapter.OnFlagEpisodeListener;
 import com.battlelancer.seriesguide.enums.EpisodeFlags;
@@ -163,11 +146,7 @@ public class EpisodesFragment extends ListFragment
             intent.setClass(getActivity(), EpisodesActivity.class);
             intent.putExtra(EpisodesActivity.InitBundle.EPISODE_TVDBID, episodeId);
 
-            ActivityCompat.startActivity(getActivity(), intent,
-                    ActivityOptionsCompat
-                            .makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight())
-                            .toBundle()
-            );
+            Utils.startActivityWithAnimation(getActivity(), intent, view);
         }
     }
 
@@ -280,22 +259,25 @@ public class EpisodesFragment extends ListFragment
 
     @Override
     public void onFlagEpisodeWatched(int episodeTvdbId, int episode, boolean isWatched) {
-        EpisodeTools.episodeWatched(getActivity(), getShowId(), episodeTvdbId, getSeasonNumber(),
-                episode, isWatched ? EpisodeFlags.WATCHED : EpisodeFlags.UNWATCHED);
+        EpisodeTools.episodeWatched(SgApp.from(getActivity()), getShowId(), episodeTvdbId,
+                getSeasonNumber(), episode,
+                isWatched ? EpisodeFlags.WATCHED : EpisodeFlags.UNWATCHED);
     }
 
     public void onFlagEpisodeSkipped(int episodeTvdbId, int episode, boolean isSkipped) {
-        EpisodeTools.episodeWatched(getActivity(), getShowId(), episodeTvdbId, getSeasonNumber(),
-                episode, isSkipped ? EpisodeFlags.SKIPPED : EpisodeFlags.UNWATCHED);
+        EpisodeTools.episodeWatched(SgApp.from(getActivity()), getShowId(), episodeTvdbId,
+                getSeasonNumber(), episode,
+                isSkipped ? EpisodeFlags.SKIPPED : EpisodeFlags.UNWATCHED);
     }
 
     public void onFlagEpisodeCollected(int episodeTvdbId, int episode, boolean isCollected) {
-        EpisodeTools.episodeCollected(getActivity(), getShowId(), episodeTvdbId, getSeasonNumber(),
-                episode, isCollected);
+        EpisodeTools.episodeCollected(SgApp.from(getActivity()), getShowId(), episodeTvdbId,
+                getSeasonNumber(), episode, isCollected);
     }
 
     private void onMarkUntilHere(long episodeFirstReleaseMs) {
-        EpisodeTools.episodeWatchedPrevious(getActivity(), getShowId(), episodeFirstReleaseMs);
+        EpisodeTools.episodeWatchedPrevious(SgApp.from(getActivity()), getShowId(),
+                episodeFirstReleaseMs);
     }
 
     private LoaderManager.LoaderCallbacks<Cursor> mLoaderCallbacks
@@ -331,26 +313,26 @@ public class EpisodesFragment extends ListFragment
     public interface EpisodesQuery {
 
         String[] PROJECTION = new String[] {
-                Tables.EPISODES + "." + Episodes._ID, Episodes.WATCHED, Episodes.TITLE,
-                Episodes.NUMBER, Episodes.FIRSTAIREDMS, Episodes.DVDNUMBER,
-                Episodes.ABSOLUTE_NUMBER, Episodes.COLLECTED
+                Tables.EPISODES + "." + Episodes._ID, // 0
+                Episodes.WATCHED,
+                Episodes.TITLE,
+                Episodes.NUMBER, // 3
+                Episodes.SEASON,
+                Episodes.FIRSTAIREDMS,
+                Episodes.DVDNUMBER,
+                Episodes.ABSOLUTE_NUMBER,
+                Episodes.COLLECTED // 8
         };
 
         int _ID = 0;
-
         int WATCHED = 1;
-
         int TITLE = 2;
-
         int NUMBER = 3;
-
-        int FIRSTAIREDMS = 4;
-
-        int DVDNUMBER = 5;
-
-        int ABSOLUTE_NUMBER = 6;
-
-        int COLLECTED = 7;
+        int SEASON = 4;
+        int FIRSTAIREDMS = 5;
+        int DVDNUMBER = 6;
+        int ABSOLUTE_NUMBER = 7;
+        int COLLECTED = 8;
     }
 
     private void loadSortOrder() {

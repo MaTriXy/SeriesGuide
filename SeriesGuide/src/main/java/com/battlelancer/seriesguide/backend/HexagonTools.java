@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.backend;
 
 import android.content.ContentValues;
@@ -22,6 +6,7 @@ import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.backend.settings.HexagonSettings;
 import com.battlelancer.seriesguide.items.SearchResult;
 import com.battlelancer.seriesguide.provider.SeriesGuideContract;
@@ -36,6 +21,7 @@ import com.battlelancer.seriesguide.util.Utils;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.uwetrottmann.androidutils.AndroidUtils;
@@ -44,12 +30,13 @@ import com.uwetrottmann.seriesguide.backend.episodes.Episodes;
 import com.uwetrottmann.seriesguide.backend.lists.Lists;
 import com.uwetrottmann.seriesguide.backend.movies.Movies;
 import com.uwetrottmann.seriesguide.backend.shows.Shows;
-import de.greenrobot.event.EventBus;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import org.greenrobot.eventbus.EventBus;
 import timber.log.Timber;
 
 /**
@@ -57,6 +44,7 @@ import timber.log.Timber;
  */
 public class HexagonTools {
 
+    private static final String HEXAGON_ERROR_CATEGORY = "Hexagon Error";
     private static final JsonFactory JSON_FACTORY = new AndroidJsonFactory();
     private static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
 
@@ -66,6 +54,21 @@ public class HexagonTools {
     private static Episodes sEpisodesService;
     private static Movies sMoviesService;
     private static Lists sListsService;
+
+    public static void trackFailedRequest(Context context, String action, IOException e) {
+        if (e instanceof HttpResponseException) {
+            HttpResponseException responseException = (HttpResponseException) e;
+            Utils.trackCustomEvent(context, HEXAGON_ERROR_CATEGORY, action,
+                    responseException.getStatusCode() + " " + responseException.getStatusMessage());
+            // log like "action: 404 not found"
+            Timber.e("%s: %s %s", action, responseException.getStatusCode(),
+                    responseException.getStatusMessage());
+        } else {
+            Utils.trackCustomEvent(context, HEXAGON_ERROR_CATEGORY, action, e.getMessage());
+            // log like "action: Unable to resolve host"
+            Timber.e("%s: %s", action, e.getMessage());
+        }
+    }
 
     /**
      * Creates and returns a new instance for this hexagon service or null if not signed in.
@@ -79,7 +82,7 @@ public class HexagonTools {
         Account.Builder builder = new Account.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, credential
         );
-        return CloudEndpointUtils.updateBuilder(builder).build();
+        return CloudEndpointUtils.updateBuilder(context, builder).build();
     }
 
     /**
@@ -95,7 +98,7 @@ public class HexagonTools {
             Shows.Builder builder = new Shows.Builder(
                     HTTP_TRANSPORT, JSON_FACTORY, credential
             );
-            sShowsService = CloudEndpointUtils.updateBuilder(builder).build();
+            sShowsService = CloudEndpointUtils.updateBuilder(context, builder).build();
         }
         return sShowsService;
     }
@@ -113,7 +116,7 @@ public class HexagonTools {
             Episodes.Builder builder = new Episodes.Builder(
                     HTTP_TRANSPORT, JSON_FACTORY, credential
             );
-            sEpisodesService = CloudEndpointUtils.updateBuilder(builder).build();
+            sEpisodesService = CloudEndpointUtils.updateBuilder(context, builder).build();
         }
         return sEpisodesService;
     }
@@ -131,7 +134,7 @@ public class HexagonTools {
             Movies.Builder builder = new Movies.Builder(
                     HTTP_TRANSPORT, JSON_FACTORY, credential
             );
-            sMoviesService = CloudEndpointUtils.updateBuilder(builder).build();
+            sMoviesService = CloudEndpointUtils.updateBuilder(context, builder).build();
         }
         return sMoviesService;
     }
@@ -149,7 +152,7 @@ public class HexagonTools {
             Lists.Builder builder = new Lists.Builder(
                     HTTP_TRANSPORT, JSON_FACTORY, credential
             );
-            sListsService = CloudEndpointUtils.updateBuilder(builder).build();
+            sListsService = CloudEndpointUtils.updateBuilder(context, builder).build();
         }
         return sListsService;
     }
@@ -218,25 +221,25 @@ public class HexagonTools {
      * <p> Merges shows, episodes and movies after a sign-in. Consecutive syncs will only download
      * changes to shows, episodes and movies.
      */
-    public static boolean syncWithHexagon(Context context, HashSet<Integer> existingShows,
+    public static boolean syncWithHexagon(SgApp app, HashSet<Integer> existingShows,
             HashMap<Integer, SearchResult> newShows) {
         Timber.d("syncWithHexagon: syncing...");
 
         //// EPISODES
-        boolean syncEpisodesSuccessful = syncEpisodes(context);
+        boolean syncEpisodesSuccessful = syncEpisodes(app);
         Timber.d("syncWithHexagon: episode sync %s",
                 syncEpisodesSuccessful ? "SUCCESSFUL" : "FAILED");
 
         //// SHOWS
-        boolean syncShowsSuccessful = syncShows(context, existingShows, newShows);
+        boolean syncShowsSuccessful = syncShows(app, existingShows, newShows);
         Timber.d("syncWithHexagon: show sync %s", syncShowsSuccessful ? "SUCCESSFUL" : "FAILED");
 
         //// MOVIES
-        boolean syncMoviesSuccessful = syncMovies(context);
+        boolean syncMoviesSuccessful = syncMovies(app);
         Timber.d("syncWithHexagon: movie sync %s", syncMoviesSuccessful ? "SUCCESSFUL" : "FAILED");
 
         //// LISTS
-        boolean syncListsSuccessful = syncLists(context);
+        boolean syncListsSuccessful = syncLists(app);
         Timber.d("syncWithHexagon: lists sync %s", syncListsSuccessful ? "SUCCESSFUL" : "FAILED");
 
         Timber.d("syncWithHexagon: syncing...DONE");
@@ -293,12 +296,12 @@ public class HexagonTools {
         return mergeSuccessful && changedDownloadSuccessful;
     }
 
-    private static boolean syncShows(Context context, HashSet<Integer> existingShows,
+    private static boolean syncShows(SgApp app, HashSet<Integer> existingShows,
             HashMap<Integer, SearchResult> newShows) {
-        boolean hasMergedShows = HexagonSettings.hasMergedShows(context);
+        boolean hasMergedShows = HexagonSettings.hasMergedShows(app);
 
         // download shows and apply property changes (if merging only overwrite some properties)
-        boolean downloadSuccessful = ShowTools.Download.fromHexagon(context, existingShows,
+        boolean downloadSuccessful = ShowTools.Download.fromHexagon(app, existingShows,
                 newShows, hasMergedShows);
         if (!downloadSuccessful) {
             return false;
@@ -306,7 +309,7 @@ public class HexagonTools {
 
         // if merge required, upload all shows to Hexagon
         if (!hasMergedShows) {
-            boolean uploadSuccessful = ShowTools.Upload.toHexagon(context);
+            boolean uploadSuccessful = ShowTools.Upload.toHexagon(app);
             if (!uploadSuccessful) {
                 return false;
             }
@@ -315,37 +318,37 @@ public class HexagonTools {
         // add new shows
         if (newShows.size() > 0) {
             List<SearchResult> newShowsList = new LinkedList<>(newShows.values());
-            TaskManager.getInstance(context).performAddTask(newShowsList, true, !hasMergedShows);
+            TaskManager.getInstance(app).performAddTask(app, newShowsList, true, !hasMergedShows);
         } else if (!hasMergedShows) {
             // set shows as merged
-            HexagonSettings.setHasMergedShows(context, true);
+            HexagonSettings.setHasMergedShows(app, true);
         }
 
         return true;
     }
 
-    private static boolean syncMovies(Context context) {
-        boolean hasMergedMovies = HexagonSettings.hasMergedMovies(context);
+    private static boolean syncMovies(SgApp app) {
+        boolean hasMergedMovies = HexagonSettings.hasMergedMovies(app);
 
         // download movies and apply property changes, build list of new movies
         Set<Integer> newCollectionMovies = new HashSet<>();
         Set<Integer> newWatchlistMovies = new HashSet<>();
-        boolean downloadSuccessful = MovieTools.Download.fromHexagon(context, newCollectionMovies,
+        boolean downloadSuccessful = MovieTools.Download.fromHexagon(app, newCollectionMovies,
                 newWatchlistMovies, hasMergedMovies);
         if (!downloadSuccessful) {
             return false;
         }
 
         if (!hasMergedMovies) {
-            boolean uploadSuccessful = MovieTools.Upload.toHexagon(context);
+            boolean uploadSuccessful = MovieTools.Upload.toHexagon(app);
             if (!uploadSuccessful) {
                 return false;
             }
         }
 
         // add new movies with the just downloaded properties
-        SgSyncAdapter.UpdateResult result = MovieTools.Download.addMovies(context,
-                newCollectionMovies, newWatchlistMovies);
+        SgSyncAdapter.UpdateResult result = app.getMovieTools()
+                .addMovies(newCollectionMovies, newWatchlistMovies);
         boolean addingSuccessful = result == SgSyncAdapter.UpdateResult.SUCCESS;
         if (!hasMergedMovies) {
             // ensure all missing movies from Hexagon are added before merge is complete
@@ -353,7 +356,7 @@ public class HexagonTools {
                 return false;
             }
             // set movies as merged
-            PreferenceManager.getDefaultSharedPreferences(context)
+            PreferenceManager.getDefaultSharedPreferences(app)
                     .edit()
                     .putBoolean(HexagonSettings.KEY_MERGED_MOVIES, true)
                     .commit();

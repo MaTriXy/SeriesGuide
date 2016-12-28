@@ -1,32 +1,17 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationManagerCompat;
-import com.battlelancer.seriesguide.SeriesGuideApplication;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.enums.TraktAction;
 import com.battlelancer.seriesguide.service.NotificationService;
 import com.battlelancer.seriesguide.ui.dialogs.CheckInDialogFragment;
 import com.battlelancer.seriesguide.ui.dialogs.GenericCheckInDialogFragment;
 import com.battlelancer.seriesguide.util.TraktTask;
 import com.uwetrottmann.androidutils.AndroidUtils;
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Blank activity, just used to quickly check into a show/episode on GetGlue/trakt.
@@ -80,12 +65,14 @@ public class QuickCheckInActivity extends FragmentActivity {
     }
 
     @SuppressWarnings("unused")
+    @Subscribe
     public void onEvent(GenericCheckInDialogFragment.CheckInDialogDismissedEvent event) {
         // if check-in dialog is dismissed, finish ourselves as well
         finish();
     }
 
     @SuppressWarnings("unused")
+    @Subscribe
     public void onEvent(TraktTask.TraktActionCompleteEvent event) {
         if (event.mTraktAction != TraktAction.CHECKIN_EPISODE) {
             return;
@@ -97,7 +84,7 @@ public class QuickCheckInActivity extends FragmentActivity {
         if (event.mWasSuccessful) {
             NotificationManagerCompat manager = NotificationManagerCompat.from(
                     getApplicationContext());
-            manager.cancel(SeriesGuideApplication.NOTIFICATION_EPISODE_ID);
+            manager.cancel(SgApp.NOTIFICATION_EPISODE_ID);
             // replicate delete intent
             NotificationService.handleDeleteIntent(this, getIntent());
         }

@@ -1,42 +1,29 @@
-/*
- * Copyright 2015 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.loaders;
 
-import android.content.Context;
+import android.app.Activity;
+import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.adapters.NowAdapter;
+import com.battlelancer.seriesguide.settings.DisplaySettings;
 import com.battlelancer.seriesguide.settings.TraktCredentials;
-import com.battlelancer.seriesguide.util.ServiceUtils;
+import com.battlelancer.seriesguide.thetvdbapi.TvdbTools;
+import com.battlelancer.seriesguide.traktapi.SgTrakt;
+import com.battlelancer.seriesguide.util.ShowTools;
 import com.battlelancer.seriesguide.util.TextTools;
 import com.uwetrottmann.androidutils.GenericSimpleLoader;
-import com.uwetrottmann.trakt.v2.TraktV2;
-import com.uwetrottmann.trakt.v2.entities.Friend;
-import com.uwetrottmann.trakt.v2.entities.HistoryEntry;
-import com.uwetrottmann.trakt.v2.entities.Username;
-import com.uwetrottmann.trakt.v2.enums.Extended;
-import com.uwetrottmann.trakt.v2.enums.HistoryType;
-import com.uwetrottmann.trakt.v2.exceptions.OAuthUnauthorizedException;
-import com.uwetrottmann.trakt.v2.services.Users;
+import com.uwetrottmann.trakt5.entities.Friend;
+import com.uwetrottmann.trakt5.entities.HistoryEntry;
+import com.uwetrottmann.trakt5.entities.UserSlug;
+import com.uwetrottmann.trakt5.enums.Extended;
+import com.uwetrottmann.trakt5.enums.HistoryType;
+import com.uwetrottmann.trakt5.services.Users;
+import dagger.Lazy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import retrofit.RetrofitError;
-import timber.log.Timber;
+import javax.inject.Inject;
 
 /**
  * Loads trakt friends, then returns the most recently watched episode for each friend.
@@ -44,37 +31,29 @@ import timber.log.Timber;
 public class TraktFriendsEpisodeHistoryLoader
         extends GenericSimpleLoader<List<NowAdapter.NowItem>> {
 
-    public TraktFriendsEpisodeHistoryLoader(Context context) {
-        super(context);
+    @Inject Lazy<Users> traktUsers;
+
+    public TraktFriendsEpisodeHistoryLoader(Activity activity) {
+        super(activity);
+        SgApp.from(activity).getServicesComponent().inject(this);
     }
 
     @Override
     public List<NowAdapter.NowItem> loadInBackground() {
-        TraktV2 trakt = ServiceUtils.getTraktV2WithAuth(getContext());
-        if (trakt == null) {
+        if (!TraktCredentials.get(getContext()).hasCredentials()) {
             return null;
         }
-        Users traktUsers = trakt.users();
 
         // get all trakt friends
-        List<Friend> friends;
-        try {
-            friends = traktUsers.friends(Username.ME, Extended.IMAGES);
-        } catch (RetrofitError e) {
-            Timber.e(e, "Failed to load trakt friends");
-            return null;
-        } catch (OAuthUnauthorizedException e) {
-            TraktCredentials.get(getContext()).setCredentialsInvalid();
-            return null;
-        }
-
+        List<Friend> friends = SgTrakt.executeAuthenticatedCall(getContext(),
+                traktUsers.get().friends(UserSlug.ME, Extended.FULL), "get friends");
         if (friends == null) {
             return null;
         }
 
         int size = friends.size();
         if (size == 0) {
-            return null;
+            return null; // no friends, done.
         }
 
         // estimate list size
@@ -85,35 +64,26 @@ public class TraktFriendsEpisodeHistoryLoader
                 new NowAdapter.NowItem().header(getContext().getString(R.string.friends_recently)));
 
         // add last watched episode for each friend
+        SparseArrayCompat<String> localShows = ShowTools.getShowTvdbIdsAndPosters(getContext());
+        boolean preventSpoilers = DisplaySettings.preventSpoilers(getContext());
         for (int i = 0; i < size; i++) {
             Friend friend = friends.get(i);
 
-            // at least need a username
+            // at least need a userSlug
             if (friend.user == null) {
                 continue;
             }
-            String username = friend.user.username;
-            if (TextUtils.isEmpty(username)) {
+            String userSlug = friend.user.ids.slug;
+            if (TextUtils.isEmpty(userSlug)) {
                 continue;
             }
 
             // get last watched episode
-            List<HistoryEntry> history;
-            try {
-                history = traktUsers.history(new Username(username),
-                        HistoryType.EPISODES, 1, 1, Extended.IMAGES);
-            } catch (RetrofitError e) {
-                // abort, either lost connection or server error or other error
-                Timber.e(e, "Failed to load friend episode history");
-                return null;
-            } catch (OAuthUnauthorizedException ignored) {
-                // friend might have revoked friendship just now :(
-                continue;
-            }
-
+            List<HistoryEntry> history = SgTrakt.executeCall(getContext(),
+                    traktUsers.get().history(new UserSlug(userSlug), HistoryType.EPISODES, 1, 1,
+                            Extended.DEFAULT_MIN, null, null), "get friend episode history");
             if (history == null || history.size() == 0) {
-                // no history
-                continue;
+                continue; // no history
             }
 
             HistoryEntry entry = history.get(0);
@@ -124,21 +94,40 @@ public class TraktFriendsEpisodeHistoryLoader
                 continue;
             }
 
-            String poster = (entry.show.images == null || entry.show.images.poster == null)
-                    ? null : entry.show.images.poster.thumb;
+            // look for a TVDB poster
+            Integer showTvdbId = entry.show.ids == null ? null : entry.show.ids.tvdb;
+            String poster = null;
+            if (showTvdbId != null && localShows != null) {
+                // prefer poster of already added show
+                poster = localShows.get(showTvdbId);
+                if (TextUtils.isEmpty(poster)) {
+                    // fall back to first uploaded poster
+                    poster = TvdbTools.buildFallbackPosterPath(showTvdbId);
+                }
+                poster = TvdbTools.buildPosterUrl(poster);
+            }
+
             String avatar = (friend.user.images == null || friend.user.images.avatar == null)
                     ? null : friend.user.images.avatar.full;
+            String episodeString;
+            if (preventSpoilers) {
+                // just display the number
+                episodeString = TextTools.getEpisodeNumber(getContext(), entry.episode.season,
+                        entry.episode.number);
+            } else {
+                // display number and title
+                episodeString = TextTools.getNextEpisodeString(getContext(), entry.episode.season,
+                        entry.episode.number, entry.episode.title);
+            }
             NowAdapter.NowItem nowItem = new NowAdapter.NowItem().
                     displayData(
                             entry.watched_at.getMillis(),
                             entry.show.title,
-                            TextTools.getNextEpisodeString(getContext(), entry.episode.season,
-                                    entry.episode.number, entry.episode.title),
+                            episodeString,
                             poster
                     )
-                    .tvdbIds(entry.episode.ids == null ? null : entry.episode.ids.tvdb,
-                            entry.show.ids == null ? null : entry.show.ids.tvdb)
-                    .friend(username, avatar, entry.action);
+                    .tvdbIds(entry.episode.ids == null ? null : entry.episode.ids.tvdb, showTvdbId)
+                    .friend(friend.user.username, avatar, entry.action);
             items.add(nowItem);
         }
 

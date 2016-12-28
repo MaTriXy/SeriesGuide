@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.extensions;
 
 import android.app.IntentService;
@@ -23,7 +7,9 @@ import com.battlelancer.seriesguide.api.Action;
 
 import static com.battlelancer.seriesguide.api.constants.IncomingConstants.EXTRA_TOKEN;
 import static com.battlelancer.seriesguide.api.constants.OutgoingConstants.ACTION_PUBLISH_ACTION;
+import static com.battlelancer.seriesguide.api.constants.OutgoingConstants.ACTION_TYPE_EPISODE;
 import static com.battlelancer.seriesguide.api.constants.OutgoingConstants.EXTRA_ACTION;
+import static com.battlelancer.seriesguide.api.constants.OutgoingConstants.EXTRA_ACTION_TYPE;
 
 /**
  * Catches actions published by enabled extensions.
@@ -46,6 +32,7 @@ public class ExtensionSubscriberService extends IntentService {
             // an extension published a new action
             String token = intent.getStringExtra(EXTRA_TOKEN);
 
+            // extract the action
             Action action = null;
             if (intent.hasExtra(EXTRA_ACTION)) {
                 Bundle bundle = intent.getBundleExtra(EXTRA_ACTION);
@@ -54,7 +41,14 @@ public class ExtensionSubscriberService extends IntentService {
                 }
             }
 
-            ExtensionManager.getInstance(this).handlePublishedAction(token, action);
+            // extensions may send movie actions as of API 1.3.0
+            // older extensions only support episode actions
+            int type = ACTION_TYPE_EPISODE;
+            if (intent.hasExtra(EXTRA_ACTION_TYPE)) {
+                type = intent.getIntExtra(EXTRA_ACTION_TYPE, ACTION_TYPE_EPISODE);
+            }
+
+            ExtensionManager.getInstance(this).handlePublishedAction(token, action, type);
         }
     }
 }

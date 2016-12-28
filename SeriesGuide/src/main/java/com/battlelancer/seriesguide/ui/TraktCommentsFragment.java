@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
 import android.os.Bundle;
@@ -40,9 +24,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.adapters.TraktCommentsAdapter;
 import com.battlelancer.seriesguide.enums.TraktAction;
 import com.battlelancer.seriesguide.loaders.TraktCommentsLoader;
@@ -50,9 +36,11 @@ import com.battlelancer.seriesguide.util.TraktTask;
 import com.battlelancer.seriesguide.util.Utils;
 import com.battlelancer.seriesguide.widgets.EmptyViewSwipeRefreshLayout;
 import com.uwetrottmann.androidutils.AndroidUtils;
-import com.uwetrottmann.trakt.v2.TraktLink;
-import com.uwetrottmann.trakt.v2.entities.Comment;
-import de.greenrobot.event.EventBus;
+import com.uwetrottmann.trakt5.TraktLink;
+import com.uwetrottmann.trakt5.entities.Comment;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import timber.log.Timber;
 
 /**
@@ -66,40 +54,41 @@ public class TraktCommentsFragment extends Fragment {
         String EPISODE_TVDB_ID = "episode";
     }
 
-    @Bind(R.id.listViewShouts) ListView mList;
-    @Bind(R.id.textViewShoutsEmpty) TextView mEmptyView;
-    @Bind(R.id.swipeRefreshLayoutShouts) EmptyViewSwipeRefreshLayout mSwipeRefreshLayout;
-    @Bind(R.id.buttonShouts) Button mButtonShout;
-    @Bind(R.id.editTextShouts) EditText mEditTextShout;
-    @Bind(R.id.checkBoxShouts) CheckBox mCheckBoxIsSpoiler;
+    @BindView(R.id.listViewShouts) ListView list;
+    @BindView(R.id.textViewShoutsEmpty) TextView emptyView;
+    @BindView(R.id.swipeRefreshLayoutShouts) EmptyViewSwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.buttonShouts) Button buttonShout;
+    @BindView(R.id.editTextShouts) EditText editTextShout;
+    @BindView(R.id.checkBoxShouts) CheckBox checkBoxIsSpoiler;
 
-    private TraktCommentsAdapter mAdapter;
+    private TraktCommentsAdapter adapter;
+    private Unbinder unbinder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_comments, container, false);
-        ButterKnife.bind(this, v);
+        unbinder = ButterKnife.bind(this, v);
 
-        mSwipeRefreshLayout.setSwipeableChildren(R.id.scrollViewComments, R.id.listViewShouts);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setSwipeableChildren(R.id.scrollViewComments, R.id.listViewShouts);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshCommentsWithNetworkCheck();
             }
         });
-        mSwipeRefreshLayout.setProgressViewOffset(false, getResources().getDimensionPixelSize(
+        swipeRefreshLayout.setProgressViewOffset(false, getResources().getDimensionPixelSize(
                         R.dimen.swipe_refresh_progress_bar_start_margin),
                 getResources().getDimensionPixelSize(
                         R.dimen.swipe_refresh_progress_bar_end_margin));
         int accentColorResId = Utils.resolveAttributeToResourceId(getActivity().getTheme(),
                 R.attr.colorAccent);
-        mSwipeRefreshLayout.setColorSchemeResources(accentColorResId, R.color.teal_500);
+        swipeRefreshLayout.setColorSchemeResources(accentColorResId, R.color.teal_500);
 
-        mList.setOnItemClickListener(mOnClickListener);
-        mList.setEmptyView(mEmptyView);
+        list.setOnItemClickListener(mOnClickListener);
+        list.setEmptyView(emptyView);
 
-        mButtonShout.setOnClickListener(new OnClickListener() {
+        buttonShout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 comment();
@@ -107,15 +96,15 @@ public class TraktCommentsFragment extends Fragment {
         });
 
         // disable comment button by default, enable if comment entered
-        mButtonShout.setEnabled(false);
-        mEditTextShout.addTextChangedListener(new TextWatcher() {
+        buttonShout.setEnabled(false);
+        editTextShout.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mButtonShout.setEnabled(!TextUtils.isEmpty(s));
+                buttonShout.setEnabled(!TextUtils.isEmpty(s));
             }
 
             @Override
@@ -131,16 +120,16 @@ public class TraktCommentsFragment extends Fragment {
 
     private void comment() {
         // prevent empty comments
-        String comment = mEditTextShout.getText().toString();
+        String comment = editTextShout.getText().toString();
         if (TextUtils.isEmpty(comment)) {
             return;
         }
 
         // disable the comment button
-        mButtonShout.setEnabled(false);
+        buttonShout.setEnabled(false);
 
         Bundle args = getArguments();
-        boolean isSpoiler = mCheckBoxIsSpoiler.isChecked();
+        boolean isSpoiler = checkBoxIsSpoiler.isChecked();
 
         // as determined by "science", episode comments are most likely, so check for them first
         // comment for an episode?
@@ -178,8 +167,8 @@ public class TraktCommentsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         // setup adapter
-        mAdapter = new TraktCommentsAdapter(getActivity());
-        mList.setAdapter(mAdapter);
+        adapter = new TraktCommentsAdapter(getActivity());
+        list.setAdapter(adapter);
 
         // load data
         getLoaderManager().initLoader(TraktCommentsActivity.LOADER_ID_COMMENTS, getArguments(),
@@ -210,7 +199,7 @@ public class TraktCommentsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override
@@ -259,7 +248,7 @@ public class TraktCommentsFragment extends Fragment {
         @Override
         public Loader<TraktCommentsLoader.Result> onCreateLoader(int id, Bundle args) {
             showProgressBar(true);
-            return new TraktCommentsLoader(getActivity(), args);
+            return new TraktCommentsLoader(SgApp.from(getActivity()), args);
         }
 
         @Override
@@ -268,8 +257,8 @@ public class TraktCommentsFragment extends Fragment {
             if (!isAdded()) {
                 return;
             }
-            mAdapter.setData(data.results);
-            setEmptyMessage(data.emptyTextResId);
+            adapter.setData(data.results);
+            setEmptyMessage(data.emptyText);
             showProgressBar(false);
         }
 
@@ -283,7 +272,7 @@ public class TraktCommentsFragment extends Fragment {
         if (!AndroidUtils.isNetworkConnected(getActivity())) {
             // keep existing data, but update empty view anyhow
             showProgressBar(false);
-            setEmptyMessage(R.string.offline);
+            setEmptyMessage(getString(R.string.offline));
             Toast.makeText(getActivity(), R.string.offline, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -299,8 +288,8 @@ public class TraktCommentsFragment extends Fragment {
     /**
      * Changes the empty message.
      */
-    private void setEmptyMessage(int stringResourceId) {
-        mEmptyView.setText(stringResourceId);
+    private void setEmptyMessage(String stringResourceId) {
+        emptyView.setText(stringResourceId);
     }
 
     /**
@@ -308,20 +297,21 @@ public class TraktCommentsFragment extends Fragment {
      * wrapping the comments list.
      */
     protected void showProgressBar(boolean isShowing) {
-        mSwipeRefreshLayout.setRefreshing(isShowing);
+        swipeRefreshLayout.setRefreshing(isShowing);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(TraktTask.TraktActionCompleteEvent event) {
         if (event.mTraktAction != TraktAction.COMMENT || getView() == null) {
             return;
         }
 
         // reenable the shout button
-        mButtonShout.setEnabled(true);
+        buttonShout.setEnabled(true);
 
         if (event.mWasSuccessful) {
             // clear the text field and show recent shout
-            mEditTextShout.setText("");
+            editTextShout.setText("");
             refreshCommentsWithNetworkCheck();
         }
     }

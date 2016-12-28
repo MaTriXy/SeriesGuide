@@ -1,19 +1,3 @@
-/*
- * Copyright 2016 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.util;
 
 import android.content.ContentProviderOperation;
@@ -144,7 +128,7 @@ public class ListsTools {
 
                 cursor = response.getCursor();
             } catch (IOException e) {
-                Timber.e(e, "removeListsRemovedOnHexagon: failed to download lists.");
+                HexagonTools.trackFailedRequest(context, "get list ids", e);
                 return false;
             }
         } while (!TextUtils.isEmpty(cursor)); // fetch next batch
@@ -258,7 +242,7 @@ public class ListsTools {
         try {
             listsService.save(listsWrapper).execute();
         } catch (IOException e) {
-            Timber.e(e, "uploadAllToHexagon: failed for lists.");
+            HexagonTools.trackFailedRequest(context, "save lists", e);
             return false;
         }
         return true;
@@ -284,7 +268,7 @@ public class ListsTools {
                     return false; // no longer signed in
                 }
 
-                Lists.Get request = listsService.get();
+                Lists.Get request = listsService.get(); // use default server limit
                 if (hasMergedLists) {
                     request.setUpdatedSince(lastSyncTime);
                 }
@@ -301,7 +285,7 @@ public class ListsTools {
                 cursor = response.getCursor();
                 lists = response.getLists();
             } catch (IOException e) {
-                Timber.e(e, "downloadFromHexagon: failed to download lists.");
+                HexagonTools.trackFailedRequest(context, "get lists", e);
                 return false;
             }
 

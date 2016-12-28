@@ -1,27 +1,8 @@
-/*
- * Copyright 2015 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -37,12 +18,14 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.adapters.MoviesNowAdapter;
 import com.battlelancer.seriesguide.adapters.NowAdapter;
 import com.battlelancer.seriesguide.loaders.TraktFriendsMovieHistoryLoader;
-import com.battlelancer.seriesguide.loaders.TraktUserMovieHistoryLoader;
+import com.battlelancer.seriesguide.loaders.TraktRecentMovieHistoryLoader;
 import com.battlelancer.seriesguide.settings.TraktCredentials;
 import com.battlelancer.seriesguide.util.GridInsetDecoration;
 import com.battlelancer.seriesguide.util.Utils;
@@ -55,24 +38,25 @@ import java.util.List;
  */
 public class MoviesNowFragment extends Fragment {
 
-    @Bind(R.id.swipeRefreshLayoutNow) EmptyViewSwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.swipeRefreshLayoutNow) EmptyViewSwipeRefreshLayout swipeRefreshLayout;
 
-    @Bind(R.id.recyclerViewNow) RecyclerView recyclerView;
-    @Bind(R.id.emptyViewNow) TextView emptyView;
-    @Bind(R.id.containerSnackbar) View snackbar;
-    @Bind(R.id.textViewSnackbar) TextView snackbarText;
-    @Bind(R.id.buttonSnackbar) Button snackbarButton;
+    @BindView(R.id.recyclerViewNow) RecyclerView recyclerView;
+    @BindView(R.id.emptyViewNow) TextView emptyView;
+    @BindView(R.id.containerSnackbar) View snackbar;
+    @BindView(R.id.textViewSnackbar) TextView snackbarText;
+    @BindView(R.id.buttonSnackbar) Button snackbarButton;
 
-    private NowAdapter adapter;
+    private MoviesNowAdapter adapter;
     private boolean isLoadingRecentlyWatched;
     private boolean isLoadingFriends;
+    private Unbinder unbinder;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_now, container, false);
-        ButterKnife.bind(this, v);
+        unbinder = ButterKnife.bind(this, v);
 
         swipeRefreshLayout.setSwipeableChildren(R.id.scrollViewNow, R.id.recyclerViewNow);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -89,7 +73,7 @@ public class MoviesNowFragment extends Fragment {
 
         emptyView.setText(R.string.now_movies_empty);
 
-        showError(false, 0);
+        showError(null);
         snackbarButton.setText(R.string.refresh);
         snackbarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +116,7 @@ public class MoviesNowFragment extends Fragment {
         swipeRefreshLayout.setColorSchemeResources(accentColorResId, R.color.teal_500);
 
         // define dataset
-        adapter = new NowAdapter(getActivity(), itemClickListener);
+        adapter = new MoviesNowAdapter(getContext(), itemClickListener);
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
@@ -169,7 +153,7 @@ public class MoviesNowFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override
@@ -201,7 +185,7 @@ public class MoviesNowFragment extends Fragment {
 
     private void refreshStream() {
         showProgressBar(true);
-        showError(false, 0);
+        showError(null);
 
         // user might get disconnected during our life-time,
         // so properly clean up old loaders so they won't interfere
@@ -216,7 +200,7 @@ public class MoviesNowFragment extends Fragment {
             // destroy trakt loaders and remove any shown error message
             destroyLoaderIfExists(MoviesActivity.NOW_TRAKT_USER_LOADER_ID);
             destroyLoaderIfExists(MoviesActivity.NOW_TRAKT_FRIENDS_LOADER_ID);
-            showError(false, 0);
+            showError(null);
         }
     }
 
@@ -226,9 +210,10 @@ public class MoviesNowFragment extends Fragment {
         }
     }
 
-    private void showError(boolean show, @StringRes int titleResId) {
-        if (titleResId != 0) {
-            snackbarText.setText(titleResId);
+    private void showError(@Nullable String errorText) {
+        boolean show = errorText != null;
+        if (show) {
+            snackbarText.setText(errorText);
         }
         if (snackbar.getVisibility() == (show ? View.VISIBLE : View.GONE)) {
             // already in desired state, avoid replaying animation
@@ -283,35 +268,33 @@ public class MoviesNowFragment extends Fragment {
             Intent i = new Intent(getActivity(), MovieDetailsActivity.class);
             i.putExtra(MovieDetailsFragment.InitBundle.TMDB_ID, item.movieTmdbId);
 
-            ActivityCompat.startActivity(getActivity(), i,
-                    ActivityOptionsCompat
-                            .makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight())
-                            .toBundle()
-            );
+            // simple scale up animation as there are no images
+            Utils.startActivityWithAnimation(getActivity(), i, view);
         }
     };
 
-    private LoaderManager.LoaderCallbacks<TraktUserMovieHistoryLoader.Result> recentlyTraktCallbacks
-            = new LoaderManager.LoaderCallbacks<TraktUserMovieHistoryLoader.Result>() {
+    private LoaderManager.LoaderCallbacks<TraktRecentMovieHistoryLoader.Result>
+            recentlyTraktCallbacks
+            = new LoaderManager.LoaderCallbacks<TraktRecentMovieHistoryLoader.Result>() {
         @Override
-        public Loader<TraktUserMovieHistoryLoader.Result> onCreateLoader(int id, Bundle args) {
-            return new TraktUserMovieHistoryLoader(getActivity());
+        public Loader<TraktRecentMovieHistoryLoader.Result> onCreateLoader(int id, Bundle args) {
+            return new TraktRecentMovieHistoryLoader(getActivity());
         }
 
         @Override
-        public void onLoadFinished(Loader<TraktUserMovieHistoryLoader.Result> loader,
-                TraktUserMovieHistoryLoader.Result data) {
+        public void onLoadFinished(Loader<TraktRecentMovieHistoryLoader.Result> loader,
+                TraktRecentMovieHistoryLoader.Result data) {
             if (!isAdded()) {
                 return;
             }
             adapter.setRecentlyWatched(data.items);
             isLoadingRecentlyWatched = false;
             showProgressBar(false);
-            showError(data.errorTextResId != 0, data.errorTextResId);
+            showError(data.errorText);
         }
 
         @Override
-        public void onLoaderReset(Loader<TraktUserMovieHistoryLoader.Result> loader) {
+        public void onLoaderReset(Loader<TraktRecentMovieHistoryLoader.Result> loader) {
             if (!isVisible()) {
                 return;
             }

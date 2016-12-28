@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.traktapi;
 
 import android.os.AsyncTask;
@@ -21,18 +5,22 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import com.battlelancer.seriesguide.BuildConfig;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.enums.TraktResult;
 import com.battlelancer.seriesguide.ui.BaseOAuthActivity;
 import com.battlelancer.seriesguide.util.ConnectTraktTask;
 import com.battlelancer.seriesguide.util.Utils;
-import com.uwetrottmann.trakt.v2.TraktV2;
+import com.uwetrottmann.trakt5.TraktV2;
+import dagger.Lazy;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import javax.inject.Inject;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import timber.log.Timber;
 
 /**
@@ -45,9 +33,11 @@ public class TraktAuthActivity extends BaseOAuthActivity {
     private static final String TRAKT_CONNECT_TASK_TAG = "trakt-connect-task";
     private String state;
     private ConnectTraktTaskFragment taskFragment;
+    @Inject Lazy<TraktV2> trakt;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        SgApp.from(this).getServicesComponent().inject(this);
         super.onCreate(savedInstanceState);
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(TRAKT_CONNECT_TASK_TAG);
@@ -73,11 +63,7 @@ public class TraktAuthActivity extends BaseOAuthActivity {
     protected String getAuthorizationUrl() {
         state = new BigInteger(130, new SecureRandom()).toString(32);
         try {
-            OAuthClientRequest request = TraktV2.getAuthorizationRequest(
-                    BuildConfig.TRAKT_CLIENT_ID,
-                    BaseOAuthActivity.OAUTH_CALLBACK_URL_CUSTOM,
-                    state,
-                    null);
+            OAuthClientRequest request = trakt.get().buildAuthorizationRequest(state);
             return request.getLocationUri();
         } catch (OAuthSystemException e) {
             Timber.e(e, "Building auth request failed.");
@@ -129,11 +115,12 @@ public class TraktAuthActivity extends BaseOAuthActivity {
 
         // fetch access token with given OAuth auth code
         setMessage(getString(R.string.waitplease), true);
-        ConnectTraktTask task = new ConnectTraktTask(getApplicationContext());
+        ConnectTraktTask task = new ConnectTraktTask(SgApp.from(this));
         Utils.executeInOrder(task, authCode);
         taskFragment.setTask(task);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ConnectTraktTask.FinishedEvent event) {
         taskFragment.setTask(null);
 
@@ -145,21 +132,21 @@ public class TraktAuthActivity extends BaseOAuthActivity {
         }
 
         // handle errors
-        int errorResId;
+        String errorText;
         switch (resultCode) {
             case TraktResult.OFFLINE:
-                errorResId = R.string.offline;
+                errorText = getString(R.string.offline);
                 break;
             case TraktResult.API_ERROR:
-                errorResId = R.string.trakt_error_general;
+                errorText = getString(R.string.api_error_generic, getString(R.string.trakt));
                 break;
             case TraktResult.AUTH_ERROR:
             case TraktResult.ERROR:
             default:
-                errorResId = R.string.trakt_error_credentials;
+                errorText = getString(R.string.trakt_error_credentials);
                 break;
         }
-        setMessage(getString(errorResId));
+        setMessage(errorText);
         activateFallbackButtons();
     }
 }

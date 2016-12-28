@@ -1,61 +1,53 @@
-/*
- * Copyright 2015 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.loaders;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import com.battlelancer.seriesguide.R;
+import com.battlelancer.seriesguide.SgApp;
 import com.battlelancer.seriesguide.items.SearchResult;
 import com.battlelancer.seriesguide.settings.DisplaySettings;
-import com.battlelancer.seriesguide.thetvdbapi.TheTVDB;
 import com.battlelancer.seriesguide.thetvdbapi.TvdbException;
-import com.battlelancer.seriesguide.util.ServiceUtils;
+import com.battlelancer.seriesguide.thetvdbapi.TvdbTools;
+import com.battlelancer.seriesguide.traktapi.SgTrakt;
 import com.battlelancer.seriesguide.util.ShowTools;
 import com.uwetrottmann.androidutils.AndroidUtils;
 import com.uwetrottmann.androidutils.GenericSimpleLoader;
-import com.uwetrottmann.trakt.v2.entities.Show;
-import com.uwetrottmann.trakt.v2.entities.TrendingShow;
-import com.uwetrottmann.trakt.v2.enums.Extended;
-import com.uwetrottmann.trakt.v2.enums.Type;
-import java.util.HashSet;
+import com.uwetrottmann.trakt5.entities.Show;
+import com.uwetrottmann.trakt5.entities.TrendingShow;
+import com.uwetrottmann.trakt5.enums.Extended;
+import com.uwetrottmann.trakt5.enums.Type;
+import com.uwetrottmann.trakt5.services.Search;
+import com.uwetrottmann.trakt5.services.Shows;
+import dagger.Lazy;
 import java.util.LinkedList;
 import java.util.List;
-import retrofit.RetrofitError;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 public class TvdbAddLoader extends GenericSimpleLoader<TvdbAddLoader.Result> {
 
     public static class Result {
+        @NonNull
         public List<SearchResult> results;
-        public int emptyTextResId;
+        public String emptyText;
         /** Whether the network call completed. Does not mean there are any results. */
         public boolean successful;
 
-        public Result(List<SearchResult> results, int emptyTextResId, boolean successful) {
+        public Result(@NonNull List<SearchResult> results, String emptyText, boolean successful) {
             this.results = results;
-            this.emptyTextResId = emptyTextResId;
+            this.emptyText = emptyText;
             this.successful = successful;
         }
     }
 
+    private final SgApp app;
     private final String query;
     private final String language;
+    @Inject Lazy<Shows> traktShows;
+    @Inject Lazy<Search> traktSearch;
 
     /**
      * Loads a list of trending shows from trakt (query is empty) or searches trakt/TheTVDB for
@@ -63,9 +55,10 @@ public class TvdbAddLoader extends GenericSimpleLoader<TvdbAddLoader.Result> {
      *
      * @param language If not provided, will search for results in all languages.
      */
-    public TvdbAddLoader(@NonNull Context context, @Nullable String query,
-            @Nullable String language) {
-        super(context);
+    public TvdbAddLoader(SgApp app, @Nullable String query, @Nullable String language) {
+        super(app);
+        this.app = app;
+        app.getServicesComponent().inject(this);
         this.query = query;
         this.language = language;
     }
@@ -76,40 +69,39 @@ public class TvdbAddLoader extends GenericSimpleLoader<TvdbAddLoader.Result> {
 
         if (TextUtils.isEmpty(query)) {
             // no query? load a list of trending shows from trakt
-            try {
-                List<TrendingShow> trendingShows = ServiceUtils.getTraktV2(getContext())
-                        .shows()
-                        .trending(1, 35, Extended.IMAGES);
+            List<TrendingShow> trendingShows = SgTrakt.executeCall(app,
+                    traktShows.get().trending(1, 35, Extended.FULL),
+                    "get trending shows"
+            );
+            if (trendingShows != null) {
                 List<Show> shows = new LinkedList<>();
                 for (TrendingShow show : trendingShows) {
-                    if (show.show == null || show.show.ids == null
-                            || show.show.ids.tvdb == null) {
+                    if (show.show == null || show.show.ids == null || show.show.ids.tvdb == null) {
                         // skip if required values are missing
                         continue;
                     }
                     shows.add(show.show);
                 }
-                results = TraktAddLoader.parseTraktShowsToSearchResults(getContext(), shows);
                 // manually set the language to the current search language
-                for (SearchResult result : results) {
-                    result.language = language;
-                }
-            } catch (RetrofitError e) {
-                Timber.e(e, "Loading trending shows failed");
-                return buildResultFailure(getContext(), R.string.trakt_error_general);
+                results = TraktAddLoader.parseTraktShowsToSearchResults(getContext(), shows,
+                        language);
+                return buildResultSuccess(results, R.string.add_empty);
+            } else {
+                return buildResultFailure(R.string.trakt);
             }
         } else {
             // have a query?
             // search trakt (has better search) when using English
             // use TheTVDB search for all other (or any) languages
             if (DisplaySettings.LANGUAGE_EN.equals(language)) {
-                try {
-                    List<com.uwetrottmann.trakt.v2.entities.SearchResult> traktResults
-                            = ServiceUtils.getTraktV2(getContext()).search()
-                            .textQuery(query, Type.SHOW, null, 1, 30);
-
+                List<com.uwetrottmann.trakt5.entities.SearchResult> searchResults
+                        = SgTrakt.executeCall(app,
+                        traktSearch.get().textQuery(query, Type.SHOW, null, 1, 30),
+                        "search shows"
+                );
+                if (searchResults != null) {
                     List<Show> shows = new LinkedList<>();
-                    for (com.uwetrottmann.trakt.v2.entities.SearchResult result : traktResults) {
+                    for (com.uwetrottmann.trakt5.entities.SearchResult result : searchResults) {
                         if (result.show == null || result.show.ids == null
                                 || result.show.ids.tvdb == null) {
                             // skip, TVDB id required
@@ -118,62 +110,65 @@ public class TvdbAddLoader extends GenericSimpleLoader<TvdbAddLoader.Result> {
                         shows.add(result.show);
                     }
 
-                    results = TraktAddLoader.parseTraktShowsToSearchResults(getContext(), shows);
                     // manually set the language to English
-                    for (SearchResult result : results) {
-                        result.language = DisplaySettings.LANGUAGE_EN;
-                    }
-                } catch (RetrofitError e) {
-                    Timber.e(e, "Searching show failed");
-                    return buildResultFailure(getContext(), R.string.search_error);
+                    results = TraktAddLoader.parseTraktShowsToSearchResults(getContext(),
+                            shows, DisplaySettings.LANGUAGE_EN);
+                    return buildResultSuccess(results, R.string.no_results);
+                } else {
+                    return buildResultFailure(R.string.trakt);
                 }
             } else {
                 try {
                     if (TextUtils.isEmpty(language)) {
                         // use the v1 API to do an any language search not supported by v2
-                        results = TheTVDB.searchShow(getContext(), query, null);
+                        results = TvdbTools.getInstance(app).searchShow(query, null);
                     } else {
-                        results = TheTVDB.searchSeries(getContext(), query, language);
+                        results = TvdbTools.getInstance(app).searchSeries(query, language);
                     }
-                    markLocalShows(getContext(), results);
+                    markLocalShows(results);
+                    return buildResultSuccess(results, R.string.no_results);
                 } catch (TvdbException e) {
                     Timber.e(e, "Searching show failed");
-                    return buildResultFailure(getContext(), R.string.search_error);
                 }
+                return buildResultFailure(R.string.tvdb);
             }
         }
-
-        return buildResultSuccess(results, R.string.no_results);
     }
 
-    private static void markLocalShows(Context context, @Nullable List<SearchResult> results) {
-        HashSet<Integer> localShows = ShowTools.getShowTvdbIdsAsSet(context);
+    private void markLocalShows(@Nullable List<SearchResult> results) {
+        SparseArrayCompat<String> localShows = ShowTools.getShowTvdbIdsAndPosters(getContext());
         if (localShows == null || results == null) {
             return;
         }
 
         for (SearchResult result : results) {
-            result.overview = "(" + result.language + ") " + result.overview;
+            result.overview = String.format("(%s) %s", result.language, result.overview);
 
-            if (localShows.contains(result.tvdbid)) {
+            if (localShows.indexOfKey(result.tvdbid) >= 0) {
                 // is already in local database
                 result.isAdded = true;
+                // use the poster we fetched for it (or null if there is none)
+                result.poster = localShows.get(result.tvdbid);
             }
         }
     }
 
-    private static Result buildResultSuccess(List<SearchResult> results, int emptyTextResId) {
+    private Result buildResultSuccess(List<SearchResult> results, @StringRes int emptyTextResId) {
         if (results == null) {
             results = new LinkedList<>();
         }
-        return new Result(results, emptyTextResId, true);
+        return new Result(results, getContext().getString(emptyTextResId), true);
     }
 
-    private static Result buildResultFailure(Context context, int emptyTextResId) {
+    private Result buildResultFailure(@StringRes int serviceResId) {
         // only check for network here to allow hitting the response cache
-        if (!AndroidUtils.isNetworkConnected(context)) {
-            emptyTextResId = R.string.offline;
+        String emptyText;
+        if (AndroidUtils.isNetworkConnected(getContext())) {
+            emptyText = getContext().getString(R.string.api_error_generic,
+                    getContext().getString(serviceResId));
+        } else {
+            emptyText = getContext().getString(R.string.offline);
         }
-        return new Result(new LinkedList<SearchResult>(), emptyTextResId, false);
+        return new Result(new LinkedList<SearchResult>(), emptyText, false);
     }
 }

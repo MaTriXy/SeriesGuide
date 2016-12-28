@@ -1,22 +1,8 @@
-/*
- * Copyright 2014 Uwe Trottmann
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.battlelancer.seriesguide.backend;
 
+import android.content.Context;
 import com.battlelancer.seriesguide.BuildConfig;
+import com.battlelancer.seriesguide.util.Utils;
 import com.google.api.client.googleapis.services.AbstractGoogleClient;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
@@ -57,15 +43,18 @@ public class CloudEndpointUtils {
 
     /**
      * Updates the Google client builder to connect the appropriate server based on whether
-     * LOCAL_ANDROID_RUN is true or false.
+     * LOCAL_ANDROID_RUN is true or false and sets a custom user agent.
      *
      * @param builder Google client builder
      * @return same Google client builder
      */
-    public static <B extends AbstractGoogleClient.Builder> B updateBuilder(B builder) {
+    public static <B extends AbstractGoogleClient.Builder> B updateBuilder(Context context,
+            B builder) {
         if (LOCAL_ANDROID_RUN) {
             builder.setRootUrl(LOCAL_APP_ENGINE_SERVER_URL_FOR_ANDROID + "/_ah/api/");
         }
+        // used for user agent
+        builder.setApplicationName("SeriesGuide " + Utils.getVersion(context));
 
         // only enable GZip when connecting to remote server
         final boolean enableGZip = builder.getRootUrl().startsWith("https:");

@@ -17,6 +17,7 @@
     <attr name="sgColorBackgroundDrawer" format="reference|color" />
     <attr name="sgColorNavDrawerIcon" format="reference" />
     <attr name="sgColorNavDrawerText" format="reference" />
+    <attr name="sgColorShadow" format="reference|color" />
 
     <!-- Color Arrays -->
     <attr name="colorsProgressBar" format="reference" />
@@ -31,21 +32,17 @@
     <attr name="drawableCheckin" format="reference" />
     <attr name="drawableCollect" format="reference" />
     <attr name="drawableCollectAll" format="reference" />
-    <attr name="drawableDivider" format="reference" />
+    <attr name="drawableComments" format="reference" />
     <attr name="drawableDropdown" format="reference" />
     <attr name="drawableFilter" format="reference" />
-    <attr name="drawableHelp" format="reference" />
+    <attr name="drawableLanguage" format="reference" />
     <attr name="drawableLink" format="reference" />
     <attr name="drawableList" format="reference" />
-    <attr name="drawableMovie" format="reference" />
-    <attr name="drawableSettings" format="reference" />
     <attr name="drawableShare" format="reference" />
     <attr name="drawableSkip" format="reference" />
     <attr name="drawableStar" format="reference" />
     <attr name="drawableStar0" format="reference" />
-    <attr name="drawableStats" format="reference" />
     <attr name="drawableTraktHeart" format="reference" />
-    <attr name="drawableTv" format="reference" />
     <attr name="drawableWatch" format="reference" />
     <attr name="drawableWatchAll" format="reference" />
     <attr name="drawableWatched" format="reference" />
