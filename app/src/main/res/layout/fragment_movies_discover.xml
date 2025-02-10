@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefreshLayoutMoviesDiscover"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Larger top padding to space out links from toolbar. -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMoviesDiscover"
+        style="@style/Widget.SeriesGuide.RecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingLeft="@dimen/grid_item_margin_horizontal"
+        android:paddingTop="8dp"
+        android:paddingRight="@dimen/grid_item_margin_horizontal"
+        android:paddingBottom="@dimen/grid_item_margin_vertical"
+        tools:listitem="@layout/item_movie" />
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

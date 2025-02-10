@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.BaseSeriesGuide.Dark" parent="Theme.Material3.Dark.NoActionBar">
+
+        <!-- All customizations that are SPECIFIC to API-level 27 go here. -->
+
+        <!-- Not used in most of the app since drawing edge-to-edge. -->
+        <!-- Copy from v23\themes.xml -->
+        <item name="android:statusBarColor">@color/md_theme_dark_surfaceContainer</item>
+        <!-- Note: nav bar color needs to be opaque! -->
+        <item name="android:navigationBarColor">@color/md_theme_dark_surfaceContainer</item>
+
+    </style>
+
+    <style name="Theme.BaseSeriesGuide.Light" parent="Theme.Material3.Light.NoActionBar">
+
+        <!-- All customizations that are SPECIFIC to API-level 27 go here. -->
+
+        <!-- Not used in most of the app since drawing edge-to-edge. -->
+        <!-- Copy from v23\themes.xml -->
+        <item name="android:statusBarColor">@color/md_theme_light_surfaceContainer</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Note: nav bar color needs to be opaque! -->
+        <!-- Use white-ish to reduce burn-in on OLED displays -->
+        <item name="android:navigationBarColor">@color/md_theme_light_surfaceContainer</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+    </style>
+
+</resources>

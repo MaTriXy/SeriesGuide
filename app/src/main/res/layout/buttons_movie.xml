@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- Copyright 2014-2024 Uwe Trottmann -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:showIn="@layout/fragment_movie">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/buttons_min_height"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonMovieWatched"
+            style="@style/Widget.SeriesGuide.Button.MediaItem"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_watch_black_24dp"
+            android:text="@string/action_watched" />
+
+        <Button
+            android:id="@+id/buttonMovieWatchlisted"
+            style="@style/Widget.SeriesGuide.Button.MediaItem"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_list_add_white_24dp"
+            android:text="@string/watchlist_add" />
+
+        <Button
+            android:id="@+id/buttonMovieCollected"
+            style="@style/Widget.SeriesGuide.Button.MediaItem"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_collect_black_24dp"
+            android:text="@string/action_collection_add" />
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerMovieStreamingSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_button"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="@dimen/padding_button">
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="buttonMovieCheckIn,buttonMovieTrailer,buttonMovieCollection,buttonMovieSimilar,buttonMovieShare,buttonMovieCalendar,buttonMovieReleaseDates,buttonMovieComments,buttonMovieStreamingSearch,buttonMovieStreamingSearchInfo"
+            app:flow_horizontalBias="0"
+            app:flow_horizontalGap="4dp"
+            app:flow_horizontalStyle="packed"
+            app:flow_wrapMode="chain"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonMovieCheckIn"
+            style="@style/Widget.SeriesGuide.Button.Outlined.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/checkin"
+            android:text="@string/checkin"
+            app:icon="@drawable/ic_checkin_black_24dp"
+            app:iconGravity="start" />
+
+        <Button
+            android:id="@+id/buttonMovieTrailer"
+            style="@style/Widget.SeriesGuide.Button.Outlined.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/trailer"
+            app:icon="@drawable/ic_movie_white_24dp"
+            app:iconGravity="start" />
+
+        <Button
+            android:id="@+id/buttonMovieCollection"
+            style="@style/Widget.SeriesGuide.Button.Outlined.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/default_padding"
+            app:icon="@drawable/ic_search_white_24dp"
+            app:iconGravity="start"
+            tools:text="Some Very Long Collection Name" />
+
+        <Button
+            android:id="@+id/buttonMovieSimilar"
+            style="@style/Widget.SeriesGuide.Button.Outlined.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/default_padding"
+            android:text="@string/action_similar"
+            app:icon="@drawable/ic_search_white_24dp"
+            app:iconGravity="start" />
+
+        <Button
+            android:id="@+id/buttonMovieShare"
+            style="@style/Widget.SeriesGuide.Button.Outlined.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/share"
+            app:icon="@drawable/ic_share_white_24dp"
+            app:iconGravity="start" />
+
+        <Button
+            android:id="@+id/buttonMovieCalendar"
+            style="@style/Widget.SeriesGuide.Button.Outlined.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/addtocalendar"
+            app:icon="@drawable/ic_event_control_24dp"
+            app:iconGravity="start" />
+
+        <Button
+            android:id="@+id/buttonMovieReleaseDates"
+            style="@style/Widget.SeriesGuide.Button.Outlined.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_release_dates"
+            app:icon="@drawable/ic_calendar_month_control_24dp"
+            app:iconGravity="start" />
+
+        <Button
+            android:id="@+id/buttonMovieComments"
+            style="@style/Widget.SeriesGuide.Button.Outlined.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comments"
+            app:icon="@drawable/ic_forum_black_24dp"
+            app:iconGravity="start" />
+
+        <Button
+            android:id="@+id/buttonMovieStreamingSearch"
+            style="@style/Widget.SeriesGuide.Button.Outlined.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/action_stream"
+            android:text="@string/action_stream"
+            app:icon="@drawable/ic_play_arrow_black_24dp" />
+
+        <!-- Note: can not wrap in LinearLayout to keep close to search button as it would
+             grow out of bounds if long. -->
+        <Button
+            android:id="@+id/buttonMovieStreamingSearchInfo"
+            style="@style/Widget.SeriesGuide.Button.IconButton.Outlined"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:contentDescription="@string/action_stream_settings"
+            android:insetLeft="0dp"
+            android:insetRight="8dp"
+            app:icon="@drawable/ic_settings_control_24dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

@@ -1,85 +1,76 @@
-Contributing
-============
+# Contributing
 
-**Note:** This project is in the [public domain](UNLICENSE). If you contribute any [non-trivial][15]
-patches or translations the following applies:
+ℹ️ This work is licensed under the [Apache License 2.0](LICENSE.txt).
+If you contribute any
+[non-trivial](http://www.gnu.org/prep/maintain/maintain.html#Legally-Significant)
+patches or translations make sure you have read it and agree with it.
 
-    I dedicate any and all copyright interest in this software to the
-    public domain. I make this dedication for the benefit of the public at
-    large and to the detriment of my heirs and successors. I intend this
-    dedication to be an overt act of relinquishment in perpetuity of all
-    present and future rights to this software under copyright law.
+**Would you like to contribute code?**
 
-#### Would you like to contribute code?
+ℹ️ If you want to contribute larger changes, please talk to me first (comment on a related issue
+or create one). Otherwise, it is likely I won't accept your merge request.
 
-1. [Fork SeriesGuide][11]. See further setup instructions below.
-2. Create a new branch ([using GitHub][14] or the command `git checkout -b descriptive-branch-name dev`) and make [great commits + messages][10].
-3. [Start a pull request][6]. Reference [existing issues][7] when possible.
+1. [Fork SeriesGuide](https://github.com/UweTrottmann/SeriesGuide/fork) and clone your fork.
+2. See the notes about [building](#building) the app below. Take the [guidelines of this project](/docs/guidelines.md) into account.
+3. Create a new branch ([using GitHub](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/)
+   or the command `git checkout -b descriptive-branch-name dev`).
+4. Make [great commits](http://robots.thoughtbot.com/post/48933156625/5-useful-tips-for-a-better-commit-message). For non-trivial changes, add a copyright line at the top of the files you edited.
+5. [Start a pull request](https://github.com/UweTrottmann/SeriesGuide/compare) and reference [issues](https://github.com/UweTrottmann/SeriesGuide/issues) if needed.
 
-#### No code!
-* You can [get help][12].
-* You can [suggest features][9].
-* You can [discuss a bug][7] or if it was not reported yet [submit a bug][8].
-* You can [translate strings][4].
+**No code!**
 
-Repository structure
---------------------
+- You can [discuss or submit bug reports](https://github.com/UweTrottmann/SeriesGuide/issues).
+- You can [suggest features](https://discuss.seriesgui.de).
+- You can [translate the app](https://crowdin.com/project/seriesguide-translations).
 
-- `dev`, the main development and [test release][2] branch.
-- `master`, the stable release branch. Always the latest [stable version][1] of SeriesGuide.
+## Building
 
-Setup
------
+- `dev` contains the latest changes.
+- `main` contains the latest stable version.
 
-This project is built with Gradle, the [Android Gradle plugin][3] and uses jar and Maven dependencies.
+To get started:
 
-1. Clone this repository inside your working folder. I suggest only cloning the latest revision, like `git clone --depth=1 https://github.com/UweTrottmann/SeriesGuide.git`.
-2. Create the `gradle.properties` and `fabric.properties` files as noted below.
-3. Android Studio: import the `settings.gradle` file.
+1. Import the `SeriesGuide` folder as a new project in Android Studio.
+2. Select the `pureDebug` build variant (defined in `app/build.gradle`). 
+   [Learn about product flavors](https://developer.android.com/studio/build/build-variants.html#product-flavors).
 
-Before your first build create `gradle.properties` in the root directory (where `settings.gradle` is) and add the following values. They do not need to be valid if you do not plan to use that functionality:
+### Debug
 
+Debug builds should just work.
+
+### TMDB, Trakt
+
+To add shows or movies you need to create an API key for [TMDB](https://www.themoviedb.org/settings/api)
+and OAuth credentials for [Trakt](https://trakt.tv/oauth/applications).
+Place them in `secret.properties` in the project directory (where `settings.gradle` is):
+
+```text
+SG_TMDB_API_KEY=<your api key>
+SG_TRAKT_CLIENT_ID=<your trakt client id>
+SG_TRAKT_CLIENT_SECRET=<your trakt client secret>
 ```
-# Credentials to publish the API jar
-ossrhUsername=<your sonatype username>
-ossrhPassword=<your sonatype password>
 
-# API keys for integrated services
-TMDB_API_KEY=<your api key>
-TRAKT_CLIENT_ID=<your trakt client id>
-TRAKT_CLIENT_SECRET=<your trakt client secret>
-TVDB_API_KEY=<your api key>
+### Release
 
+To release some additional `secret.properties` values might be necessary:
+
+```text
 # Play Store in-app billing public key
-IAP_KEY_A=dummy
-IAP_KEY_B=dummy
-IAP_KEY_C=dummy
-IAP_KEY_D=dummy
+SG_IAP_KEY_A=<keypart>
+SG_IAP_KEY_B=<keypart>
+SG_IAP_KEY_C=<keypart>
+SG_IAP_KEY_D=<keypart>
+
+# Credentials to publish the API jar
+SONATYPE_NEXUS_USERNAME=<your sonatype username>
+SONATYPE_NEXUS_PASSWORD=<your sonatype password>
 ```
 
-Also create `SeriesGuide/fabric.properties` for [Crashlytics][13]. You may use the dummy values below:
+#### Crashlytics
 
-```
-# crashlytics dummy values
-apiSecret=0000000000000000000000000000000000000000000000000000000000000000
-apiKey=0
-```
+To use [Crashlytics](https://firebase.google.com/docs/crashlytics) download and
+add your `app/google-services.json`.
 
-Now build any variant of the **free flavor**, for developing probably `freeDebug` (flavor + build type, see [instructions about product flavors][5]) defined in `SeriesGuide/build.gradle`.
+#### Amazon Appstore public key
 
- [1]: https://seriesgui.de
- [2]: https://github.com/UweTrottmann/SeriesGuide/wiki/Beta
- [3]: http://tools.android.com/tech-docs/new-build-system/user-guide
- [4]: https://crowdin.com/project/seriesguide-translations
- [5]: http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Product-flavors
- [6]: https://github.com/UweTrottmann/SeriesGuide/compare
- [7]: https://github.com/UweTrottmann/SeriesGuide/issues
- [8]: https://github.com/UweTrottmann/SeriesGuide/issues/new
- [9]: https://seriesguide.uservoice.com
- [10]: http://robots.thoughtbot.com/post/48933156625/5-useful-tips-for-a-better-commit-message
- [11]: https://github.com/UweTrottmann/SeriesGuide/fork
- [12]: https://seriesgui.de/help
- [13]: https://get.fabric.io/crashlytics
- [14]: https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/
- [15]: http://www.gnu.org/prep/maintain/maintain.html#Legally-Significant
- 
+For in-app purchases need to add `AppstoreAuthenticationKey.pem` into `app/src/amazon/assets`.

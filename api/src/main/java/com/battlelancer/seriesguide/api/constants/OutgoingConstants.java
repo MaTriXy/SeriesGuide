@@ -1,5 +1,11 @@
+// Copyright 2014 Uwe Trottmann
+// SPDX-License-Identifier: Apache-2.0
+
 package com.battlelancer.seriesguide.api.constants;
 
+/**
+ * Internal constants, do not use.
+ */
 public interface OutgoingConstants {
 
     String ACTION_PUBLISH_ACTION = "com.battlelancer.seriesguide.api.action.PUBLISH_ACTION";

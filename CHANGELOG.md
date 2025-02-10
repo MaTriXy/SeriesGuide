@@ -1,2839 +1,1512 @@
-<a name="top"></a>
+# Release notes
 
-Release notes
-=============
+🌟 = New.  
+🔧 = Improved or tweaked.  
+🔨 = Resolved or fixed.  
+📝 = Notable change.
 
-All dates are in the European Central timezone.
+Releases marked with 🧪 (or previously with the "beta" suffix) were released on
+[the preview program](https://www.seriesgui.de/help/how-to/basics/preview) only.
 
-Version 35
-----------
-*(in development)*
+## Version 2024.5
 
-#### 35-beta2
-*(2016-12-16)*
+* 🌟 Shows: add a note to a show, synced with SeriesGuide Cloud or Trakt (VIP only).
+* 🌟 Movies: add link to all release dates.
+* 🔧 Shows: increase resolution of episode images.
 
-* TWEAK Display status message while trakt or Cloud network action is processing for movies.
-* TWEAK Display localized string for release country.
-* FIX Crash when trying to upgrade the database, but it is not writable.
-* NOTE Latest translations from crowdin.
+### 2024.5.4 - 2024-12-13
 
-#### 35-beta1
-*(2016-12-09)*
+* 🔨 Trakt: retry if show not yet in Trakt profile failed to upload during initial sync.
+* 📝 Latest user interface translations from Crowdin.
 
-* TWEAK Display status message while trakt or Cloud network action is processing.
-* NOTE Update HTTP networking library.
-* NOTE Latest translations from crowdin.
+### 2024.5.3 - 2024-12-11 🧪
 
-Version 34
-----------
-*(2016-12-01)*
+* 🔧 Shows: revert to search symbol for primary button on discover screen.
+* 🔧 Lists: ask for confirmation before deleting a list, actually call it delete instead of "just"
+  remove.
+* 📝 Latest user interface translations from Crowdin.
 
-* Change show sort options: sort by title, latest or oldest next episode, last watched show or remaining number of episodes.
-* Display the remaining number of episodes right in the shows list.
-* Add separate language selector for movies, supports all languages of The Movie Database.
-* For Android 7.1: add round launcher icon, launcher shortcuts.
+### 2024.5.2 - 2024-12-04 🧪
 
-#### 34.2
-*(2016-12-27)*
+* 🔧 Shows: when viewing the stream or purchase provider filters, the reset button is shown as
+  disabled when no provider is selected. Also tabs are renamed and display icons to differentiate
+  filter from sort options.
+* 🔨 Show scrollbars for show filter and sort options.
+* 🔧 Use common "Sort by" action name.
+* 🔧 Android 15: turn predictive back animation back on after more issues are resolved.
+* 📝 Latest user interface translations from Crowdin.
 
-* FIX Crash on some Android 4.0 devices which are missing a standard database feature introduced for search.
+### 2024.5.1 - 2024-11-21 🧪
 
-#### 34.1
-*(2016-12-19)*
+* 🌟 Shows: add a note to a show, synced with SeriesGuide Cloud or Trakt (VIP only).
+* 🔧 Shows: increase resolution of episode images.
+* 🔧 Shows: also use plus symbol for button on discover screen to be consistent.
 
-* TWEAK Display localized string for release country.
-* FIX Crash when trying to upgrade the database, but it is not writable.
+### 2024.5.0 - 2024-11-06 🧪
 
-#### 34
-*(2016-12-01)*
+* 🌟 Movies: add link to all release dates.
+* 🔧 Overview: use local number format for absolute episode number.
+* 📝 Latest user interface translations from Crowdin.
 
-* NOTE Latest translations from crowdin.
+## Version 2024.4
 
-#### 34-beta4
-*(2016-11-25)*
+* 🌟 Movies: display the collection (like a movie series) a movie is in, support to view the 
+  collection.
+* 🔧 Shows: display cast and crew of all seasons instead of just the latest one.
+* 🔧 Episodes: in list view, can again set watched with one tap.
+* 🔧 Display more options of list items on touch and hold and right click (for example in Samsung
+  Dex) as well.
 
-* TWEAK Last watched sort order is initialized with data from recently watched episodes in Now tab.
-* TWEAK Display message if database is corrupted, advice to backup, re-install and restore.
-* FIX Display episodes released before 1970 in infinite calendar.
-* FIX Crash in list widget settings.
-* NOTE Latest translations from crowdin.
+### 2024.4.6 - 2024-11-01
 
-#### 34-beta3
-*(2016-11-18)*
+* 🔨 Trakt: do not crash when opening Connect Trakt screen on Android 6 or older.
+* 📝 Latest user interface translations from Crowdin.
 
-* FEATURE Changed show sort options. Shows can now be sorted by title, latest or oldest next episode, last watched or remaining number of episodes.
-* FEATURE Support new show sort options for lists and widgets.
-* TWEAK In the show list and in lists, shows display the remaining number of released, unwatched episodes right on their card.
-* TWEAK Display spoiler setting instead of language setting on getting started card.
-* FIX Trim leading and trailing white spaces from show titles.
-* NOTE Latest translations from crowdin.
+### 2024.4.5 - 2024-10-23
 
-#### 34-beta2
-*(2016-11-04)*
+* 🔧 Trakt: use new logo.
+* 📝 Latest user interface translations from Crowdin.
 
-* TWEAK Add separate language selector for movies, supports all languages from TMDB.
-* TWEAK Show better error messages if loading shows and movies fails.
-* TWEAK Show better error message in add dialog if show does not exist on TheTVDB.
+### 2024.4.4 - 2024-10-16 🧪
 
-#### 34-beta1
-*(2016-10-28)*
+* 🔧 Episodes: in list view, can again set watched with one tap.
+* 🔧 Calendar: add discoverable more options button on items, does the same thing as touch and hold.
+* 🔧 Display more options of list items on touch and hold and right click (for example in Samsung
+  Dex) as well.
+* 🔧 Where touch and hold copies text, support right click to copy as well.
+* 🔧 Add manual sync action back to show Upcoming, Recent tabs, new to lists and movie Watchlist,
+  Collection, Watched tabs.
+* 🔧 Seasons: move skipped and collection indicators to the right to work better with multi-line
+  status text.
+* 🔨 Show overview: do not display no spoiler warning if there is no image.
+* 🔨 Consistently style more options menus.
+* 🔨 Episodes: can use watched button also after dismissing the popup menu.
+* 🔨 Consistently show tooltips for actions.
+* 🔨 Discover: after (dis)connecting Trakt, Trakt features get hidden/shown on refresh.
+* 📝 Latest user interface translations from Crowdin.
 
-* TWEAK Use an image caching server, currently only for images from TheTVDB in the show search screen.
-* TWEAK Add round launcher icon.
-* TWEAK Add launcher shortcuts to "Add show", "Lists" and "Movies".
-* TWEAK Improvements to search index generation (use FTS4 instead of FTS3), should require less disk space.
-* FIX Text overlaps other content if movie title is very long.
-* FIX Handle duplicates when adding episodes while adding or updating a show.
+### 2024.4.3 - 2024-09-13 🧪
 
-Version 33
-----------
-*(2016-10-20)*
+* 🔧 Show details: display full show title, touch and hold to copy it to clipboard (like for episode
+  and movie titles).
+* 🔧 Show details: move shortcut and search buttons to top buttons.
+* 🔧 Overview/Episode details: add more obvious no spoiler warning where the image would be.
+* 🔨 Android 14: turn off predictive back animation due to unresolved issues.
+* 📝 Latest user interface translations from Crowdin.
 
-* "Prevent spoilers" option in Settings > Basics. If enabled, episode details are hidden until an episode is watched.
-* Extensions support for movies. See https://seriesgui.de/api for details.
-* Share TheTVDB links to SeriesGuide to add a show.
-* "Set watched" action in single episode notifications.
-* All changes at https://git.io/sgchanges
+### 2024.4.2 - 2024-08-09 🧪
 
-#### 33
-*(2016-10-20)*
+* 🔧 Shows: display cast and crew of all seasons instead of just the latest one.
+* 📝 Latest user interface translations from Crowdin.
 
-* FIX Crash when taping on item in Movies Now tab.
-* NOTE Latest translations from crowdin.
+### 2024.4.1 - 2024-08-07 🧪
 
-#### 33-beta5
-*(2016-10-13)*
+* 🔨 Upcoming/Recent: do not crash when scrolling and data changes.
+* 📝 Latest user interface translations from Crowdin.
 
-* TWEAK trakt will stop supplying images end of October. This affects the Now tabs and history
-  screens, as well as the search tabs for shows. For shows, SeriesGuide will fall back to a TheTVDB
-  poster. For movies, images from trakt have been removed.
-* NOTE Latest translations from crowdin.
+### 2024.4.0 - 2024-08-02 🧪
 
-#### 33-beta4
-*(2016-10-06)*
+* 🌟 Movies: display the collection (like a movie series) a movie is in, view the collection.
+* 📝 Latest user interface translations from Crowdin.
 
-* TWEAK "Prevent spoilers" setting also applies to widgets.
-* FIX Revert Android Support library version to avoid rare crash.
-* NOTE Latest translations from crowdin.
+## Version 2024.3
 
-#### 33-beta3
-*(2016-09-30)*
+* 🔧 Shows: move Discover screen to top-level.
+* 🌟 Shows: add permanent year and language filters to Discover tab.
+* 🌟 Discover: add current year option to year filter.
+* 🔧 Shows: display all search results, support to filter by release year.
+* 🔧 Movies: move Watchlist next to Discover so order is similar to Shows screen.
+* 🌟 Trakt: support to edit and delete (new) comments.
+* 🌟 Trakt: support to remove a rating.
 
-* FEATURE Add "Prevent spoilers" option in Settings. If enabled, episode details are hidden until
-  the episode is watched.
-* TWEAK Add "Delete" option to show overview menu.
-* TWEAK Add "Set watched" action to single episode notifications.
-* TWEAK Show "Check in" as a separate full-width button. Hide it if trakt is not connected.
-* NOTE Latest translations from crowdin.
+### 2024.3.8 - 2024-08-29
 
-#### 33-beta2
-*(2016-09-28)*
+* 🔨 Android 14: turn off predictive back animation due to unresolved issues.
+* 🔨 Backups: do not crash due to obscure errors when restoring.
 
-* FIX Crash when opening show overview or movie details on Android 4.4 and below. New vector icons
-  are not supported without some tweaks.
-* FIX Crash in movie details when actions are loaded, but there is no view to attach them to.
+### 2024.3.7 - 2024-08-16
 
-#### 33-beta1
-*(2016-09-23)*
+* 🔨 Android 14: do not crash when updating from version 40 or older.
 
-* FEATURE Extensions support for movies. See https://seriesgui.de/api for details.
-* FEATURE Share TheTVDB links to SeriesGuide to add a show. For now, if no TheTVDB link is recognized,
-  the search field is filled with the shared text.
-* TWEAK Display language button right above show description. Easier to find and understand what it does.
-* NOTE Latest translations from crowdin.
+### 2024.3.6 - 2024-07-25
 
-Version 32
-----------
-*(2016-08-24)*
+* 📝 This version was released only on the Amazon Appstore.
+* 🔨 Amazon account and active purchases are correctly recognized again.
 
-* Various layout improvements, most notably for image sizes.
-* Remember last selected tab in Lists and Movies.
-* The list widget can now be reduced horizontally to 2 blocks.
-* Support for Android 7.0 (Nougat).
+### 2024.3.5 - 2024-07-18
 
-#### 32.1
-*(2016-08-25)*
+* 🔨 Widgets: content does not longer protrude from the widget.
+* 🔧 More: add link to what's new.
+* 🔧 Re-set remembered selected tab for shows, lists and movies.
+* 📝 Latest user interface translations from Crowdin.
 
-* FIX Dialogs have a white background, text is unreadable.
-* FIX Movie posters have slightly wrong size.
-* FIX Crash when trying to purchase subscription.
+### 2024.3.4 - 2024-07-12 🧪
 
-#### 32
-*(2016-08-24)*
+* 🔧 Android 15: turn on predictive back animation.
+* 🌟 Shows: add permanent year and language filters to Discover tab.
+* 🌟 Discover: add current year option to year filter.
+* 📝 Latest user interface translations from Crowdin.
 
-* TWEAK Remember last selected tab in Lists and Movies.
-* NOTE Support Android 7.0 (Nougat).
-* NOTE Latest translations from crowdin. Thanks to translators added Japanese and Tamil.
+### 2024.3.3 - 2024-07-04 🧪
 
-#### 32-beta3
-*(2016-08-13)*
+* 🔨 Calendar: do not crash when scrolling and data changes.
+* 🔨 Images: on Android 7.0 or older, images load correctly again.
+* 📝 Latest user interface translations from Crowdin.
 
-* NOTICE Started some architecture changes, let me know if you see issues with TVDb, trakt and TMDb integration.
-* TWEAK Match rating text styles throughout the app.
-* NOTICE Latest translations from crowdin.
+### 2024.3.2 - 2024-06-14 🧪
 
-#### 32-beta2
-*(2016-08-04)*
+* 🔧 Shows: move Discover tab first, drop add show action, add search action, rename Shows to Added.
+* 🔧 Movies: move Watchlist next to Discover so order is similar to Shows screen.
+* 🔧 Shows: restore search option on history and calendar tabs.
+* 🔧 Show search: add Add show action, passes search query if there is one.
+* 🔨 Discover: properly display no results or no connection messages.
+* 🔨 Lists: hide set watched action when there is no next episode.
+* 📝 Latest user interface translations from Crowdin.
 
-* TWEAK Many layout updates, most notably better image aspect ratios.
-* TWEAK Allow list widget to be reduced horizontally to 2 blocks.
-* NOTICE Latest translations from crowdin.
+### 2024.3.1 - 2024-06-07 🧪
 
-#### 32-beta1
-*(2016-07-08)*
+* 🔧 Shows: move Discover screen to top-level.
+* 🔧 Shows: display all search results, filter by release year.
+* 🔧 Crew: display directors and writers first, then in order of job title.
+* 📝 Latest user interface translations from Crowdin.
 
-* TWEAK Movie details include poster, including full screen poster view on clicking poster.
-* TWEAK When viewing a poster full screen display the low resolution version until the full version has loaded.
-* TWEAK Keyboard is hidden by default when showing comments.
-* TWEAK Improved dialog button sizes and stacking. Other layout and design tweaks.
-* FIX Do not show full screen poster if there is no poster.
-* FIX Show movie details if they are cached even if offline.
-* NOTICE Latest translations from crowdin.
+### 2024.3.0 - 2024-05-24 🧪
 
-Version 31
-----------
-*(2016-06-23)*
+* 🌟 Trakt ratings: support removing a rating.
+* 🌟 Trakt comments: edit and delete comments.
+* 🔨 Trakt comments: refresh will actually show the latest comments, including after posting one.
+* 📝 Latest user interface translations from Crowdin.
 
-* Faster and more reliable trakt watched and collected episode sync.
-* No "hour-past-midnight" correction for Netflix shows (would get moved by one day).
+## Version 2024.2
 
-#### 31.1
-*(2016-06-29)*
+* 🌟 Discover: add year and original language filters where possible.
+* 🌟 Ratings: display TMDB rating for shows. Tap rating to open TMDB or Trakt page.
+* 🔧 Display run time in hours and minutes.
 
-* NOTICE Latest translations from crowdin.
+### 2024.2.7 - 2024-07-05
 
-#### 31
-*(2016-06-23)*
+* 🔨 Images: on Android 7.0 or older, images load correctly again.
 
-* TWEAK Ask long time users for feedback.
-* TWEAK Fix cut-off card shadows in show overview.
-* NOTICE Latest translations from crowdin.
-
-#### 31-beta4
-*(2016-06-16)*
-
-* TWEAK No "hour-past-midnight" correction for Netflix shows (would get moved by one day).
-* TWEAK Display error if calculating statistics fails.
-* TWEAK Enable full auto backup on Android 6.0 (Marshmallow) and up.
-* FIX Correctly save trakt ratings for episodes.
-* FIX Correctly display show or episode opened via view intent from other apps.
-* NOTICE Latest translations from crowdin.
-
-#### 31-beta3
-*(2016-06-12)*
+### 2024.2.6 - 2024-05-17
 
-* FIX Crash when trying to refresh trakt access token.
+* 🔨 Discover: on older versions of Android, do not crash when rotating the screen.
+* 🔧 Discover: sort languages by top 5, then alphabetically.
 
-#### 31-beta2
-*(2016-06-10)*
+### 2024.2.5 - 2024-05-10
 
-* TWEAK Rewritten trakt watched and collected episode sync. Should be faster and more reliable.
-* TWEAK Show keyboard when opening search for a show or episode (not when trying to add a show).
-* TWEAK If available, show trakt user display name in trakt settings.
-* NOTICE Latest translations from crowdin.
+* 🔧 Mark some supporter-only features with stars. Drop X Pass link, not longer available for new users.
 
-#### 31-beta1
-*(2016-05-27)*
+### 2024.2.4 - 2024-05-03 🧪
 
-* TWEAK Add note if no translation of a movie description is available.
-* TWEAK Move person and movie links to new links menu item with distinct "explore" icon.
-* TWEAK Updated pricing for the "Unlock All Subscription". Note: "X Pass" pricing was updated as well.
-* TWEAK Reduced the size of the app.
-* NOTICE Latest translations from crowdin.
+* 🌟 Movies: add year and original language filter where possible for discover and search screens.
+* 🔧 Search: hide keyboard after submitting query.
 
-Version 30
-----------
-*(2016-05-06)*
+### 2024.2.3 - 2024-04-26 🧪
 
-* On phones: switch seasons from the top of the episode details screen.
-* Lists are synced with SeriesGuide Cloud.
-* In search screen: add option to add shows to trakt watchlist. Support removing shows from trakt watchlist.
+* 🌟 Ratings: display TMDB rating for shows and episodes. Tap rating to open TMDB or Trakt page.
+* 📝 Latest user interface translations from Crowdin.
+* 📝 Change to year-based versioning scheme.
 
-#### 30.0.1
-*(2016-05-11)*
+### 73.0.2 - 2024-04-19 🧪
 
-* FIX Send automatically created first list to Cloud as well.
-* TWEAK "Images via Wi-Fi only" is disabled by default again.
+* 🌟 Discover: add new episodes screen with year and language filters, similar to popular shows screen.
+* 🔧 Stream and purchase filter: sort providers by name.
+* 🔧 History: sort Trakt friends by latest activity first.
+* 🔨 Comments: do not display misleading "Could not modify data" message when commenting on a show.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 30
-*(2016-05-06)*
+### 73.0.1 - 2024-04-12 🧪
 
-* NOTICE Latest translations from crowdin.
+* 🔧 Display run time in hours and minutes.
+* 🔧 Calendar: avoid changing scroll position after viewing details or refreshing data.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 30-beta5
-*(2016-04-29)*
+### 73.0.0 - 2024-04-05 🧪
 
-* FEATURE Lists are synced with SeriesGuide Cloud.
-* TWEAK When adding a show the chosen language is synced with Cloud.
-* FIX Do not set the default language to English when exporting shows. Instead specify no language,
-  so when importing the user preferred language is used.
-* NOTICE Latest translations from crowdin.
+* 🌟 Year and original language filter for popular shows screen.
 
-#### 30-beta4
-*(2016-04-22)*
+## Version 72
 
-* FEATURE In search screen: add option to add shows to trakt watchlist. Support removing shows from
-  trakt watchlist.
-* FIX Potential fix of search table creation failing in some situations.
-* FIX Crash due to broken Persian and Polish translation.
-* NOTICE Latest translations from crowdin.
+* 🌟 Shows: stream or purchase filter. See which shows are available on a service.
+  After updating it may take a day or so for filter options to appear.
+* 🔧 Seasons: show total number of episodes (excluding specials), show indicator if episodes are in
+  collection, show count of skipped and in collection.
+* 🔧 Lists: quickly set next episode watched.
+* 🔧 Episodes: allow to re-watch from episode list.
+* 🔨 Overview: prevent skipping already watched episodes.
+* 🔨 History: add entries when marking multiple episodes as watched.
 
-#### 30-beta3
-*(2016-04-15)*
+### 72.0.8 - 2024-04-24
 
-* FEATURE On phones: switch seasons from the top of the episode details screen.
-* TWEAK If a show title and description are not translated, fall back to the default translation and
-  add a note to the description that no translation is available.
-* TWEAK Allow any list name as long as it is not empty or the same as an existing list. No more
-  special or latin character restrictions.
-* FIX Crash when viewing About on devices with Android 5.1 or older.
-* FIX Recent search suggestions drop down is colored gray on the light theme.
-* NOTICE Latest translations from crowdin.
+* 🔨 Resolve crash when viewing show or movie details and cast or crew members failed to load.
 
-#### 30-beta2
-*(2016-04-09)*
+### 72.0.7 - 2024-03-22
 
-* TWEAK Use TVDB API v2 to search for shows (non-English, not any), fetch show info (not episodes).
-  If no show title and overview translation exists English will no longer be used as a fallback.
-  A placeholder title and overview is show instead.
-* FIX Database error message crashes the app.
-* NOTICE Latest translations from crowdin.
+* 🔨 Do not show copied to clipboard notification if Android already does.
+* 🔨 Seasons: do not say all episodes are watched if all are skipped.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 30-beta1
-*(2016-03-17)*
+### 72.0.6 - 2024-03-15 🧪
 
-* TWEAK Offer to open shows in add dialog that are already added to SeriesGuide.
-* TWEAK Display pieces of information right in the root settings screen. Like the current supporter
-  state or signed-in account names.
-* TWEAK Clean up the first run experience. Do not show the nav drawer, show the auto backup
-  permission warning only after Getting Started is dismissed.
-* TWEAK Display placeholder in search screen if posters are not or could not be loaded.
-* NOTICE Latest translations from crowdin.
+* 🔧 Seasons: different indicators if only some or all episodes are skipped or in collection.
+* 🔧 Lists: add option to watch next episode, update to shows more options menu.
+* 🔧 Lists: replace favorite with set next watched button to match Shows section.
+* 🔨 Overview: prevent skipping already watched episodes which would remove existing number of times watched.
+* 🔧 Episodes: allow to re-watch from episode list, integrate all options into watched button.
+* 🔧 Overview: display "Special Episodes" instead of "Season 0" for the next episode as well.
+* 📝 Latest user interface translations from Crowdin.
 
-Version 29 *(2016-03-11)*
------------------------------
+### 72.0.5 - 2024-03-08 🧪
 
-* Combined search and "Add show" screen.
-* Improved layout in comments and movie details on large tablets.
-* Display episode number in notifications and DashClock extension.
-* List widget updates immediately when marking watched, in-app settings affecting it change.
-* SeriesGuide Cloud support on Amazon version if Google Play Services are available.
+* 🔧 Seasons: show total number of episodes (excluding specials), show indicator if episodes are in
+  collection, show count of skipped and in collection.
+* 🔧 Add history entry when marking multiple episodes as watched.
+* 🔨 Android 5: use correct color for show status and stream search configure button.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 29.0.4 *(2016-03-18)*
+### 72.0.4 - 2024-02-29 🧪
 
-* FIX Database error message crashes the app.
+* 🔧 Help: add link to new Discord server, make actions more understandable (like "Send email"
+  instead of "Send feedback").
+* 🔨 Stream or purchase filter: support using system colors on Android 12 and newer.
 
-#### 29.0.3 *(2016-03-16)*
+### 72.0.3 - 2024-02-29 🧪
 
-* FIX Do not crash on some common database problems and display a message instead.
-* FIX Crash when starting purchase of subscription if inventory has not been checked.
-* FIX Widget providers crash if the received context or intent are null.
+* 🔨 Sync: properly handle interruptions by the system again.
 
-#### 29.0.2 *(2016-03-12)*
+### 72.0.2 - 2024-02-23 🧪
 
-* FIX Season and episode number are flipped in DashClock extension.
+* 🔨 Stream or purchase filter: make it readable in dark mode.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 29.0.1 *(2016-03-11)*
+### 72.0.1 - 2024-02-23 🧪
 
-* FIX Use correct SKU to validate Amazon subscription purchases.
-* FIX Crash when trying to purchase with Google Play, but billing service is not connected any longer.
-* FIX Do not leak activity with connectivity manager (androidutils update).
+* 🌟 Add stream or purchase filter for shows: see which shows are available on a service.
+  After updating it may take a day or so for filter options to appear.
+* 🔧 Discover: use check boxes for stream or purchase filter.
+* 🌟 Movies: option to create a calendar event for to be released movies.
 
-#### 29 *(2016-03-10)*
+### 72.0.0 - 2024-02-09 🧪
 
-* FEATURE Enable SeriesGuide Cloud on Amazon version if the device has Google Play Services.
-* FIX Price of subscription not displayed on Amazon version.
-* NOTICE Latest translations from crowdin.
+* 🔧 Display a separate notification for each episode, including title and description if available
+  and its own actions.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 29-beta3 *(2016-03-03)*
+## Version 71
 
-* TWEAK Move appearance settings to root. Move links in about section to Advanced, link directly to About page.
-* TWEAK Use HTTPS for SeriesGuide website links, including the help page.
-* FIX Movie card layout padding is broken in watchlist and collection.
-* FIX Potential improvements to list widget not updating.
-* NOTICE Latest translations from crowdin.
+* 🌟 Shows: link to trailers, if available.
+* 🔨 Shows/Movies: repair Metacritic search links.
+* 🔨 Shows: do not display all episodes are collected, if there are none collected. Also consider all
+  episodes, not just released ones. This now matches with what episodes the collect all or none
+  buttons change.
 
-#### 29-beta2
-*(2016-02-18)*
+### 71.0.3 - 2024-01-12
 
-* TWEAK Update list widget immediately when setting episodes watched.
-* TWEAK Display episode number in notifications and DashClock extension.
-* FIX Crash due to incorrect Lithuanian translation.
-* NOTICE Latest translations from crowdin.
+* 🔧 Shows: adjust edit time dialog to avoid buttons moving around when changing values.
+* 🔧 Shows: make switching between episode pages fast again.
+* 🔨 Update Metacritic search links.
+* 🔧 Add acknowledgement messages for actions that may take longer (that do network requests), drop
+  them for actions that complete immediately (e.g. set watched).
+* 📝 Latest user interface translations from Crowdin.
 
-#### 29-beta1
-*(2016-02-11)*
+### 71.0.2 - 2023-12-15 🧪
 
-* TWEAK Combined search and "Add show" screen.
-* TWEAK Wider layout for movie details on 10-inch devices in landscape.
-* TWEAK Wide layout for comments on tablets in landscape.
-* TWEAK Show the number of replies to a comment.
-* FIX Make crashes in Movies section less likely when rotating the screen multiple times.
-* NOTICE Translations re-imported to improve support for plural strings. Some strings need to be translated again.
+* 🔨 Shows: do not consider all episodes collected, if there are none collected. Also consider all
+  episodes, not just released ones. This now matches with what episodes the collect all or none
+  buttons change.
+* 📝 Latest user interface translations from Crowdin.
 
-Version 28 *(2016-02-04)*
------------------------------
+### 71.0.1 - 2023-12-07 🧪
 
-* Setting to show absolute ("Oct 31") instead of relative ("in 3 days") time for episodes.
-* Dark theme for widget.
-* Improvements and fixes.
+* 🔧 Shows/Movies: move more secondary actions to the top, organize them in a chain.
+* 🔧 People: use rounded images and placeholders.
+* 🔨 Cloud: do not fail when uploading more than 500 new shows.
+* 🔨 Show details: color source info with a readable color again.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 28 *(2016-02-04)*
+### 71.0.0 - 2023-11-17 🧪
 
-* TWEAK Show 3 columns of show cards on Nexus 9.
-* NOTICE Latest translations from crowdin.
+* 🌟 Shows: support opening show trailer when adding a show and in details.
 
-#### 28-beta3 *(2016-01-29)*
+## Version 70
 
-* TWEAK Remember last selected language in "Add show" screen.
-* TWEAK Update to okhttp 3 for network connections.
-* FIX Signing in with trakt results in crash.
-* NOTICE Latest translations from crowdin.
+* 🌟 Movies: support displaying similar movies.
+* 🔧 Switch to TMDBs recommendations when looking for similar shows or movies.
+* 🔨 Android 14: fix automatic syncing.
 
-#### 28-beta2 *(2016-01-23)*
+### 70.0.3 - 2023-11-10
 
-* FIX Signing in with trakt results in loops or incorrect cross-site request forgery warning.
-* FIX Changing exact date setting does not affect widgets.
-* FIX Changing some settings do not affect list widget immediately.
-* NOTICE Latest translations from crowdin.
+* 🔨 Movies: do not skip items when refreshing search results, popular, released or upcoming movies.
 
-#### 28-beta1 *(2016-01-14)*
+### 70.0.2 - 2023-11-03
 
-* FEATURE Add setting to show absolute (e.g. "Oct 31") instead of relative ("in 3 days") timestamps
-  for episodes.
-* TWEAK Add "Android Dark" theme to widget, which has a transparent header, similar to the old
-  widget design.
-* TWEAK `ExtensionsConfigurationActivity` is now exported so extensions can send the user to it.
-  Thanks @tasomaniac-taso!
-* FIX Prevent crashes in overview, search, certain network and time zone configurations.
-* NOTICE Latest translations from crowdin.
+* 🔨 Android 14: fix automatic syncing.
+* 📝 Latest user interface translations from Crowdin.
 
-Version 27 *(2015-12-21)*
------------------------------
+### 70.0.1 - 2023-10-20 🧪
 
-* trakt login through default browser.
-* Improved accessibility.
-* More material list widget design.
+* 🔨 Get started: allow notification button now stays hidden after granting notification permission.
+* 🔨 User interface: restore scrollbars wherever they were missing. Add fast scroller for lists and comments.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 27.0.3 *(2016-01-24)*
+### 70.0.0 - 2023-09-21 🧪
 
-* FIX Signing in with trakt results in crash.
+* 🌟 Movies: support displaying similar movies.
+* 🔧 Switch to TMDBs recommendations when looking for similar shows or movies.
 
-#### 27.0.2 *(2016-01-23)*
+## Version 69
 
-* FIX Signing in with trakt results in loops or incorrect cross-site request forgery warning.
+* 🔧 Streaming search: add latest supported countries.
+* 🔧 Notifications: on Android 12 and newer, ask for permission to set precise alarm.
+* 🔧 Trakt: add link to delete account.
+* 🔧 Appearance: small adjustments.
 
-#### 27.0.1 *(2016-01-15)*
+### 69.0.3 - 2023-09-14
 
-* FIX Prevent crashes in overview, search, certain network and time zone configurations.
-* FIX Improve show and movie card sizes with large fonts.
-* NOTICE Latest translations from crowdin.
+* 🔨 Appearance: to get a matching navigation bar color on Samsung devices use a non-transparent
+  background on all devices.
+* 🔧 Appearance: adjust light theme highlight color to be less washed out.
+* 🔧 Trakt: add link to delete account.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 27 *(2015-12-21)*
+### 69.0.2 - 2023-08-18 🧪
 
-* TWEAK Updated list widget design to feel more material.
-* NOTICE Latest translations from crowdin.
+* 🔧 Calendar: change calendar settings symbol from eye to a filter to hopefully be more intuitive.
+* 🔧 Notifications: on Android 12 and newer, ask for permission to set precise alarm.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 27-beta4 *(2015-12-17)*
+### 69.0.1 - 2023-08-10 🧪
 
-* TWEAK Improve accessibility by adding missing descriptions to buttons and labels, useful titles to screens.
-* FIX Could not add show existing on SeriesGuide Cloud in some circumstances.
-* FIX trakt login was broken on Android 4.4 and below.
-* NOTICE Latest translations from crowdin.
+* 🔨 Do not apply corrections (e.g. for US time zones) on episodes when a custom time is set and the
+  other way around.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 27-beta3 *(2015-12-10)*
+### 69.0.0 - 2023-08-04 🧪
 
-* TWEAK Show message if no show or episode description is available.
-* TWEAK Show re-try buttons if there are no search results or searching for shows/movies failed.
-* NOTICE Latest translations from crowdin.
+* 🔧 Streaming search: add latest supported countries.
+* 🔧 Cloud: do not automatically sign in (if e.g. signed in previously or on other devices).
+* 🔧 Device backup: include the database when backing up to e.g. Google One. Only include auto
+  backup files for device-to-device transfer (Android 12 and newer).
+* 📝 Latest user interface translations from Crowdin.
 
-#### 27-beta2 *(2015-11-27)*
+## Version 68
 
-* TWEAK Connect trakt: show integrated browser option also if no auth codes are returned.
-* TWEAK Hide check-in buttons when connected to SeriesGuide Cloud. If connected to trakt as well,
-  watched items would not sync down. Marking watched manually would create duplicate history entries.
-* FIX On some occasions the nav drawer has an incorrect item selected.
-* FIX Did not show last watched episode for trakt friends if their username had a space character.
-* NOTICE Latest translations from crowdin.
+* 🌟 Shows: support setting custom release time and day offset.
+* 🔧 Use in-app browser only for websites related to the app.
+* 🔧 Design: update to latest Material version.
 
-#### 27-beta1 *(2015-11-19)*
+### 68.0.6 - 2023-08-11
 
-* TWEAK When connecting to trakt the default browser is used, which likely already has your credentials.
-  The integrated browser is still available as a fall back.
-* TWEAK Sync show languages with SeriesGuide Cloud.
-* TWEAK If the app bar scrolls out of view, it will now snap to an appropriate position.
-* NOTICE Latest translations from crowdin.
+* 🔨 Do not apply corrections (e.g. for US timezones) on episodes when a custom time is set and the
+  other way around.
 
-Version 26 *(2015-11-06)*
------------------------------
+### 68.0.5 - 2023-07-07
 
-* Add shows that can not be tracked with trakt (also no ratings, comments), though they will have limited release information.
-* Select the language when adding a show through search, change the preferred language of a show after adding it.
-* Add a trakt "Collection" tab to the "Add show" screen ("Library" tab is now called "Watched").
-* "Favorites" widget type is now "Shows", adds favorites filter and sort order (by latest episode or title).
-* "Quick check in" setting.
+* 🔨 Movies: when removing movie from watchlist or collection actually remove it visually.
+* 🔧 History: try to refresh watched episodes from Trakt after setting watched in other tabs.
+* 🔧 History: display Trakt logo if history is fetched from there.
 
-#### 26.0.1 *(2015-11-12)*
+### 68.0.4 - 2023-06-30
 
-* FIX Language update triggering each time opening show details.
-* FIX Crash when updating shows on some devices.
-* NOTICE Latest translations from crowdin.
+* 🔨 Custom time: fix resetting, simplify dialog, suggest day offset matching time zone conversion
+  of official time.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 26 *(2015-11-06)*
+### 68.0.3 - 2023-06-23 🧪
 
-* TWEAK Clear notification when checking in from it.
-* NOTICE Latest translations from crowdin.
+* 🔧 Show details: make release time edit button more obvious, re-arrange some things.
+* 🔧 Overview: add button to edit release time.
 
-#### 26-beta4 *(2015-10-29)*
+### 68.0.2 - 2023-05-25 🧪
 
-* TWEAK Change "Favorites" widget type to "Shows", add setting to filter on favorites instead, add
-  sort order setting (by latest episode or title).
-* TWEAK Show fast scrollbar again in movies watchlist and collection tabs if displaying many items.
-* FIX Crash when trying to change show language (should now really be fixed).
-* FIX Crash when SeriesGuide Cloud account resolution fails while syncing.
-* NOTICE Latest translations from crowdin.
+* 🔧 Design: update to latest Material version, with new time picker and new dialog animations.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 26-beta3 *(2015-10-22)*
+### 68.0.1 - 2023-05-19 🧪
 
-* TWEAK Allow to track shows locally if they are not (yet) available on trakt. Show better error
-  messages when trying to rate, comment or check-in on a show that is not available on trakt.
-* FIX Search history now correctly saves latest search terms, displays them in order of last use.
-* FIX Crash when trying to change show language.
-* NOTICE Latest translations from crowdin.
+* 🌟 Edit release time of a show: specify time and number of days earlier or later. Currently only
+  from the details view, tap the pen symbol. Use this for shows that e.g. release later or earlier
+  in your region.
+* 📝 Latest user interface translations from Crowdin. Many updates to Traditional Chinese used in
+  Taiwan, thanks jackiexyz!
 
-#### 26-beta2 *(2015-10-16)*
+### 68.0.0 - 2023-03-30 🧪
 
-* NOTICE It is now again possible to add shows that are only on TheTVDB and not on trakt (e.g. if
-  they do or can not have an English translation), though they currently display no detailed
-  release information (e.g. week day, time or country).
-* TWEAK Add language selection when adding a show through search.
-* TWEAK Allow to change the preferred content language of a show.
-* FIX Resolved some bugs, crashes.
-* NOTICE Latest translations from crowdin.
+* 🔧 Use in-app browser only for websites related to the app.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 26-beta1 *(2015-10-07)*
+## Version 67
 
-* TWEAK Add trakt "Collection" tab in "Add show" screen. Rename "Library" to "Watched".
-* FEATURE Add "Quick check in" setting so the check in dialog will not ask for a check in message.
-* TWEAK Trakt links for shows and episodes now always open the item directly instead of showing search results.
-* TWEAK Show shortcuts now have nicer icons (thanks to a code contribution from @adneal).
-* NOTICE Latest translations from crowdin.
+* 🔧 On Android 8 and newer, use system settings to configure notification settings.
+* 🔧 On Android 13, ask to allow notifications.
+* 🔧 Use in-app browser whenever possible to open websites.
+* 🔧 Appearance: use card to separate details on large episodes and people screens.
 
-Version 25 *(2015-10-01)*
------------------------------
+### 67.0.3 - 2023-02-24
 
-* Support Android 6.0 (Marshmallow), will now ask for permissions.
-* On Android 4.4 (KitKat) and up, you can now select custom (auto) backup files. These may be
-  on external storage, Google Drive, etc. (provider needs to support Storage Access Framework).
-* On Android 5.0 (Lollipop) and up, the app bar hides in some screens when scrolling.
-* Restructured settings, open help page using Chrome custom tabs, other improvements.
+* 🔧 Trakt: show default browser in-app when signing in, drop integrated browser option.
+* 🔧 Use in-app browser (Custom Tab) whenever possible to open websites.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 25.0.2 *(2015-10-11)*
+### 67.0.2 - 2023-02-16 🧪
 
-* FIX Add show button could show in "Now" tab.
-* FIX Some crashes, bugs.
+* 🔧 Internal changes to ensure compatibility with Play Store billing.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 25.0.1 *(2015-10-02)*
+### 67.0.1 - 2023-02-03 🧪
 
-* FIX Error messages in Now tabs not always visible.
-* NOTICE Latest translations from crowdin.
+* 🔧 On Android 8 and newer, use system settings to configure notification settings.
+* 🔧 On Android 13 and newer, ask to allow notifications.
+* 🔨 Do not open comments screen if required data is not available, yet.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 25 *(2015-10-01)*
+### 67.0.0 - 2023-01-27 🧪
 
-* TWEAK Allow to select between importing shows, lists and movies.
-* TWEAK Show help and feedback page using Chrome custom tabs, if available. More prominent feedback action.
-* FIX Crash when choosing backup files and the system is configured not to allow it.
-* FIX Don't fail import when using default folders and a file is missing, but at least one other exists.
-* NOTICE Latest translations from crowdin.
+* 🔧 Appearance: use card to separate details on large episodes and people screens.
 
-#### 25-beta4 *(2015-09-25)*
+## Version 66
 
-* TWEAK On Android KitKat (4.4) and up, you can now select custom (auto) backup files. These may be
-  on external storage, Google Drive, etc (provider needs to support Storage Access Framework).
-* FIX The sync indicator has moved into the app bar and is now circular and less distracting.
-* NOTICE Latest translations from crowdin.
+* 🔧 Appearance updates.
+* 🔧 Trakt: show special error messages if watchlist limit is exceeded.
+* 🔧 Show filters: change option to remove all filters to instead restore defaults (exclude hidden).
+* 🔨 Manage lists: fix an item getting removed from other lists if there are many lists.
 
-#### 25-beta3 *(2015-09-18)*
+### 66.0.7 - 2023-01-19
 
-* TWEAK Hide app bar when scrolling on Android 5.0 and up in Shows, Lists, Movies, Add show screens.
-* TWEAK Hide app bar when scrolling in episode details view on phones.
-* TWEAK Always display add show button, only hide it when moving between tabs.
-* TWEAK Move "Upcoming range" setting to Shows tab filter menu.
-* TWEAK Rename "Content language" setting to "Preferred content language" as a fallback
-  to English is always possible.
-* TWEAK Use switch preference in settings where appropriate.
-* NOTICE Latest translations from crowdin.
+* 🔨 Do not crash if time zone of device is not known, report and default to "America/New_York" instead.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 25-beta2 *(2015-09-12)*
+### 66.0.6 - 2023-01-13 🧪
 
-* TWEAK Support Android 6.0, including new permissions.
-* TWEAK Restructured settings, added important ones to the main screen.
-* NOTICE Latest translations from crowdin.
+* 🔧 Trakt: show special error messages if account is locked or list limit exceeded.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 25-beta1 *(2015-08-26)*
+### 66.0.5 - 2022-12-21 🧪
 
-* TWEAK Full height nav drawer on Android 5 Lollipop and up.
-* FIX trakt friend activity was not displayed if one friend had a username with a period in it.
+* 🔧 Support adding shows when Trakt is down, use default values (e.g. for release time and time zone).
+* 🔧 Trakt: add button to support with VIP; button to open website (or dashboard when signed in).
+* 🔨 Do not crash when devices are using the renamed "Europe/Kyiv" or new "America/Ciudad_Juarez" time zone.
+* 📝 Latest user interface translations from Crowdin.
 
-Version 24 *(2015-08-21)*
------------------------------
+### 66.0.4 - 2022-12-16 🧪
 
-* Now tab for movies. Displays your recently watched movies on trakt, as well as the last watched
-  movie of your trakt friends.
-* Do not load images over metered connections if "Images only over Wi-Fi" is enabled.
+* 🔧 Appearance: draw behind navigation bar in movie details screen.
 
-#### 24 *(2015-08-21)*
+### 66.0.3 - 2022-12-10 🧪
 
-* TWEAK More readable color for default theme navigation items.
-* TWEAK Get rid of fast scrollers in most places.
-* NOTICE Latest translations from crowdin.
+* 🔨 Fix crash when loading movie watch history of Trakt friends and the device is offline.
 
-#### 24-beta4 *(2015-08-15)*
+### 66.0.2 - 2022-12-09 🧪
 
-* FEATURE Now tab for movies. Displays your recently watched movies on trakt, as well as the last
-  watched movie of your trakt friends.
-* FIX Now tab correctly shows content while refreshing.
-* NOTICE Reduction of app size by removing more unused code from libraries. Let me know if anything breaks!
-* NOTICE Latest translations from crowdin.
+* 🔧 Appearance: draw behind status and navigation bar whenever possible.
+* 🔧 Show filters: change option to remove all filters to instead restore defaults (exclude hidden).
+* 🔨 Fix network detection on some Android 11 devices.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 24-beta3 *(2015-07-05)*
+### 66.0.1 - 2022-10-21 🧪
 
-* TWEAK Do not load images over metered connections if "Images only over Wi-Fi" is enabled. Update
-  setting description.
-* FIX Do only search once when pressing enter in show/movie search.
-* FIX Fixes from release 23.1.1.
-* NOTICE Updated SeriesGuide Cloud connector libraries. Let me know of any issues.
-* NOTICE Updated Extension API: now sending absolute episode number.
-* NOTICE Latest translations from crowdin.
+* 🔨 Fix crash when resizing the app while on the episodes screen.
 
-#### 24-beta2 *(2015-05-11)*
+### 66.0.0 - 2022-10-20 🧪
 
-* TWEAK SG pushes the release time by a day if a show releases between 12AM and 1AM now only or US
-  shows. E.g. US late-night shows are typically listed in TheTVDB like "airing Monday night, 12:30AM",
-  which is actually Tuesday when looking at the date. This is not common for e.g. Japanese anime,
-  hence the limiting to US shows.
-* TWEAK Display TMDb rating vote count for movies.
-* FIX Do not fail merging shows with SeriesGuide Cloud if a show does not exist any longer on TheTVDB.
-  This would cause a full show merge running repeatedly.
-* NOTICE Latest translations from crowdin.
+* 🔨 Manage lists: fix an item getting removed from other lists if there are many lists.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 24-beta1 *(2015-04-27)*
+## Version 65
 
-* TWEAK Better material design on older versions of Android, especially in dialogs.
-* TWEAK Nav drawer highlight now colors text and icon.
-* NOTICE Latest translations from crowdin.
+* 🔧 Clean up supported languages for show and movie content. Languages not longer supported are
+  changed to US English.
+* 🔧 When making changes to a season, always apply to all episodes. Previously, e.g. set watched
+  only affected episodes with a past release date, but add to collection affects all.
+* 🔧 Streaming search: add latest supported countries.
+* 🔧 Android 13: support per-app language setting.
 
-Version 23.1 *(2015-05-14)*
--------------------------
+### 65.0.5 - 2022-08-26
 
-* Improved material design on older versions of Android.
-* Bugfixes (crash when opening Now tab; midnight offset now only applies to US shows).
-* Display TMDb rating vote count for movies.
-* Note: SG pushes the release time by a day if a show releases between 12AM and 1AM now only or US
-  shows. E.g. US late-night shows are typically listed in TheTVDB like "airing Monday night, 12:30AM",
-  which is actually Tuesday when looking at the date. This is not common for e.g. Japanese anime,
-  hence this is now limited to US shows.
+* 🔧 Support "Themed icons" beta feature of Android 13.
+* 🔧 Support per-app language setting of Android 13.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 23.1.1 *(2015-05-23)*
+### 65.0.4 - 2022-08-19 🧪
 
-* FIX Crash in Now tab on certain devices (on app start).
-* FIX Crash when importing shows without status.
-* TWEAK Allow importing shows without a title.
-* NOTICE Latest translations from crowdin.
+* 🔧 Add latest supported countries to streaming search.
+* 🔧 Restored subscription expired notification as in-app message.
+* 📝 Latest user interface translations from Crowdin.
 
-Version 23 *(2015-04-14)*
--------------------------
+### 65.0.3 - 2022-08-12 🧪
 
-* List tabs can be reordered (see Menu > Reorder lists). Order is preserved on backup/restore.
-* If connected to trakt, any movie can be set watched and any watched movie can be rated.
-* In search, show cards now have all expected menu options (e.g. manage lists, remove).
-* trakt search replaces TheTVDB search in "Add show". Please report any issues, or if the results are better or worse.
+* 🔧 When making changes to a season, always apply to all episodes. Previously, setting watched or
+skipped only affected episodes with a release date and released in the past. But adding to/removing
+from collection affected all.
+* 🔧 When updating shows, do not fail if just Trakt info can not be updated.
 
-#### 23.0.1 *(2015-04-18)*
+### 65.0.2 - 2022-08-05 🧪
 
-* FIX Crash when using accessibility tools (like TalkBack) in shows section.
-* NOTICE Latest translations from crowdin.
+* 🔨 Trakt: prevent adding a duplicate play in the rare case a play was already sent and stored at
+  Trakt, but no confirmation was received.
+* 🔨 Movies: instead of a future date, show no date if release date is unknown in watched movies list.
 
-#### 23.0.0 *(2015-04-14)*
+### 65.0.1 - 2022-07-22 🧪
 
-* NOTICE Latest translations from crowdin.
+* 🔧 Clean up supported languages for show and movie content. Languages not longer supported are
+changed to US English. As a side-effect should resolve issues with translations switching back to
+English at random.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 23-beta5 *(2015-04-09)*
+### 65.0.0 - 2022-05-27 🧪
 
-* TWEAK Use trakt for search in "Add show". Please report any issues, or if the results are better or worse.
+* 🔧 Choose newest unwatched episode as next when adding a show that has watched episodes, e.g.
+after signing into Cloud on a new device.
 
-#### 23-beta4 *(2015-04-09)*
+## Version 64
 
-* TWEAK If connected to trakt, display and allow changing watched state of any movie. Requires trakt
-  sync to run at least once after updating so watched movies are downloaded.
-* TWEAK Display sync progress bar in Lists and Movies as well.
-* TWEAK Add option to hide "Released today" from Now tab.
-* TWEAK Add "Open in browser" action to help.
-* TWEAK Use different ellipsis algorithm for single line text, displaying as many characters as possible.
-* TWEAK Show scrollbar in Now tab.
-* NOTICE Latest translations from crowdin.
+* 🔧 Show filters: move no released episodes option there, display status also as text.
+* 🔧 Clearly label the next episode to watch in the overview screen.
+* 🔧 Display the last time a show or movie was updated.
+* 🔨 Do not crash if permission to set alarms and reminders has been removed (Android 12), schedule
+inexact episode notifications instead.
 
-#### 23-beta3 *(2015-04-02)*
+### 64.0.7 - 2022-05-18
 
-* TWEAK Add skip options to episodes list menus.
-* FIX Buttons on Android 4.3 and below do not have enough padding.
-* FIX Use white instead of dark underline for transparent tabs for Android Dark theme.
-* FIX Improve padding for fast scrollbars and margin for add show button on Android 5.1.
-* NOTICE Latest translations from crowdin.
+* 🔨 Resolve Android not responding issue when viewing a show or its episodes.
 
-#### 23-beta2 *(2015-03-21)*
+### 64.0.6 - 2022-05-15 🧪
 
-* TWEAK If a trakt comment fails due to breaking the new commenting rules, show an error message.
-* TWEAK If a trakt check-in fails due to the item not found on trakt, show an error message.
-* TWEAK Add "Update" action to search card menu.
-* FIX Use latest Amazon In-App billing, fixes crashes on Lollipop (Amazon version only).
-* FIX Toolbar icons use wrong color on Android KitKat and below in some circumstances.
-* FIX Using the "Add all" button in "Add show" now correctly marks all shows as added.
-* NOTICE Latest translations from crowdin.
+* 🔨 Do not crash when selecting backup file to restore from.
 
-#### 23-beta1 *(2015-03-11)*
+### 64.0.5 - 2022-05-13 🧪
 
-* FEATURE List tabs can be reordered (see Menu > Reorder lists). Order is preserved on backup/restore.
-* TWEAK Toggle favorite state of shows in lists.
-* TWEAK Add menu to show search result cards (Toggle favorite and hidden state, manage lists, remove).
-* TWEAK Slightly faster export and auto backup due to removal of indents in exported JSON files.
-* TWEAK Show higher resolution background on Android Wear notifications.
-* FIX Show status is now correctly not displayed if it is unknown (= not set on TheTVDB).
-* FIX Shows tab next episodes update correctly after setting watched episodes in Upcoming/Recent.
+* 🔨 Do not crash if permission to set alarms and reminders has been removed, schedule inexact
+  episode notifications instead.
+* 🔧 Improve when the app wakes the device to notify about upcoming episodes.
+* 📝 Latest user interface translations from Crowdin.
 
-Version 22 *(2015-03-02)*
--------------------------
+### 64.0.4 - 2022-05-06 🧪
 
-* New "Now" tab displays episodes released today, recently watched (device only or trakt history)
-  and watched by your trakt friends.
-* Further updates towards material design.
-* When setting a season or show watched, only already released episodes will be set watched.
+* 🔨 Movies: properly clean up movies watched by friends data on refresh.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 22.0.2 *(2015-03-09)*
+### 64.0.3 - 2022-04-14 🧪
 
-* FIX When using manual time offset, episodes now correctly show up in "Released today".
-* FIX Potential fix for crash in "Now" tab.
-* FIX Abort loading friends early.
+* 🔧 Clearly label next episode to watch in show overview screen.
+* 🔧 Improve updating of shows, on failure display exact service that failed, better suggestions.
+* 🔧 Display the last time a show or movie (if added to a list) was updated.
+* 🔨 Movie details screen: always display the oldest theatrical release date, matching other screens.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 22.0.1 *(2015-03-02)*
+### 64.0.2 - 2022-03-10 🧪
 
-* FIX "Now" tab would show multiple "Recently watched" headers for local history.
-* FIX Update scroll bars, text fields and progress bars on Android 4.4 and below with new accent color.
-* TWEAK Hide add-show-button when scrolling show list.
-* NOTICE Latest translations from crowdin.
+* 🔨 Cloud: when signing in do not add shows that were removed after the TMDB migration.
+* 🔨 Fixed: when first tapping any episode in a season always displays the first episode.
+* 🔨 Fixed: upcoming/recent does not update over time.
+* 🔨 Fixed: guest stars, writers, etc. not separated by comma.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 22.0.0 *(2015-02-27)*
+### 64.0.1 - 2022-03-03 🧪
 
-* TWEAK Move "Add show" action to a floating action button.
-* TWEAK Remove "events and reminders" category from SeriesGuide episode notifications. To continue
-  receiving episode notifications while Priority mode is active, make SeriesGuide a priority app.
-  Only on Android Lollipop and up.
-* TWEAK Enable Samsung multi-window. However, layouts are not optimized for multi-window.
-* TWEAK Some minor design updates.
-* NOTICE Latest translations from crowdin.
+* 🔧 Move no aired episodes option to shows filter view.
+* 🔧 Display state of show filters also as text.
+* 🔧 Rephrase TMDB migration info and suggest action (search for a replacement).
+* 🔧 Create first list when installing app instead of when visiting lists screen.
+* 🔧 Various small design tweaks.
+* 🔨 Display error if managing lists of a show is not possible.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 22.0.0-beta5 *(2015-02-24)*
+## Version 63
 
-* TWEAK Use new CardView to replace old card drawables. Other design updates and fixes.
-* TWEAK Experimental change of the accent color to teal.
-* TWEAK Now tab has better error messages and feedback about loading data.
-* TWEAK Add "Web search" action to movie details menu.
-* FIX Now tab would not respect manual time offset.
-* NOTICE Latest translations from crowdin.
+* 🌟 Some design updates to fit with latest Material style.
+* 🌟 Add setting to use system colors on Android 12.
+* 🔨 Sort by title properly handles characters with accents.
 
-#### 22.0.0-beta4 *(2015-02-17)*
+### 63.1.0 - 2022-03-11
 
-* TWEAK On Now tab, added "More history" shortcut in "Recently watched" section. Removed history tab.
-* TWEAK Support trakt refresh tokens. trakt sign-ins are now permanent, unless you disconnect or
-  revoke SeriesGuide's permission on the trakt website.
-* NOTICE If you are connected to trakt, you will have to sign in again once at the latest in 90 days.
-* TWEAK Display search icon in shows section if there is room.
-* FIX Would not offer to add show from "Recently watched" if connected to trakt.
-* NOTICE Latest translations from crowdin.
+* 🔨 Cloud: when signing in do not add shows that were removed after the TMDB migration.
+* 🔨 Fixed: when first tapping any episode in a season always displays the first episode.
 
-#### 22.0.0-beta3 *(2015-02-12)*
+### 63-beta4 - 2022-02-10
 
-* TWEAK Recently watched in "Now" is replaced with trakt episode history if connected to trakt.
-* TWEAK The "Add show" screen now displays already added shows, but with an added indicator.
-  Add dialog also prevents adding shows already in the local database.
-* TWEAK When setting a season or show watched, only already released episodes will be set watched.
-* TWEAK When setting a show watched or collected, will now exclude specials. This lines the behavior
-  up with the indicators.
-* FIX When setting a season or show watched/not watched, will now only upload changed episodes to
-  trakt. This prevents new watch dates from being created on trakt.
-* FIX When adding a show from the add dialog, will now correctly display show title in status toast.
-* NOTICE Latest translations from crowdin.
+* 🌟 Appearance setting to use system colors on Android 12.
+* 📝 Latest user interface translations from Crowdin.
 
-#### 22.0.0-beta2 *(2015-02-05)*
+### 63-beta3 - 2022-02-04
 
-* FEATURE Experimental "Now" tab in shows section. Displays recently watched episodes,
-  episodes released today and recent episodes of trakt friends. Note: Recently watched are currently
-  local only, even if connected to trakt; friends activity loads any last episode, even if it
-  was watched a long time ago.
-* TWEAK After adding show from add dialog, add button will disappear in show lists. Thanks @migueljteixeira!
-* TWEAK Switch to new dedicated trakt v2 API endpoint.
-* TWEAK Update string related to hiding shows for clarity.
-* FIX When adding a show and connected to trakt, would add show even if loading watched or collected
-  episodes failed. Now fails with trakt error message.
-* NOTICE Changed Android Beam NDEF mime type. Beaming shows from their overview will only work
-  against this or a later version.
-* NOTICE Latest translations from crowdin.
+* 🔨 Fix crash when using email sign-in on Android 12.
+* 🔨 Fix missing state description for show filters (accessibility).
+* 📝 Latest user interface translations from Crowdin.
 
-#### 22.0.0-beta1 *(2015-01-28)*
+### 63-beta2 - 2022-02-03
 
-* FEATURE Sort lists by title or next episode. When sorted by next episode, seasons are treated
-  like shows (e.g. next episode of show determines order).
-* TWEAK Sort movies without release date as newest.
-* TWEAK Backup/Restore tool includes user ratings. Restore sets sensible defaults, skips broken data.
-* TWEAK Movie trakt links now immediately redirect to movie (could show multiple results before).
-* TWEAK Allow removing a show even if parts of it are added to lists. List items will disappear
-  until show is added again.
-* FIX "Manage Lists" dialog does not remember user choice when scrolling list item out of view.
-* FIX Movies could be rated even after removing them from watchlist and collection.
-* FIX Crash in "Unlock features".
-* NOTICE Latest translations from crowdin.
+* 🌟 Some design updates to fit with latest Material style.
+* 📝 Latest user interface translations from Crowdin.
 
-Version 21.1 *(2015-01-19)*
----------------------------
+### 63-beta1 - 2022-01-21
 
-* Improved error messages when interacting with trakt.
-* Combined search and trending tab in "Add show" screen.
+* 🔧 Move movie trailer button right below title to make it easier to discover.
+* 🔨 Sort by title properly handles characters with accents.
+* 🔨 Display correct colors if check-in dialog is launched from notification.
+* 📝 Optimization for Android 12.
+* 📝 Latest translations from Crowdin.
 
-#### 21.1.3 *(2015-02-05)*
+## Version 62
 
-* TWEAK Switch to new dedicated trakt v2 API endpoint.
+* 🌟 Discover: filter popular shows and shows with new episodes by streaming service.
+* 🌟 Discover: filter popular movies and movies with digital release by streaming service.
+* 🔧 App widget: add option to hide watch button.
 
-#### 21.1.2 *(2015-01-21)*
+### 62.2 - 2021-12-21
 
-* TWEAK Always open help page in-app.
-* FIX Crash when displaying results in "Add show" tabs and other locations.
-* FIX Crash when trying to launch extension action that was removed or is not currently available.
-* FIX Crash when trying to modify sync settings, but sync account is not available.
-* TWEAK Partially localized error message when in-app billing actions fail.
-* FIX Crash when in-app billing actions fail.
-* FIX Text-to-speech service leak in WebViews (trakt auth and help page) on Android 4.2.2.
-* FIX Crash when Android settings could not be found when trying to display system app settings.
-* TWEAK Button text less likely to get cut off in add dialog.
+* 🔨 Potential fix for crash when updating next episode on Android 5.1 devices.
+* 🔨 Fix Amazon extension search link.
 
-#### 21.1.1 *(2015-01-19)*
+### 62.1 - 2021-12-16
 
-* FIX Crash when trakt credentials are invalid and trying to load user history.
-* FIX Crash when timezone is not recognized.
+* 🔨 Potential fix for crash when updating next episode on Android 5.1 devices.
+* 🔨 Amazon version: do not crash when re-launching the app.
+* 📝 Latest translations from Crowdin.
 
-#### 21.1.0 *(2015-01-19)*
+### 62 - 2021-12-09
 
-* TWEAK Better error messages when connecting trakt.
-* TWEAK Smaller sync status progress bar.
+* 📝 Add Welsh translation, thanks to NMulholland.
 
-#### 21.1.0-beta5 *(2015-01-16)*
+### 62-beta5 - 2021-12-03
 
-* TWEAK When rating, wait for sending to trakt to complete before changing local rating.
-* FIX Rare crash in show overview and history tab when trying to display data, but user is moving away.
-* NOTICE Latest translations from crowdin.
+* 🔧 Discover: highlight new show and movie filters.
+* 🔨 Do not crash when selecting backup files and no supported file picker is available.
+* 🔨 Do not display options in toolbar not applicable when first opening some screens.
+* 📝 Latest translations from Crowdin.
 
-#### 21.1.0-beta4 *(2015-01-14)*
+### 62-beta4 - 2021-11-25
 
-* TWEAK If connected to trakt or Cloud and changing movie watchlist/collection state, will only change local state if sending was successful.
-* NOTICE Latest translations from crowdin.
+* 🌟 Discover: filter popular shows and shows with new episodes by streaming service.
+* 🌟 Discover: filter popular movies and movies with digital release by streaming service.
+* 🔧 Episode search: match independent of case for Unicode characters, e.g. German umlauts.
+* 📝 Latest translations from Crowdin.
 
-#### 21.1.0-beta3 *(2015-01-13)*
+### 62-beta3 - 2021-10-20
 
-* TWEAK Re-enable watched button for movies in either watchlist or collection, if connected to trakt.
+* 🔧 Revert the next episode selection change, because Anime. The next episode is again selected
+  by release date. Note: to never choose specials as next, see More > Settings > Advanced.
+* 📝 Latest translations from Crowdin.
 
-#### 21.1.0-beta2 *(2015-01-12)*
+### 62-beta2 - 2021-10-13
 
-* FIX Do not try to send watched/collected episodes to trakt if not connected.
+* 🔧 The next episode is now selected based on number, no longer by release date. This means specials
+  released in between episodes will no longer appear as next, you'll have to look for them in the
+  specials season. Decided to change this based on feedback over the years as many were confused
+  why an apparently random episode was next e.g. after marking all specials watched/skipped.
+* 🔧 Modernize remaining pager components (e.g. episode tabs, movie tabs) for more reliable behavior.
+* 📝 Latest translations from Crowdin.
 
-#### 21.1.0-beta1 *(2015-01-12)*
+### 62-beta1 - 2021-09-30
 
-* TWEAK If connected to trakt or Cloud and setting episodes watched or collected, will wait until network operation has completed before changing local state.
-* TWEAK Combine trending shows and search tab. Display more trending shows.
-* TWEAK Better error messages if loading data from trakt fails.
-* FIX Skipped episodes were removed if syncing an unwatched/uncollected local show with trakt.
-* NOTICE Latest translations from crowdin.
+* 🔧 App widget: add option to hide watch button.
+* 🔧 Display error message if creating a shortcut fails.
+* 🔨 Only move shows by a day if released in the hour past midnight for the CBS and NBC networks.
 
-Version 21 *(2015-01-02)*
--------------------------
+## Version 61
 
-* Support for the new trakt (v2). You will have to sign in and re-approve SeriesGuide.
+* 🌟 App widget: add system theme that supports dark mode, colors on Android 12. Modernize existing themes.
+* 🌟 App widget: add watch button.
+* 🌟 Add upcoming movies screen.
+* 🔧 Correctly choose the next episode if episodes are watched multiple times. This may change the next episode for some shows. Just set an episode watched to update.
 
-#### 21.0.4 *(2015-01-05)*
+### 61 - 2021-09-23
 
-* FIX Crash when leaving episode details view while it reloads.
-* FIX Crash if notification intent is null.
-* FIX Crash if content provider id is unknown at runtime.
-* FIX Disabled Javascript on the trakt sign-in page blocked some Google accounts from signing in.
+* 🔨 Do not crash episode list if number of episodes and selection changes.
+* 📝 Latest translations from Crowdin.
 
-#### 21.0.3 *(2015-01-05)*
+### 61-beta5 - 2021-09-16
 
-* FIX Crash in some circumstances when loading data from trakt fails.
+* 🌟 App widget: add system theme that supports dark mode, colors on Android 12.
+* 🔧 App widget: modernize theme, update preview.
+* 🔧 App widget: use system reconfigure button on Android 12.
+* 📝 Latest translations from Crowdin.
 
-#### 21.0.2 *(2015-01-04)*
+### 61-beta4 - 2021-09-10
 
-* TWEAK Better error reports.
-* NOTICE Latest translations from crowdin.
+* 🔧 Finally add fast scroller to episode list.
+* 📝 Latest translations from Crowdin.
 
-#### 21.0.1 *(2015-01-03)*
+### 61-beta3 - 2021-09-03
 
-* FIX Crash when loading movie, but trakt credentials are invalid.
-* FIX trakt links open the development site.
-* FIX Crash when upgrading database is interrupted.
-* TWEAK Search TheTVDB in all languages if there are no results using the user preferred language.
-* NOTICE Latest translations from crowdin.
+* 🌟 Add watch button to app widget.
+* 🌟 Add upcoming movies screen.
+* 🔨 Set a show not watched actually does something.
+* 📝 Latest translations from Crowdin.
 
-#### 21.0.0 *(2015-01-02)*
+### 61-beta2 - 2021-08-12
 
-* FEATURE Support for trakt v2.
-* TWEAK Improved trakt sync, now ratings are available offline as well.
-* NOTICE Friend streams and movie watched toggles are gone for now.
-* NOTICE Release time and country support improved. E.g. for non-US users, US shows are now all on east coast time.
-* TWEAK Small design and layout fixes in some places.
-* FIX Movie could show wrong poster, if it did not have one.
-* FIX List widget layout is broken on RTL layouts.
-* NOTICE tvtag has closed down and was removed.
-* NOTICE Latest translations from crowdin.
+* 🔨 Do not select skipped episode as next to watch.
+* 🔨 Cloud: on sync update last watched episode to correctly determine next to watch on all devices.
+* 🔨 Cloud: do not fail when uploading a lot of movies.
+* 📝 Latest translations from Crowdin.
 
-Version 20.1 *(2014-12-08)*
------------------------------
+### 61-beta1 - 2021-08-04
 
-* Fix crash on launch for certain Samsung and Wiko devices running Android 4.2.2.
+* 🌟 When re-watching an episode, correctly choose the next one to rewatch. Display watch count in overview screen.
+* 🔨 Prevent crash when removing show while it was getting updated.
+* 🔧 Drop unused storage permissions, should have no impact on supported devices.
+* 📝 Latest translations from Crowdin.
 
-Version 20 *(2014-12-02)*
------------------------------
+## Version 60
 
-* Further design updates towards material design.
-* Favorite shows filter for list widget.
-* Collection indicator in Upcoming/Recent.
+* 🌟 Support signing into Cloud with email and password. With this update you are asked to sign into Cloud again.
+  Choose email if you use other devices that do not support Google sign-in, like Amazon devices.
+* 🔧 An episode IMDb link will open the episode page again, if the IMDb ID is available on TMDb.  
 
-#### 20.0.1 *(2014-12-03)*
+### 60 - 2021-07-28
 
-* FIX Dividers in nav drawer are clickable.
+* 🔧 Auto-dismiss support the dev message.
 
-#### 20 *(2014-12-02)*
+### 60-beta4 - 2021-07-21
 
-* TWEAK Show connected SeriesGuide Cloud or trakt account in nav drawer.
-* TWEAK Show ripples when touching list widget items.
+* 🔧 An episode IMDb link will open the episode page again, if the IMDb ID is available on TMDb.
+* 🔨 Fix duplicate error string when adding a show fails.
+* 📝 Latest translations from Crowdin.
 
-#### 20-beta3 *(2014-12-01)*
+### 60-beta3 - 2021-07-08
 
-* TWEAK Do not focus on movie search bar by default.
-* FIX Extension configure button text cut off.
-* FIX Duplicate list selector in search results. Improved other selectors as well.
-* NOTICE Latest translations from crowdin.
+* 🔨 Do not crash during Cloud sync or actions due to issues with new sign-in.
 
-#### 20-beta2 *(2014-11-21)*
+### 60-beta2 - 2021-07-07
 
-* TWEAK Add "Only favorite shows" setting to list widget. Setting is now independent from Upcoming/Recent filter settings.
-* TWEAK Move season watched/collected all/none options to inline icons.
-* TWEAK Display collected indicator in Upcoming/Recent. (You can still touch and hold to add/remove from collection.)
-* TWEAK Update app and notification icon.
-* FIX Light theme transparent tab text color is now black again.
+* 🌟 Sign into Cloud with only email and password. With this update you are signed out of Cloud.
+  When signing in again choose whether to switch to email and password or continue to use Google sign-in.
+  If you use other devices that do not support Google sign-in, like Amazon Fire devices,
+  you should choose email and password sign in.
+* 🔧 When signed out of Cloud due to an error, will resume syncing without a full sync when signing
+  in again with the same email address.
+* 📝 Latest translations from crowdin.
 
-#### 20-beta1 *(2014-11-17)*
+### 60-beta1 - 2021-06-24
 
-* FEATURE Integrate with Google Now, say "Search for Newsroom on SeriesGuide".
-* TWEAK Combine tabs with action bar, add shadow on Android Lollipop.
-* TWEAK Text edit bar overlays action bar instead of pushing it down.
-* FIX Can touch tabs through open nav drawer.
-* FIX Better action bar height on phones in landscape.
-* NOTICE Latest translations from crowdin.
+* 🔨 Lists: do not jump to top on database changes.
+* 📝 Errors: drop Countly reporting.
 
+## Version 59
 
-Version 19 *(2014-10-30)*
------------------------------
+* 🌟 Add language setting for person details.
+* 🌟 Shows: add sort by status option.
+* 🔧 Small design updates.
+* 🔧 Widget: when displaying shows, exclude shows without next episode.  
+* 🔨 Backup: export episodes even if a show was never opened.
+* 🔨 Statistics: do not count canceled shows as with next episodes.
 
-* Further design updates towards material design.
-* Android 5.0 support (notification color, settings, material theme).
-* List widget light theme.
+### 59.1 - 2021-06-23
 
-#### 19.0.2 *(2014-11-03)*
+* 🔨 Person details: do not crash in landscape layout.
 
-* FIX Crash when creating menus in some situations.
-* FIX Potential fix for crash when displaying upgrade toast on L preview.
+### 59 - 2021-06-17
 
-#### 19.0.1 *(2014-11-01)*
+* 🔨 Backup: export episodes even if a show was never opened.
 
-* TWEAK Add toolbar to Amazon feature unlock screen.
+### 59-beta3 - 2021-06-16
 
-#### 19 *(2014-10-30)*
+* 🌟 Add language setting for person details.
+* 🔧 Add Esperanto translation for app.
 
-* NOTICE Latest translations from crowdin.
+### 59-beta2 - 2021-06-02
 
-#### 19-beta3 *(2014-10-28)*
+* 🔧 If sorting by oldest, latest or remaining episode again sort by status.
+* 🔧 Add upcoming range option to include shows with any future episode.
+* 🔧 Widget: when displaying shows, never display shows without next episode.
+* 🔨 Use correct theme on About screen.
 
-* TWEAK Go directly to search from overview action.
-* TWEAK Set notification color, category (event) and link to settings (Android Lollipop and up).
-* TWEAK Increase drawer width, add larger top space for future use.
-* FIX Update DashClock settings to new theme.
-* FIX Some devices crash if action items are customized.
-* FIX Restore progress bars for TheTVDB and TMDB search.
-* FIX Show progress indicator when initially loading trakt streams and comments.
-* FIX Crash when trying to swipe to refresh.
-* FIX Button text getting cut off in dialogs.
-* FIX Check-in and comment button enabled, even though no action possible.
+### 59-beta1 - 2021-05-22
 
-#### 19-beta2 *(2014-10-25)*
+* 🔧 Small design updates.
+* 🔧 Sort shows: add new sort by status option. If by oldest, latest or remaining episode do no longer sort by status.
+* 🔧 Filter shows: if excluding upcoming, exclude any with future next episode (ignoring upcoming range setting).
+* 🔨 If lists Cloud migration fails due to unsaved list, require lists merge.
+* 🌟 Statistics: add shows finished watching (all episodes watched, show is canceled or ended). Thanks to @ippschi!
+* 🔨 Statistics: do not count canceled shows as with next episodes.
+* 🔨 Fix Chinese, French, Spanish language variants.
 
-* TWEAK More Material design updates (icons, colors, action bar).
-* FIX Potential fix for list widget crash (mostly on Samsung GT I9500).
-* NOTICE Latest translations from crowdin.
+## Version 58
 
-#### 19-beta1 *(2014-10-08)*
+* 🌟 Switch show data source to themoviedb.org (TMDB). Shows need to update before all features,
+  like Trakt or Cloud, can be used again. Shows or episodes not available on TMDB remain in your
+  library until you remove that show, Trakt and Cloud features do no longer work with them.
+* 🌟 Display most popular watch provider. Supports more regions. Powered by JustWatch via TMDb.
+* 🔧 Lists can now only contain shows. Existing season and episode list items can only be removed.
 
-* FEATURE Light theme for list widget.
-* TWEAK Display "Unlock all features" link in nav drawer if user is no supporter. Update strings related to unlocking all features.
-* FIX Create calendar events with new method available since Android ICS. Enables creating events in Sunrise calendar.
-* NOTICE Latest translations from crowdin.
+### 58.5 - 2021-05-14
 
-Version 18 *(2014-09-26)*
------------------------------
+* 🔨 Do not crash when generating list item IDs.
 
-* Display more details like release time, network and genre in the "Add show" show info dialog.
-* Better support for "Large text" accessibility option.
-* Share statistics.
-* Amazon App Store version.
+### 58.4 - 2021-05-13
 
-#### 18.1.0 *(2014-10-09) Amazon only*
+* 🔨 Fix issues when migrating list items that would prevent Cloud sync to succeed.
+* 🔧 Ensure valid list item IDs when importing.
+* 🔧 Import legacy season and episode list items again. If restored together with an old shows backup, those can still be displayed.
 
-* TWEAK Make subscription optional, like Google version.
-* FEATURE Light theme for list widget.
-* TWEAK Display "Unlock all features" link in nav drawer if user is no supporter. Update strings related to unlocking all features.
-* FIX Create calendar events with new method available since Android ICS. Enables creating events in Sunrise calendar.
-* NOTICE Dropped SeriesGuide X migration tool.
+### 58.3 - 2021-05-12
 
-#### 18.0.3 *(2014-10-02)*
+* 🔨 Fix issues when migrating list items that would prevent Cloud sync to succeed.
 
-* FIX Movie watched state not changing for movies in watchlist or collection.
-* TWEAK Better action button descriptions.
-* NOTICE trakt ratings, comments and movie watched state are currently incorrectly displayed due to issues at trakt. They are, however, correctly sent to trakt.
+### 58.2 - 2021-05-01
 
-#### 18.0.2 *(2014-09-28) Amazon only*
+* 🔧 Display details for legacy season and episode list items.
+* 🔨 Display any recently watched show from Trakt in history tab.
 
-* FIX Remove all Google Play search links from Amazon version.
+### 58.1 - 2021-04-21
 
-#### 18.0.1 *(2014-09-26)*
+* 🔧 Update episodes not found on TMDb if they get added to TMDb at some later point, if the number matches.
 
-* FIX Use lighter text color in search box when using Light theme.
+### 58 - 2021-04-15
 
-#### 18 *(2014-09-26)*
+* 🔨 Resolve crash when connecting to Trakt in some cases.
+* 📝 Latest translations from crowdin.
 
-* TWEAK Remove manually marked watched episodes and movies from "Friends" stream to improve load time. In return extend episode friends stream to 7 days.
-* TWEAK "Collected all" indicator now only takes into account released episodes.
-* TWEAK Add search button in lists section.
-* NOTE Provide a version for the Amazon App Store.
-* NOTICE Latest translations from crowdin.
+### 58-beta9 - 2021-04-01
 
-#### 18-beta3 *(2014-09-15)*
+* 🔧 The add show dialog is now sized bigger in most cases.
+* 🔧 Move about screen up to more options.
+* 📝 Latest translations from crowdin.
 
-* TWEAK Display additional details in show add dialog.
-* TWEAK Display genres for movies.
-* TWEAK Simply display year of original release for shows instead of exact date.
+### 58-beta8 - 2021-03-26
 
-#### 18-beta2 *(2014-09-10)*
+* 🔧 Occasionally suggest to support with a sub as apparently many users do not know it is possible.
+* 📝 Latest translations from crowdin.
 
-* FEATURE Remember past search queries for TheTVDB and TMDB search.
-* FIX Interface handles "Large text" accessibility option better (no overlapping or cut off text).
-* FIX Always show cheat sheet for touch and hold on inline actions (like action bar buttons).
-* NOTICE Latest translations from crowdin.
+### 58-beta7 - 2021-03-19
 
-#### 18-beta1 *(2014-09-01)*
+* 🔧 Lists again display (unsupported) seasons and episodes (as long as a show is not removed and re-added).
+* 🔧 Display X Pass detected message, restore X Pass App button, sort subscription tiers by price.
+* 📝 Add Twitter account link.
+* 📝 Latest translations from crowdin.
 
-* FEATURE Add shows tab to search. Results update as you type.
-* FEATURE Share your statistics: export stats screen as text for email, IM, etc.
-* TWEAK Update season and episode list designs.
-* FIX trakt "Friends" and "You" tabs appear immediately after signing in, previously they would only appear on restarting the main activity.
-* NOTICE Latest translations from crowdin.
+### 58-beta6 - 2021-03-17
 
-Version 17 *(2014-08-27)*
------------------------------
+* 🌟 Display most popular watch provider inside stream or purchase button. Support more regions. Powered by JustWatch via TMDb.
+* 🔧 Do no longer remove episodes that are not on TMDB, instead display info message.
+* 🔧 When filtering for continuing shows, include pilot and in production shows. Include canceled if excluding.
+* 📝 Latest translations from crowdin.
 
-* Design updates, moving towards Material Design language.
-* Access trakt and TMDb over a secure connection (HTTPS).
+### 58-beta5 - 2021-03-06
 
-#### 17.0.1 *(2014-09-01)*
+* 🔨 Resolve (auto) backup failing if lists or movies are missing some properties.
+* 🔨 Notification selection: show empty text only if list is empty.
+* 📝 Latest translations from crowdin.
 
-* TWEAK Cut down on excessive log reports.
-* FIX Potential fix for very rare crash in show overview.
-* NOTICE Latest translations from crowdin.
+### 58-beta4 - 2021-03-05
 
-#### 17 *(2014-08-27)*
+* 🔧 Allow adding show with duplicate TheTVDB ID if the TMDB ID is different. Background: TheTVDB
+  recently started combining shows that are still separate on TMDB. TMDB may then link to the same TheTVDB ID.
+* 🔨 Do not crash if show fallback response failed.
+* 🔨 Limit episode search results to 500 to avoid crash.
+* 🔧 Report auto backup errors.
 
-* TWEAK Restore larger nav drawer items on tablets. Also increase people tile size.
+### 58-beta3 - 2021-03-04
 
-#### 17-beta5 *(2014-08-25)*
+* 🔧 Seasons and episodes that are not on TMDB are now removed from shows. This should be a better
+  user experience, e.g. it avoids errors when setting watched on Trakt.
+* 🔨 Resolve crash when downloading not watched/collected episode info from Cloud.
+* 🔨 Do not fail update if a show can not be found on Trakt.
 
-* FIX Crash due to Android L developer preview bug. Temporarily repackage okio and okhttp dependencies. See https://github.com/square/okhttp/issues/967.
+### 58-beta2 - 2021-03-03
 
-#### 17-beta4 *(2014-08-24)*
+* 🔨 Resolve crash when adding show without run time info.
+* 🔨 Resolve crash when downloading not watched/collected episode info from Cloud.
 
-* TWEAK Pressing back when third-party app linked to show or episode returns to third-party app (see https://github.com/UweTrottmann/SeriesGuide/wiki/Extension-API).
-* TWEAK Accept stale images when offline. This should improve images displaying if offline for longer periods of time.
-* FIX Potential fix for image cache getting corrupted. Also, images are now exclusively cached on internal storage (avoids external storage format issues).
-* FIX Small UI fixes.
-* NOTICE Latest translations from crowdin.
+### 58-beta1 - 2021-03-03
 
-#### 17-beta3 *(2014-08-15)*
+* 🌟 Show data is now powered by themoviedb.org (TMDB). Your shows need to update before some
+  functionality, incl. Trakt or Cloud can be used again. Shows or episodes not available on TMDB
+  currently remain in your library, but functionality is reduced (e.g. no Trakt or Cloud support).
+* 🌟 Share a TMDB show url to SeriesGuide to add a show (support for TVDB URLs was removed).
+* 🔧 Lists can now only contain shows. Note: use the backup tool to export your season and episode lists.
+* 🔧 Allow longer check in messages.
+* 📝 Latest translations from crowdin.
 
-* TWEAK Remove show dialog opens without delay.
-* FIX Crash when authenticating with tvtag.
-* FIX Discard old list widget data only after query for new data has finished.
+## Version 57
 
-#### 17-beta2 *(2014-08-13)*
+* 🌟 For shows, add Portuguese (Brazil) to supported languages.
+* 🔧 Detect locked Trakt accounts during sign-in.
+* 🔧 Optimization for Android 11.
 
-* TWEAK Use platform activity animations to better fit in with apps for that version of Android.
-* TWEAK Large episode actions in overview, larger touch area for menu buttons on shows and movies, star button on shows.
-* TWEAK Display interim results when calculating total time of watched episodes for many shows.
-* TWEAK Download movie posters over HTTPS, use HTTPS when talking to trakt.
-* TWEAK Cache TVDb and TMDb requests (e.g. search results, biography, movie details).
-* NOTICE Latest translations from crowdin.
+### 57 - 2020-12-04
 
-#### 17-beta1 *(2014-08-06)*
+* 🔧 Always display hint about Cloud disabling Trakt features.
+* 📝 Latest translations from crowdin.
 
-* TWEAK Design updates, moving towards Material Design language.
-* TWEAK Show actions are embedded for easier access.
+### 57-beta5 - 2020-11-27
 
-Version 16 *(2014-07-28)*
------------------------------
+* 🔧 Detect locked Trakt accounts during sign-in.
+* 📝 Latest translations from crowdin.
 
-* Cast and crew info with photos and biography for shows and movies.
-* Added some movie statistics.
-* trakt activity streams display items manually marked as watched.
-* Fixed notification text color on Android Wear devices.
-* Improved image loading, using Android designated cache folders.
-* Dropped dedicated check-in screen.
-* SeriesGuide Cloud experiment: save and sync shows and movies. (If connected to trakt at the same time, will only sync with SeriesGuide Cloud. Check-Ins, marking watched/collected still sent to trakt.)
+### 57-beta4 - 2020-11-26
 
-#### 16.0.1 *(2014-07-31)*
+* 🔧 Experiment with using self-hosted Countly instance to track some network errors.
+* 📝 Latest translations from crowdin.
 
-* FIX Crash when loading movie poster, but no external storage is available.
-* NOTICE Latest translations from crowdin.
+### 57-beta3 - 2020-11-06
 
-#### 16 *(2014-07-28)*
+* 🔨 Resolve connection issues due to outdated security settings on some devices.
 
-* FIX List widget poster placeholder icon cut off.
-* NOTICE Latest translations from crowdin.
+### 57-beta2 - 2020-10-29
 
-#### 16-beta8 *(2014-07-24)*
+* 🔨 On Android 11 allow detection of X Pass.
+* 🔧 Support Trakt API rate limiting.
+* 📝 Latest translations from crowdin.
 
-* FIX Crash when loading images.
+### 57-beta1 - 2020-10-23
 
-#### 16-beta7 *(2014-07-24)*
+* 🌟 For shows, add Portuguese (Brazil) to supported languages.
+* 🔧 Sort languages in selection dialog.
+* 🔨 In movie details, display country if Portuguese is selected as language.
+* 🔨 Restore feedback when tapping buttons at bottom, in rate dialog.
+* 🔧 Optimization for Android 11 (this time for real).
+* 📝 Latest translations from crowdin.
 
-* FEATURE SeriesGuide Cloud v2 with support for episode and movie backup and sync.
-* TWEAK Display episodes or movies marked as seen in trakt activity streams.
-* TWEAK Trakt connect screens wrap content better on tablet displays.
-* FIX Guest star names sometimes contain leading or trailing spaces.
-* NOTICE The original SeriesGuide Cloud experiment is now deprecated (and will be disabled soon). You will have to sign in again to connect to Cloud v2 on each device.
-* NOTICE When connecting to SeriesGuide Cloud, activity on trakt will no longer be downloaded to SeriesGuide.
+## Version 56
 
-#### 16-beta6 *(2014-07-04)*
+* 🌟 Limited support for watching episodes and movies multiple times. Synced with Cloud or Trakt.
+  Only available for supporters.
+* 🌟 Metacritic search link for shows and movies. Note that only English titles get good results.
+* 🔧 Display movies in collection in statistics.
+* 🔧 Shorter English episode number formats by default (S01E01 -> S1:E1). The older formats are
+  still available in Settings.
 
-* FEATURE Person details view, currently with bio, TMDb and web search link. Try in landscape!
-* FEATURE Support shows released in Canada. See https://github.com/UweTrottmann/SeriesGuide/issues/382 for details.
-* TWEAK Ensure share button is always on the right.
-* TWEAK Clean up action bar on many screens by moving infrequent actions to the overflow menu.
-* TWEAK Drop the dedicated check in screen.
-* TWEAK New transition animations, making more clear where content came from and where it is going in the visual stack.
-* FIX Don't display error message while loading cast or crew members.
-* FIX Could not swipe to refresh if trakt check-in stream was empty.
+### 56 - 2020-10-15
 
-#### 16-beta5 *(2014-06-30)*
+* 🔧 Upload multiple plays to Trakt during first sync (previously would only upload one).
 
-* FEATURE Display cast and crew with headshots, name and character respectively job.
-* TWEAK Increase tab size on large+ screens (tablets).
+### 56-beta4 - 2020-10-09
 
-#### 16-beta4 *(2014-06-27)*
+* 🔧 Improvements to background tasks, billing.
+* 🔨 Do not crash when loading movie with invalid release date.
 
-* FIX Episode title in notifications not visible on Android Wear devices.
-* FIX Episode list sometimes incorrectly re-selects the first episode.
+### 56-beta3 - 2020-10-01
 
-#### 16-beta3 *(2014-06-25)*
+* 🔧 Display number and share of movies in collection in statistics, drop redundant progress bar.
+* 📝 Latest translations from crowdin.
 
-* FEATURE Add some movie statistics.
-* FIX Potentially fix crash in episode pages view if number of episodes changes.
-* FIX On tablets, going into episode view the shown episode is correctly selected in list. Selection is correctly kept when changing sort order.
-* NOTICE Latest translations from crowdin.
+### 56-beta2 - 2020-09-11
 
-#### 16-beta2 *(2014-06-20)*
+* 🌟 Limited support for re-watching episodes and movies. When viewing an episode or movie, tap
+  Watched and then Set watched to add another play. To keep things simple, SeriesGuide only keeps
+  a count of plays. This is only available for supporters.
+* 📝 When connecting Trakt, multiple plays are not uploaded (as Trakt keeps a watched at time,
+  not sure how to handle this, yet).
+* 📝 The JSON backup format now exports plays count for episodes and movies.
+* 🔨 Potential fix for Trakt sign-in issues for some users.
+* 🔧 Add additional reporting to help diagnose Trakt sign-in issues.
+* 🔧 Add option to turn off sending crash and error reports.
+* 🔨 Tapping the launcher icon to open the app now always returns to the previous screen.
+* 🔨 Display movie info instead of nothing if sending movie action to Trakt fails.
+* 📝 Latest translations from crowdin.
 
-* TWEAK UI improvements (episode list, rate dialog, light theme immersive theme).
-* TWEAK Sort ended after continuing shows when ordering by next episode.
-* NOTICE Latest translations from crowdin (some updates for Spanish).
+### 56-beta1 - 2020-08-07
 
-#### 16-beta1 *(2014-06-18)*
+* 🌟 Metacritic search link for shows and movies. Note that only English titles get good results.
+* 🔧 Shorter English episode number formats by default (S01E01 -> S1:E1). The older formats are still available in Settings.
+* 🔧 Show details layout again always includes status, network and time.
+* 🔧 Show overview multi-pane layout requires larger screen width in landscape.
+  Most tall phones using gesture navigation should support it.
+* 🔧 Update older movies more often (180 -> 90 days), this should resolve broken posters more quickly.
+* 🔧 Fast scroller for watched movie list.
+* 🔧 Link to battery settings/app info page from notification settings to make users aware of these system settings.
+* 📝 Latest translations from crowdin.
 
-* TWEAK Better way of loading show posters and episode images, also now using designated cache folders.
-* NOTICE Dropped now deprecated poster loading tool, clear image cache setting now links to app info where you can 'Clear Cache'.
-* NOTICE Latest translations from crowdin.
+## Version 55
 
-Version 15 *(2014-06-03)*
------------------------------
+* 🌟 Movie search results, popular, digital and disc release lists now display all items.
+* 🔧 More compact and cleaner statistics.
+* 🔧 Small design and layout tweaks.
+* 🔨 The app respects the system font size on Android 7 and older again.
+* 🔨 Removed subscription expired notification.
 
-* UI improvements and bug fixes.
-* Supports Android 4.0.3 (Ice Cream Sandwich) and up. If you are running Android 3.x you will only receive important bug fixes from now on.
+### 55.1 - 2020-09-16
 
-#### 15.0.6 *(2014-06-16)*
+* 🔨 Potential fix for Trakt sign-in issues for some users.
+* 🔧 Add additional reporting to help diagnose Trakt sign-in issues.
+* 🔨 Display movie info instead of nothing if sending movie action to Trakt fails.
 
-* FIX Creating a backup, adding or removing shows takes a long time when there are many shows added to SG.
+### 55 - 2020-07-16
 
-#### 15.0.5 *(2014-06-12)*
+* No changes.
 
-* FIX Crash when calculating next episode.
+### 55-beta6 - 2020-07-10
 
-#### 15.0.4 *(2014-06-11)*
+* 🔧 Internal updates to Trakt history page, resolves rare crash.
+* 🔧 Add more prominent link to full history, fast scroller to Trakt history page.
+* 🔧 Display sync status and errors directly under More.
+* 🔨 Shows list did not update despite next episodes changing.
 
-* FIX Jank when scrolling the show list.
-* FIX Crash when retrieving show poster from cache.
+### 55-beta5 - 2020-07-02
 
-#### 15.0.3 *(2014-06-09)*
+* 🔧 Added fast scroller back to shows tab.
+* 🔧 Fast scroller indicator should track finger position more closely, feel more precise.
+* 📝 Latest translations from crowdin. Dropped Hindi, Latvian, Lithuanian and Slovenian due to
+  largely incomplete translation.
 
-* FIX Movies removed from watchlist or collection are added again when syncing with trakt.
+### 55-beta4 - 2020-06-26
 
-#### 15.0.2 *(2014-06-06)*
+* 📝 Make adjustments to meet Google Play requirements.
 
-* FIX Crash when upgrading database.
-* FIX Crash when creating SeriesGuide account.
-* FIX Crash when decoding downloaded image consumes too much memory.
+### 55-beta3 - 2020-06-25
 
-#### 15.0.1 *(2014-06-04)*
+* 🔧 Update more text styles.
+* 🔧 Episode, show and movie buttons display state if enabled instead of action. To display the action tap and hold the buttons as usual.
+* 🔨 Fix and update style of some buttons.
+* 🔨 Fix the app not respecting system font size on Android 7 and older.
+* 📝 Latest translations from crowdin.
 
-* FIX Sync progress bar showing briefly when launching even if no actual sync is occuring.
+### 55-beta2 - 2020-05-20
 
-#### 15 *(2014-06-03)*
+* 🔧 Refreshed show info layout, more compact ratings display.
+* 🔧 Add remove action if there are no more episodes.
+* 🔧 Drop sometimes misleading subscription expired notification, sometimes it is just a temporary
+  error with Google Play.
+* 🔨 Don't say sending to Cloud when changing a (Trakt) rating.
 
-* TWEAK Design tweaks.
-* TWEAK Moved movie search tab to first position.
-* FIX Notification settings not disabled when returning after disabling notifications.
-* NOTICE Latest translations from crowdin. Added (partial) Catalan.
+### 55-beta1 - 2020-05-08
 
-#### 15-beta1 *(2014-05-23)*
+* 🌟 Movie search results, popular, digital and disc release lists are now (almost) endless.
+* 🔧 More compact and cleaner statistics.
+* 📝 Latest translations from crowdin.
 
-* TWEAK The context menu is dead! Long live the popup menu! Migrated all context menus to popup menus.
-* TWEAK Updated action bar design, updated some icons.
-* TWEAK Simplified getting started instructions, dropped migration quick link (still available in settings).
-* TWEAK Pitch black background for fullscreen poster/image viewer.
-* FIX Notification sometimes links to wrong episode.
-* FIX In movie search, the popup menu now shows add to/remove from options depending on a movie being added to the watchlist or collection.
-* NOTICE Drop ActionBarSherlock. It was nice, while it lasted. Goodbye old friend!
-* NOTICE Supports Android 4.0.3 (Ice Cream Sandwich) and up. If you are running Android 3.x you will only receive important bug fixes from now on.
+## Version 54
 
-Version 14 *(2014-05-14)*
------------------------------
+* 🌟 Switch to bottom navigation bar.
+* 🔧 Auto backups are created in an app specific directory, no longer requiring any setup. For most
+  users it will be backed up by Android (Android 6+, up to 25 MB total) and can be restored from
+  after re-installing the app.
+* 🔧 When connecting Trakt, do not clear movies that are only watched on the device. Instead upload
+  them. Trakt will set them as watched on their release date.
+* 🔨 Support adding and updating shows without episodes (e.g. upcoming shows).
+* 🔧 Add JustWatch Turkey to streaming search links.
 
-* View a stream of your and your friends trakt check-ins for shows and movies.
-* Option to sort shows and movies by title while ignoring articles (English only).
-* Easier trakt setup: after connecting your shows and movies are automatically merged with your trakt profile.
-* Extensions replace watch options for episodes. Added extension for Google Play, YouTube and Web search.
+### 54 - 2020-04-30
 
-#### 14.0.4 *(2014-05-21)*
+* 📝 Latest translations from crowdin.
 
-* FIX Crash when database upgrade did not succeed.
+### 54-beta4 - 2020-04-24
 
-#### 14.0.3 *(2014-05-15)*
+* 🔧 Add JustWatch Turkey to streaming search links.
+* 🔧 Tapping a bottom nav item now scrolls the visible list to the top.
+* 🔨 Fix widget crashing if an item has no poster.
+* 🔨 Fix crash when changing calendar settings in some situations.
+* 🔨 Fix crash when pinning shortcut in some situations.
+* 🔨 Fix crash if external storage is not available to read auto backups from.
 
-* FIX Actually fix crash when leaving right after starting to connect to trakt.
+### 54-beta3 - 2020-04-03
 
-#### 14.0.2 *(2014-05-15)*
+* 🔧 Move community and translation links to More from Settings.
+* 🔧 Less bright empty message icons on dark theme.
+* 🔨 Fix conflict that prevented side-by-side installation of the Amazon and Play Store version.
+* 🔨 Correctly color add all icon on Trakt lists screens.
+* 🔧 A bunch of internal improvements.
+* 📝 Latest translations from crowdin.
 
-* FIX Crash when leaving right after starting to connect to trakt.
-* FIX German translation.
-* NOTICE Latest translations from crowdin.
+### 54-beta2 - 2020-03-26
 
-#### 14.0.1 *(2014-05-14)*
+* 🌟 Replaced the navigation drawer with an easier to use and discover bottom navigation bar.
+* 🔧 Removed unlock and services settings that are now shown under More.
+* 🔧 When connecting Trakt, do not clear movies that are only watched on the device, instead upload
+  them. Trakt will set them as watched on their release date.
+* 🔨 Support adding and updating shows without episodes (e.g. upcoming shows).
+* 🔨 The last auto backup date was off by a month.
+* 📝 Latest translations from crowdin.
 
-* FIX Crash when access to network detection is prevented (e.g. Xposed privacy module).
-* NOTICE Latest translations from crowdin (Finish, Portuguese Brazil).
+### 54-beta1 - 2020-03-20
 
-#### 14 *(2014-05-12)*
+* 🔧 Auto backups are now always created in an app specific directory on external storage, not
+  requiring a special permission or any setup. The last two backups are kept. They are not available
+  if the app is installed again, unless Android's app data backup has backed them up (Android 6+, up to 25 MB total).
+* 🔧 After installing the app and an auto backup is detected (e.g. Android has restored app data), offer to restore it.
+* 🔧 After creating a backup, auto backup can copy it to files you specify.
+* 🔧 Show a message if the last auto backup failed.
+* 🔧 Ability to run auto backup right away, e.g. to test if creating copies is successful.
+* 🔧 Suggest more recognizable names for backup files.
+* 🔧 If a show or movie failed to update, also display its title.
+* 📝 Auto backup will be turned on for all users. If you do not need auto backups,
+  you can turn it off again.
+* 📝 Auto backup will now create an empty file instead of none if there is no data to backup.
+* 📝 Importing an empty backup file will no longer fail and just remove existing data.
+* 📝 Support Android 10.
 
-* FIX Error message not displaying in some cases when failing to add a show.
-* FIX Crash when sharing, but no app available to handle a share intent.
-* NOTICE Latest translations from crowdin (Arabic, French, Polish).
+## Version 53
 
-#### 14-beta5 *(2014-05-09)*
+* New Dark and Light app and widget theme.
+* By default, set app theme based on system setting (Android 10) or by Battery Saver (Android 9 and older).
+* New notification option to only notify if the new episode is the next episode to watch.
 
-* TWEAK Greatly improved experience after connecting to trakt: watched and collected episodes on the device are now automatically merged with your trakt profile.
-* NOTICE Deprecated trakt upload tool. To merge your watched and collected episodes, disconnect, then connect again to trakt.
-* NOTICE Latest translations from crowdin (Danish).
+### 53 - 2020-03-12
 
-#### 14-beta4 *(2014-05-06)*
+* 🔨 In some cases when backing up and the new backup is smaller,
+  the resulting JSON might be corrupted.
+* 🔧 If a show or movie failed to update, display which one (see Trakt/Cloud screens).
+* 📝 Latest translations from crowdin.
 
-* FEATURE 'Ignore articles' option for show/movies sort order.
-* TWEAK Swipe to refresh in comments.
-* TWEAK If relative time (e.g. "in 5 min") is lower than possible resolution, display "now".
-* TWEAK Hide manual update and load poster actions in advanced menu.
-* NOTICE Latest translations from crowdin.
+### 53-beta5 - 2020-03-05
 
-#### 14-beta3 *(2014-04-30)*
+* 🔧 Replace compass with link icon for movie links option.
+* 🔧 Display country for Portuguese variants when selecting movie language.
+* 🔨 Use less bright selected state for people list as well.
+* 🔨 Restore icon for add to home screen button.
+* 🔨 Crash when a movie result does not exist.
+* 📝 Latest translations from crowdin.
 
-* TWEAK Friends and your trakt activity grouped by day, similar to Upcoming/Recent.
-* FIX Fullscreen images are cut-off.
-* FIX Crash when returning to Upcoming/Recent and data has changed.
+### 53-beta4 - 2020-02-20
 
-#### 14-beta2 *(2014-04-28)*
+* 🌟 Notifications: option to only notify if the new episode is the next episode to watch.
+* 🔧 Add link to release announcements from app update notification.
+* 🔨 Fix colors in debug view.
+* 📝 Latest translations from crowdin.
 
-* FEATURE trakt activity streams: recently watched shows for your friends and yourself, same for movies. Streams support pull to refresh.
-* TWEAK Added extensions for Google Play, YouTube and Web search. These replace the current watch links below episodes.
-* NOTICE Latest translations from crowdin.
+### 53-beta3 - 2020-02-13
 
-#### 14-beta1 *(2014-04-24)*
+* 🌟 New Dark and Light widget themes replace old themes, with more compact and less colorful header.
+* 🔧 Widgets: prevent setting only premieres option if displaying shows, it has no effect.
+* 🔨 Crash when using the new backup agent.
+* 🔨 Crash when receiving malformed response from Cloud.
+* 🔨 List add and edit dialog text box not full width.
+* 📝 Latest translations from crowdin.
 
-* TWEAK Fullscreen show poster view loads image with highest resolution.
-* TWEAK Show list and activity refresh data when returning to app, every 5 minutes when kept open.
-* TWEAK Use 'Add to/Remove from collection' for shows and episodes instead of 'Collected/Not yet collected' where appropriate.
-* NOTICE Cloud beta setup moved to Settings > Services.
+### 53-beta2 - 2020-02-07
 
-Version 13.1.1 *(2014-04-22)*
------------------------------
+* 🌟 New Dark and Light theme replace old themes. By default theme is chosen by system setting
+  (Android 10) or depending on Battery Saver being active (Android 9 and older). Set the theme
+  permanently to Dark or Light in Settings.
+* 📝 The theme update is still incomplete (e.g. widgets) or might be broken on some devices. Let me know!
+* 🔧 Confirm set all episodes up to here watched.
+* 🔧 On Android 6 and newer improve system app data backup by only including settings.
+* 📝 Latest translations from crowdin.
 
-* TWEAK 'Add to collection' option in activity context menus.
-* TWEAK Neutral touch feedback on list widget.
-* TWEAK Support for shows with 'Netherlands' release times.
-* TWEAK When removing a show its episodes are removed immediately from activity stream.
-* FIX Incorrect episode flagged watched in activity stream.
-* FIX Text drawing issue on Android 4.0 (Ice Cream Sandwich) devices in episode details.
-* NOTICE Latest translations from crowdin.
+### 53-beta1 - 2020-01-10
 
-Version 13.1 *(2014-04-17)*
----------------------------
+* 🔧 Fetch images from new TheTVDB artworks subdomain, provide fall back for old image links.
+* 🔨 Episodes screen may crash in certain situations.
+* 🔨 Background work may crash on some devices in certain situations.
+* 📝 Latest translations from crowdin.
 
-* Extensions API: now all users can add up to two extensions. To add more subscribe or buy the X Pass!
+## Version 52
 
-Version 13.0.1 *(2014-04-17)*
------------------------------
+* 🌟 Calendar: add option to only display premieres.
+* 🔧 Episodes: button to set all episodes watched up to (including) the current one.
+* 🔧 Episodes: on phones, combine list and page view, add switch view button.
+* 🔧 Discover: also use improved search by TheTVDB.com when set to English.
+* 🔧 Discover: drop any language option, just type a show title in any language to get a match.
 
-* Bugfixes based on past crash reports.
+### 52 - 2019-12-05
 
-Version 13 *(2014-04-16)*
------------------------------
+* 📝 Latest translations from crowdin.
 
-* Extensions API: provide custom quick actions below episodes. Learn how to [build one](https://github.com/UweTrottmann/SeriesGuide/wiki/Extension-API).
-* Design refresh.
-* Sort movies.
-* Supports Android 3.0 (Honeycomb) and up. If you are running Android 2.3 you will only receive important bug fixes from now on.
+### 52-beta5 - 2019-11-28
 
-#### 13-beta7 *(2014-04-11)*
+* 🔧 Add new languages supported by TheTVDB.com.
+* 📝 Add more translations of the new description on Play Store. Thanks to all translators!
+* 📝 Latest translations from crowdin.
 
-* TWEAK Purple action bar for SeriesGuide Light theme.
-* FEATURE Backup tool now also exports/imports movies. They are stored in a separate file called 'sg-movies-export.json'.
+### 52-beta4 - 2019-11-21
 
-#### 13-beta6 *(2014-04-08)*
+* 🔧 Switch English language show search to the new and improved search by TheTVDB.com.
+* 🔧 Also drop any languages option. Just enter a show title in any language to get a match.
+* 🔧 Discover: add Trakt logo to links connected to current Trakt profile.
+* 📝 Latest translations from crowdin. Now including Hindi thanks to a new translator!
 
-* TWEAK Do not show fast scroll bar in 'Lists'.
-* TWEAK Fresh coat of paint for SeriesGuide (default) and SeriesGuide Light theme. Various other design tweaks.
-* TWEAK 'Hide special episodes' setting respected by 'Statistics', added toggle for the setting to 'Statistics' menu.
-* NOTICE Latest translations from crowdin.
+### 52-beta3 - 2019-11-15
 
-#### 13-beta5 *(2014-04-02)*
+* 🔧 Episode view remembers if season was last viewed as list, goes back to list if page was shown
+  by tapping on list.
+* 🔨 Correctly tint switch view icon on light theme.
+* 🔨 Resolve crash when opening episodes view.
+* 📝 Latest translations from crowdin.
 
-* TWEAK Always show fast scroll bar when appropriate to allow easy jumping inside of lists.
-* TWEAK Do not show '<show> was successfully added' toasts anymore. If there was an error adding a show it will still display, but only if the app is in the foreground.
-* FIX 'Manage Lists' and 'Share' action were shown in overview if there was no episode.
-* NOTICE New [Extensions API](https://github.com/UweTrottmann/SeriesGuide/wiki/Extension-API) release.
+### 52-beta2 - 2019-11-08
 
-#### 13-beta4 *(2014-03-27)*
+* 🔧 On phones, combine episode list and page view into one.
+  Switch between them with a button in the top right.
+* 🔧 Move episode share, add to calendar and manage lists buttons to bottom of screen.
+* 🔨 Watched up to here no longer marks unreleased episodes watched.
+* 🔨 In debug mode, log show TheTVDB ID if it fails to update.
+* 🔨 Do not crash on backing up if file provider has issues.
+* 📝 Latest translations from crowdin.
 
-* TWEAK Add all remaining Amazon domains.
-* FIX full trakt sync did not correctly download unwatched and uncollected episodes.
-* FIX Some GA issues.
-* NOTICE Latest translations from crowdin.
+### 52-beta1 - 2019-10-31
 
-#### 13-beta3 *(2014-03-26)*
+* 🌟 Calendar: add option to only display premieres (first episodes).
+* 🔧 Show overview: if there is no next episode, suggest to look for similar shows.
+* 🔧 Episode details: button to set all episodes watched up to (including) the current one.
+* 📝 Latest translations from crowdin.
 
-* FEATURE SeriesGuide extensions, learn how to [get started](https://github.com/UweTrottmann/SeriesGuide/wiki/Extension-API).
-* TWEAK Episode details load faster.
-* FIX Scroll bar overlaps episode list too much.
-* FIX tvtag auth token marked for refresh a week before expiry (was 24 hours), reducing the chance the user has to manually re-authenticate.
-* NOTICE SeriesGuide for Android 2.3 (Gingerbread) only receiving minor updates from now on, e.g. it will not get extension support.
-* NOTICE New permission: "Prevent device from sleeping". Read more at [http://seriesgui.de/privacy](http://seriesgui.de/privacy).
+## Version 51
 
-#### 13-beta2 *(2014-03-17)*
+* 🌟 Display similar shows from the show details dialog and screen. Powered by themoviedb.org!
+* 🔧 Display streaming search in show details dialog, if it was configured.
+* 🔧 Move advanced settings up to the first settings section.
+* 🔧 Remove DashClock extension, DashClock has been unpublished for a long time.
+* 🔧 Allow users to enable debug mode, for example to share log output.
 
-* TWEAK trakt comments do not auto-refresh anymore, added refresh button instead.
-* FIX Some bug fixes and optimizations.
+### 51 - 2019-10-02
 
-#### 13-beta1 *(2014-03-11)*
+* 🔨 Do not crash when trying to display details for a show not existing on TheTVDB.com.
+* 🔨 Do not crash if there is no app available to select notification sound.
+* 📝 Latest translations from crowdin.
 
-* FEATURE Sort movies by title or release date (touch again to reverse sort).
-* TWEAK Toned down tab strip highlights, movie button bar.
-* TWEAK Auto-complete email accounts when signing up for trakt.
-* TWEAK Hidden shows will not display notifications any longer.
-* TWEAK Display absolute episode number more prominently in episode detail view, drop duplicate season and episode number.
-* FIX Exclude special episodes from determining if all episodes of a show are collected as well (already in effect for watched all marker).
+### 51-beta6 - 2019-09-26
 
-Version 12.4 *(2014-03-27)*
----------------------------
+* 🔧 Show a close instead of an up button for screens that have no parent screen.
+* 🔧 Migrate widget settings and Amazon extension settings to new implementation.
+* 🔧 Allow users to enable debug mode, for example to share log output.
+* 🔨 Do not show movie history tab at wrong position after connecting trakt. Wait until the movies
+  section is left and visited again.
+* 📝 Latest translations from crowdin.
 
-* FIX Full trakt sync not downloading unwatched and uncollected episodes correctly.
-* FIX Crash when adding movie.
+### 51-beta5 - 2019-09-20
 
-Version 12.3 *(2014-03-08)*
----------------------------
+* 🌟 Display similar shows from the show details dialog and screen. Powered by themoviedb.org!
+* 🔧 Display streaming search in show details dialog if it was configured.
+* 📝 Latest translations from crowdin.
 
-* Trakt show upload was broken.
+### 51-beta4 - 2019-09-14
 
-Version 12.2 *(2014-03-03)*
----------------------------
+* 🔨 Add movies to watchlist, collection or watched in all cases when syncing with trakt or Cloud.
+  On upgrading to this version the next sync will add missing movies.
+* 🔧 Remove DashClock extension, DashClock has been unpublished for a long time.
+* 🔧 Switch settings to new underlying implementation.
+* 🔧 Move basic settings link up to the first section, rename it to Advanced.
 
-* Comments for episodes did wrongly display show comments.
+### 51-beta3 - 2019-09-04
 
-#### 12.2-beta2 *(2014-03-02)*
+* 🔨 Resolve connection issues with TheTVDB and trakt.
 
-* FIX Comments for episodes did wrongly display show comments.
-* FIX Crashes when doing (bulk) database operations. Recover in more cases.
-* NOTICE Updates to Chinese Simplified translation.
+### 51-beta2 - 2019-08-30
 
-#### 12.2-beta1 *(2014-03-01)*
+* 🔨 Do not crash when viewing an episode and there is no show title or poster.
 
-* FIX Crashes when doing (bulk) database operations. This might have performance impacts regarding adding shows, sync time, etc. Please report anything out of the ordinary in that regard.
-* NOTICE Updated Romanian translation.
+### 51-beta1 - 2019-08-29
 
-Version 12.1 *(2014-02-27)*
----------------------------
+* 🔧 Fetch show small poster path instead of constructing it, to future proof for upcoming changes at TheTVDB.com.
+* 🔨 Fix discover screen displaying shows that can not be added.
+* 🔨 Fix the subscriptions screen displaying a developer error in some cases.
 
-* Bugfixes.
-* Updated translations.
+## Version 50
 
-Version 12 *(2014-02-26)*
--------------------------
+* 🌟 Add Sponsor and Supporter subscriptions. If you can or want to you can now make a more
+  significant contribution to help me make future updates.
+* 📝 Existing subscription is now All Access. Reduced price (for existing subscribers, too) so
+  more people can get access to Cloud.
+* 🔧 Add option to turn off infinite calendar.
+* 🔧 Movie release times setting also affects popular, search. Watchlist, collection, watched and
+  details views will start using it.
 
-* Improved international show support: release times + notifications might be off until a full sync will run (by opening the app). You may trigger a sync manually by touching Menu in the upper right corner (or by pressing the menu button on your device), then Update.
-* Build a movie watchlist and collection.
-* Requires at least Android 2.3 (Gingerbread).
-* Bugfixes and design updates.
+### 50.1 - 2019-09-18
 
-#### 12-beta10 *(2014-02-24)*
+* 🔨 Add movies to watchlist, collection or watched in all cases when syncing with trakt or Cloud.
+  On updating to this version the next sync will add missing movies.
 
-* FIX Tabs are crammed together.
+### 50 - 2019-08-14
 
-#### 12-beta9 *(2014-02-24)*
+* 📝 Latest translations from crowdin.
 
-* TWEAK DashClock extension now prominently displays show title, is formatted similar to DashClock's calendar extension.
-* TWEAK 'Manual sync with trakt' is now simply 'Upload existing shows'. The regular (Auto) Update mechanism will take care of syncing watched and collected episodes.
-* TWEAK More reliable trakt credentials validation.
-* FIX Tab backgrounds not themed.
-* FIX No error message if movie details could not be loaded, lonely cast and crew labels.
-* FIX Displayed last 'Auto-Backup' time even if there are no actual backup files.
-* FIX Various other bug fixes.
-* NOTICE Themes are now exclusive to X subscribers/X pass holders.
+### 50-beta5 - 2019-07-25
 
-#### 12-beta8 *(2014-02-19)*
+* 🔧 The list of popular movies and movie search display release dates depending on the selected
+  region.
+* 🔧 The movie watchlist, collection, watched tab and the details view will start to display the
+  release date depending on the selected region. Preferably the theatrical one.
+* 🔨 Correctly detect active subscription after restarting the app.
+* 🔨 Do not crash if subscription title can not be parsed.
+* 📝 Distribute as Android App Bundle. This can not be sideloaded, use the official APK from the website!
+* 📝 Latest translations from crowdin.
 
-* TWEAK Better crash reports.
-* FIX Movie posters and trakt avatars downloaded despite on mobile connection and 'Images via Wi-Fi only' was enabled.
+### 50-beta4 - 2019-07-19
 
-#### 12-beta7 *(2014-02-18)*
+* 🌟 Support upgrading subscription to new Sponsor and Supporter tiers.
+* 🔧 Show icon which subscription tier is active.
+* 📝 Latest translations from crowdin.
 
-* FIX Crash when movie details did not load due to network error, but movie was added to watchlist or collection.
+### 50-beta3 - 2019-07-18
 
-#### 12-beta6 *(2014-02-18)*
+* 🌟 Introduce Sponsor and Supporter subscriptions so people who can or want to can make a more
+  significant contribution. This helps me make future updates.
+* 📝 Rename existing subscription to All Access. Reduced price for new and existing subscribers so
+  more people can get access to Cloud.
+* 🔧 Move subscriptions to new Google Play billing library.
+* 📝 Latest translations from crowdin.
 
-* NOTICE This version requires at least Android 2.3 (Gingerbread).
-* FEATURE Movie watchlist and collection support. If connected to trakt, syncs watchlist and collection and in addition allows to flag movies watched.
-* TWEAK Display movie runtime, cast and crew as well as TMDb and trakt ratings.
-* TWEAK Support sharing movie (using secure trakt web link), added TMDb link.
-* TWEAK Sharing shows and movies uses a secure trakt web link which creates nice info cards on Google+, Facebook and Twitter.
-* TWEAK Moved Settings and Help back to nav drawer, cleaned up some duplicate overflow actions.
-* TWEAK Support translucent system bars with Android Dark app theme.
-* TWEAK Support release times for Finland (Europe/Helsinki time zone).
-* FIX Single episode notification opens wrong episode.
-* FIX Show and episode ratings did not update because they were cached for too long.
-* FIX Using the back button on the show list sometimes navigates to the show list again.
-* FIX Setting a manual time offset breaks episodes moving correctly into 'Recent', notifications.
-* FIX When dismissing the check-in dialog coming from a notification quick action a blank screen is shown.
-* FIX When changing settings for multiple widgets the configuration dialog for the first configured widget was shown for all widgets.
-* FIX Going back from a widget configuration dialog or notification quick-action check in returns to the app instead of the home screen/previous task.
-* FIX Syncing on Android 2.3 (Gingerbread) crashes SeriesGuide.
-* FIX Flagging an episode as unwatched could lead to unexpected (= much later) next episode.
-* NOTICE Contributor branch changed from `beta` to `dev`. Please submit any new pull requests against `dev`. Also updated contributer guidelines.
-* NOTICE Switched to a new crash reporting tool. For the privacy policy see http://seriesgui.de/privacy.
-* NOTICE Latest translations from crowdin.
-* NOTICE Database upgraded to version 32.
+### 50-beta2 - 2019-07-06
 
-#### 12-beta5 *(2014-02-04)*
+* 🔧 Shows/Movies: move search action left-most as likely most used. Show refresh action on history tabs.
+* 🔧 Show overview: move share action to more options to reduce clutter.
+* 🔧 Episodes list: show sort by action.
+* 🔨 Enable crash reporting.
 
-* NOTICE A full sync is scheduled after upgrading. Details below.
-* TWEAK Release times are calculated with a show's country of origin (sourced from trakt) in mind. When upgrading a full sync is triggered. You might see incorrect release times and receive incorrect notifications until the upgrade is complete.
-* TWEAK On the info tab of a show 'Release times' will list the country that determines which time zone is used to calculate the episode release times. Currently supported are Australia, Germany, Japan, United States, United Kingdom. United States is used for all others. Please share others you want supported!
-* TWEAK Shows airing from 12:00am to 12:59am are now associated with the day before (e.g. Late Night with Jimmy Fallon).
-* TWEAK On Android 4.4 (KitKat) and up the episode details screen uses translucent system bars (phones only).
-* FIX Daily trakt sync now properly removes watched or collected flags for shows with no watched or collected episode on trakt.
-* FIX Crash when connecting to trakt and credentials could not be stored correctly.
-* FIX Sync did not update all shows it was told to update.
-* NOTICE The JSON import/export tool now exports the 'country' property for shows.
-* NOTICE Latest translations from crowdin.
+### 50-beta1 - 2019-07-05
 
-#### 12-beta4 *(2014-01-30)*
+* 🔧 Restore infinite calendar option due to feedback. Defaults to enabled for new and existing users.
+* 🔨 Potential fixes for crashes due to extensions.
 
-* FIX Crash when adding/removing movie from watchlist, shouting.
-* NOTICE Latest translations from crowdin.
+## Version 49
 
-#### 12-beta3 *(2014-01-29)*
+* 🔧 Calendar is always infinite, uses all available space on large screens, has larger fast
+  scroller that is easier to grab.
+* 🌟 Add setting to ignore hidden shows for notifications (defaults to enabled).
+* 🌟 Filters: add option to make all hidden shows visible at once.
+* 🔧 History: Add link to trakt history website. Show up to 50 items (was 25).
+* 🔧 Streaming search: add JustWatch for Poland.
+* 🔧 Movies: Add set watched option to more options (three dots) menu.
 
-* NOTICE GetGlue is now tvtag.
-* TWEAK Check-in dialog waits for trakt and/or tvtag check-in to succeed before vanishing with your message (you can still dismiss anytime).
-* TWEAK Auto-Update gets watched and collected episodes from trakt and matches them in SeriesGuide. At most every 24 hours (always if update is triggered manually).
-* TWEAK Show show title in show list context menu, season number in seasons context menus.
-* NOTICE Latest translations from crowdin.
+### 49 - 2019-06-28
 
-#### 12-beta2 *(2014-01-21)*
+* 📝 Latest translations from crowdin.
 
-* FIX Mirrored shows and movies grid on some Android 4.1 tablets.
+### 49-beta6 - 2019-06-21
 
-#### 12-beta1 *(2014-01-20)*
+* 🔨 When making all hidden shows visible also upload changes to Cloud.
+* 🔨 trakt sign-in: do not crash if WebView is currently unavailable (e.g. it is updated).
+* 🔨 Potential fix for crashes when receiving actions from extensions.
+* 🔧 When changing the state of a show (e.g. favoriting or hiding it), will wait until sent to Cloud
+  before applying the change locally.
+* 📝 Latest translations from crowdin.
 
-* TWEAK Light theme now features a light action bar and nav drawer. Both SeriesGuide Light and Android Dark theme have a more pleasant flat background.
-* TWEAK Drop user to home screen after creating show shortcut.
-* FIX Crash when rating while using SeriesGuide with ART.
-* FIX Incorrect movie posters displaying in movie search.
-* NOTICE Reenable access to SeriesGuide cloud.
+### 49-beta5 - 2019-06-07
 
-Version 11.1 *(2014-01-21)*
--------------------------
+* 🌟 Add setting to ignore hidden shows for notifications (defaults to enabled).
+* 🌟 Filters: add option to make all hidden shows visible at once.
+* 🔨 Do not crash when changing show states (favorite, hidden, notify).
+* 📝 Latest translations from crowdin.
 
-* FIX Mirrored shows and movies grid on some Android 4.1 tablets.
-* FIX Crash when rating episode if SeriesGuide is running on ART.
+### 49-beta4 - 2019-05-31
 
-Version 11 *(2014-01-17)*
--------------------------
+* 🔧 Streaming search: add JustWatch for Portugal (but appears to be broken) and Poland.
+* 🔧 Add set watched option to movie more options (three dots) menu.
+* 🔨 Movie not in collection or watchlist is properly added after setting it watched.
+* 🔨 trakt sync adds movies that are just watched.
+* 🔧 TMDb sync now reports failure if any movie failed to update.
+* 📝 Latest translations from crowdin.
 
-* Show activity integrated into shows section. Just swipe to get from your show list to upcoming episodes or friends activity (last one requires connecting to trakt).
-* Better offline detection, new 'Images via Wi-Fi only' setting replaces previous 'Update via Wi-Fi only' setting.
-* Many small fixes and tweaks (e.g. scroll bars, list widget config).
+### 49-beta3 - 2019-05-24
 
-#### 11-beta5 *(2014-01-13)*
+* 🔧 Experimental internal improvements when changing favorite, notify or hidden state of a show.
+* 🔨 Potential fix for calendar jumping away from first item.
+* 📝 Latest translations from crowdin.
 
-* FIX Lists in shows section overlap with tab strip on Android 2.3 (Gingerbread).
-* TWEAK Better explanation of upgrade options, fall back to X Pass link if Billing service unavailable.
-* NOTICE Latest translations from crowdin.
+### 49-beta2 - 2019-05-10
 
-#### 11-beta4 *(2014-01-09)*
+* 🔧 The new calendar is now always infinite. If multiple columns are shown, groups are no longer
+  broken into a new row, instead using all available space.
+* 📝 Latest translations from crowdin.
 
-* TWEAK Store trakt passwords with Android account system, will hopefully lead to less errors. Also, disconnecting from trakt will not force you back to the previous screen anymore.
-* TWEAK Rework sync account handling, leading to potentially less crashes.
-* FIX List widget does not refresh items immediately after changing its settings. Thanks Tomas for pushing me to fix this.
-* NOTICE Latest translations from crowdin, now including Latvian.
+### 49-beta1 - 2019-05-10
 
-#### 11-beta3 *(2014-01-03)*
+* 🔧 Add link to trakt history website on history screen. Show up to 50 items (was 25).
+* 🔧 If connected to trakt, show at most 10 recently watched episodes or movies on history tabs (was 25).
+* 🔨 Switched upcoming/recent tabs to RecyclerView, should resolve various crashes.
+* 📝 The infinite calendar option has been removed. Instead upcoming/recent now show up to 50 episodes.
+* 📝 Drop support for beaming shows from overview screen. Share the TheTVDB link instead.
 
-* TWEAK Require confirmation before toggling watched or collected flag for all seasons.
-* TWEAK Show tab displays more info right beside show poster.
-* TWEAK Finally move activity tabs into shows section now that filtering is done via an action item (funnel icon).
-* TWEAK Other minor layout tweaks.
-* FIX Superfluous space character in trakt movie check-in confirmation message.
-* FIX Scrollbars overlap content, make item actions hard to press.
-* FIX Library tab in 'Add shows' screen does not display show descriptions.
+## Version 48
 
-#### 11-beta2 *(2013-12-22)*
+* Support 'Upcoming' status for shows.
+* Add watched movies tab.
+* Statistics: display number and run time of watched movies.
+* Color navigation bar black for dark themes, white on light theme.
 
-* FIX Crash when doing network operations in libssl due to issue with OkHttp (see commit c73265d240bdf168d02e704ecda43fa653068c49).
-* FIX Crash when downloading shows from hexagon, but no valid property values exist (all null).
+### 48 - 2019-05-02
 
-#### 11-beta1 *(2013-12-20)*
+* 🔨 Do not crash if updating security provider fails.
+* 📝 Latest translations from crowdin.
 
-* FEATURE SeriesGuide cloud experiment which can backup/sync your shows across devices. Episodes and movies are NOT yet included, use trakt.tv integration for that.
-* TWEAK Better offline detection in many places.
-* TWEAK New 'Images via Wi-Fi only' setting. By default SeriesGuide uses mobile networks as well. If the new setting is set, SeriesGuide will not download images if only a mobile connection is available keeping the mobile data charges at a minimum. ('Update only via Wi-Fi' setting is removed.)
-* TWEAK 'Remove all filters' action in 'Filter shows' menu.
-* TWEAK Display shorter movie release date in movie grids.
-* FIX Episode not updating in overview after trakt sync flagged it watched/collected (e.g. shortly after a check-in).
-* NOTICE Latest translations from crowdin, now including Latvian.
+### 48-beta6 - 2019-04-17
 
-Version 10 *(2013-12-06)*
--------------------------
+* 🔧 Support 'Upcoming' status for shows.
+* 🔧 Ask Google Play Services (if available) to update security provider.
+* 🔨 Fix crashes in movie details view and when pinning shortcuts.
 
-* Movie search results and movie details are displayed in the content language set in Settings (if available).
-* Small design tweaks, icon updates.
-* Layout fixes for some Android 4.1 tablets.
+### 48-beta5 - 2019-04-12
 
-#### 10-beta3 *(2013-12-03)*
+* 🔧 Experiment: refresh season watched counts using new Worker API.
+* 📝 Latest translations from crowdin.
 
-* TWEAK Also use new card layout in 'Add show' screen.
-* TWEAK Use new placeholder image for show list as well, fix placeholder blinking on list update.
-* FIX Certain Android 4.1 tablets incorrectly use 4.2 and up RTL layouts.
-* NOTICE Latest translations from crowdin.
+### 48-beta4 - 2019-03-29
 
-#### 10-beta2 *(2013-11-26)*
+* 🔧 Do not ask for storage permission in backup/restore tool (still required for auto-backup).
+* 📝 Latest translations from crowdin.
 
-* TWEAK Some design updates (more visually separated items, icon tweaks).
+### 48-beta3 - 2019-03-21
 
-#### 10-beta1 *(2013-11-20)*
+* 🌟 Statistics: display number and run time of watched movies. Might be incorrect until movies are updated.
 
-* TWEAK trakt credentials are sanitized more rigorously. If you have issues, try disconnecting and re-connecting again.
-* TWEAK Movie search results and movie details are displayed in the content language set in Settings, if a translation is available on themoviedb.org.
-* TWEAK Use Android 4.4 style settings icon on the list widget, change its layout a little.
+### 48-beta2 - 2019-03-15
 
-Version 9.3 *(2013-11-13)*
---------------------------
+* 🌟 Add watched movies tab. Might show blank items until movies are updated.
+* 🔧 Force black navigation bar on OnePlus devices as well.
+* 🔧 Use white navigation bar on light theme if on Android 8.1 or higher for burn-in protection.
+* 📝 Latest translations from crowdin.
 
-Disable encryption when talking to GetGlue. Android can't validate the certificate chain (either certificates were switched or RC 128 encryption is not supported).
+### 48-beta1 - 2019-03-08
 
-Version 9.1 *(2013-11-12)*
---------------------------
+* 🔧 Force black navigation bar.
+* 🔧 Use darker overlay action and status bar for better readability (movie details).
+* 🔧 Backup screens: show file path below button for better readability.
+* 📝 Latest translations from crowdin.
 
-Resolved crashes and layout issues. Latest translations.
+## Version 47
 
-### Detailed changes:
+* 🔧 Show list: replace favorite button with set watched button.
+* 🌟 Set movies watched (previously only when connected to trakt).
+* 🌟 New show list filters that can be set to include (+), exclude (-) or disabled.
+* 🌟 Added filter for continuing shows (exclude to display ended shows).
+* 📝 Show list filter settings are set back to defaults.
+* 🔧 Sharing old TheTVDB links to SeriesGuide to add shows works again.
 
-* TWEAK Highlight currently active navigation drawer item. Only available on Android 3.0 (Honeycomb) and up.
-* TWEAK Reorganize settings. Notably extracted notification related settings to their own page. Notify about all shows by default (previously only favorites).
-* TWEAK Updated shouts screen to be more in line with the rest of the app, e.g. added action bar.
-* TWEAK Removed navigation drawer from some not directly content related screens (e.g. help, tools).
-* FIX Screen partially blacks out on certain Nexus devices. Also see #309.
-* FIX Crashes when connecting to trakt, showing manage lists dialog.
-* FIX Crash in full screen mode on Android 3.x (Honeycomb) devices.
-* FIX Slow-down in add activity when trakt was offline, crash when trakt was disconnected.
-* FIX In some cases the subscription check crashes if the user leaves the app in the meantime.
-* NOTICE Latest translations from crowdin.
+### 47 - 2019-02-22
 
-Version 9 *(2013-11-08)*
-----------------------------
+* 🔧 Sharing old TheTVDB links to SeriesGuide to add shows works again.
+* 🔧 Switch to improved error reporting to better pinpoint issues.
+* 📝 Latest translations from crowdin.
 
-* Skip an episode or an entire season if you don't want to watch right now.
-* Android 4.4 (KitKat) compatible.
-* Moved 'Migrate from X' action to service settings.
-* New backend for GetGlue and trakt.
+### 47-beta7 - 2019-02-16
 
-### Detailed changes:
+* 🔧 Experiment with improved error reporting to better pinpoint issues.
+* 🔨 Crashes and errors are reported again.
 
-#### 9-beta5 *(2013-11-06)*
+### 47-beta6 - 2019-02-08
 
-* TWEAK Always crop episode image in episode details, tap to view original.
-* TWEAK Use dark action bar and white item selector for Android Dark theme.
-* TWEAK Removed duplicate search action from shows menu, is accessible via nav drawer.
-* FIX Action items not readable in episode details using white theme on phones.
-* FIX Random crash on Android 4.4 (KitKat), when syncing with trakt, when shows got added automatically, when adding shows with lots of episodes.
-* FIX Check marks in activity stream only flagging as watched.
-* FIX GetGlue id has to be entered multiple times when checking a show in for the first time.
-* FIX Search result images are too small on high resolution phones.
+* 🔨 Do not crash when loading show discover screen.
 
-#### 9-beta4 *(2013-11-04)*
+### 47-beta5 - 2019-02-08
 
-* FEATURE Skip an episode or an entire season you don't want to watch right now.
-* TWEAK Speeded up screen transitions, making the app even faster.
-* TWEAK Built and optimized for Android 4.4 (KitKat).
-* FIX Various crashes, related to in-app billing, syncing with trakt, connecting to trakt.
+* 🔨 Do not crash when opening movie with unknown running time.
+* 🔨 Do not crash when opening show sort options with deprecated sort order.
 
-#### 9-beta3 *(2013-10-31)*
+### 47-beta4 - 2019-02-01
 
-* TWEAK Moved trakt integration to new backend.
+* 🌟 Set movies watched (previously only when connected to trakt).
+* 🌟 Cloud: sync watched movies. If trakt is connected, too, will upload existing watched movies,
+  then use Cloud to sync them going forward. Watched changes are still sent to trakt.
+* 📝 Latest translations from crowdin.
 
-#### 9-beta2 *(2013-10-29)*
+### 47-beta3 - 2019-01-25
 
-* FIX Crash fix for In-App billing.
+* 🌟 New show list filters that can be set to include (+), exclude (-) or disabled.
+* 🌟 Added filter for continuing shows (exclude to display ended shows).
+* 📝 Show list filter settings are set back to defaults.
+* 🔧 Upcoming range setting moved to button next to upcoming filter.
+* 🔧 Show list filter view scrolls if screen is not tall enough.
+* 📝 Target Android 9.0 (Pie).
+* 📝 Latest translations from crowdin.
 
-#### 9-beta1 *(2013-10-28)*
+### 47-beta2 - 2019-01-18
 
-* TWEAK Switch to new GetGlue v3 API. Requires giving permission to SeriesGuide once. Setting a GetGlue id once before checking into a new show.
-* TWEAK Move update progress bar below action bar. Use it for poster loading progress as well.
-* TWEAK Improve poster and episode image full screen view: two-finger zoom, navigation stays visible.
-* TWEAK Change filter icon state if a filter is active. Thanks @adneal!
-* TWEAK Moved 'Migrate from X' action to service settings. Grouped SeriesGuide and GetGlue service settings
+* 🔧 After changing the language of a show or the alternative language in Settings, episode descriptions are updated properly again.
+* 🔧 Combine show filter and sort options into single view. Stays visible until tap outside or back button press.
+* 📝 Latest translations from crowdin.
 
-Version 8.3 *(2013-10-29)*
------------------
+### 47-beta1 - 2019-01-11
 
-* Crash fix for In-App billing.
+* 🔧 Show list: replace favorite button with set watched button. Display an indicator if a show is a favorite instead.
+* 🔧 Cloud: update and improve Google Sign-In.
+* 🔧 Tablets: move add show button on discover screen to top right to match placement of primary action in other places.
+* 🔧 Discover: remove trakt recommendations. They were never useful. Send in feedback if they are for you!
+* 🔨 Only remove movie from watchlist if it actually was on it. This avoids a confusing confirmation message.
+* 📝 Only support Android 5.0 (Lollipop) and newer.
+* 📝 Latest translations from crowdin.
 
-Version 8.2 *(2013-10-23)*
------------------
+## Version 46 and older
 
-* Security updates and bug fixes for In-App billing.
-* Disable manual creation of sync account.
-
-Version 8.1 *(2013-10-16)*
------------------
-
-* Restored the one-row widget on Android 4.0 (Ice Cream Sandwich) and below. Added a new compact mode to the list widget on Android 4.1 (Jelly Bean) and up.
-* Updates for translations.
-* Some minor sync related fixes.
-
-Version 8 *(2013-10-08)*
------------------
-
-* SeriesGuide X users, time to migrate your shows to the free version! Use the migration assistants, keep X installed to unlock all features in the free version.
-* Revamped filter and sort options for shows. Apply sort order twice to reverse it.
-* YouTube and web search button for shows and episodes.
-* Reduced minimum size of list widget, removed legacy one row widget on Android 3.0 and up.
-* Bug and crash fixes.
-
-### Detailed changes:
-
-#### 8 *(2013-10-07)*
-
-* FEATURE Support Hebrew and Japanese TVDb content languages.
-* FEATURE 'Web search' button for shows and episodes. Thanks Andrew Neal (@adneal)!
-* TWEAK Correct air times for Australian shows using information from trakt.tv.
-
-#### 8-beta2 *(2013-10-04)*
-
-* FEATURE New filter and sort options for shows. Apply sort order twice to reverse it. Removed old categories.
-* FIX Some reported crashes.
-* NOTICE Latest translations from crowdin.
-
-#### 7.2-beta1 *(2013-10-01)*
-
-* NOTICE SeriesGuide X users, time to migrate your shows to the free version! Keep X installed to unlock all features in the free version.
-* FEATURE YouTube search link on show and episode pages. Thanks Andrew Neal (@adneal)!
-* FEATURE Migration assistant. Helps export shows and install SeriesGuide in X, import shows within SeriesGuide.
-* TWEAK Refined first run info card, now a less distracting dismiss button.
-* TWEAK Some layout tweaks for larger screens (7-inch, 10-inch).
-* TWEAK Refreshed icons. Search inside show action now shown with any tab in show overview.
-* TWEAK List widget can be resized down to about one row in height and three columns in width. Removed legacy one row widget.
-* TWEAK Display subscription button right in the top menu for better discovery.
-* FIX Day headers on activity screen blacked out.
-* FIX Going back from X subscription screen dropped you out of the app.
-* FIX Layout animations in season list caused wierd overlaps.
-* NOTICE Switched to Gradle build system.
-* NOTICE Latest translations from crowdin.
-
-Version 7.1 *(2013-08-10)*
------------------
-
-* NOTICE Allow removal of SeriesGuide account from Android settings. If you experience random crashes, try removing and then adding the SeriesGuide account again.
-* FIX Crash when disconnecting from trakt.
-* FIX Crash when checking for in-app purchases (X subscription).
-* FIX Only update a show once every 12 hours when accessing its overview page.
-
-Version 7 *(2013-08-08)*
------------------
-
-* NOTICE Introducing the X Subscription. You can try it for free for 30 days. Users who have purchased the old X Upgrade or install the SeriesGuide X Life-Time Pass side-by-side will get access to the X Subscription for free until SeriesGuide will cease to exist. Please write in if there are problems!
-* FEATURE Display show posters and episode images full screen by touching them.
-* X FEATURE New widget type: favorite shows.
-* X FEATURE Add shortcuts to shows to your home screen from their overview page.
-* TWEAK Add Google Play search link to movie detail page.
-* TWEAK Check validity of trakt credentials when updating, auto-disconnect if they are invalid (e.g. if you change your password).
-* TWEAK Improvements to support restricted profiles in Android 4.3.
-
-#### 7beta3 *(2013-08-07)*
-
-* FEATURE Display show posters and episode images full screen by touching them. Thanks Andrew Neal (@adneal)!
-* TWEAK Improvements to support restricted profiles in Android 4.3.
-* TWEAK New sliding tab indicators, is now behind the new overlaying nav drawer.
-* TWEAK Check validity of trakt credentials when updating, auto-disconnect if they are invalid (e.g. if you change your password).
-* TWEAK Add Google Play search link to movie detail page. Thanks Andrew Neal (@adneal)!
-* FIX Reenable search within shows from their overview page. Suggestions still show for all shows though :(
-* FIX Also correctly remember last notified about episode when touching a notification instead of swiping it away.
-* FIX Activity wrongly limits number of episodes after rotating after enabling 'Infinte Activity'.
-* NOTICE Updated ActionBarSherlock to 4.4.0.
-
-#### 7beta2 *(2013-07-20)*
-
-* NOTICE The X Upgrade is now a yearly X Subscription. You can try it for free for 30 days. Users who have purchased the old X Upgrade or install SeriesGuide X side-by-side will get access to the X Subscription for free until SeriesGuide will cease to exist. Please write in if there are problems!
-* X FEATURE New widget type: display favorite shows.
-* X FEATURE Add shortcuts to shows to your home screen from their overview page. Thanks Andrew Neal (@adneal)!
-* TWEAK Tapping the Google Play link now searches exclusively for movies and TV shows. Thanks Andrew Neal (@adneal)!
-* TWEAK Title and description in the add show dialog are now selectable (Android 3+). Thanks Andrew Neal (@adneal)!
-* TWEAK The search bar is now shown on older versions of Android, too. Thanks Andrew Neal (@adneal)!
-* TWEAK Tab bars are now only as wide as they need to be, this looks way better especially on large screens.
-* FIX Strict mode testing: some unclosed cursors are now closed correctly, freeing up resources correctly. Thanks Andrew Neal (@adneal)!
-* FIX If the X subscription is canceled, actually remove access to X features once it has expired.
-* FIX Ensure valid trakt credentials before rating a show. Thanks Andrew Neal (@adneal)!
-* FIX Actions now properly hide in all cases when opening the navigation drawer.
-* FIX Some Google Play reported crashes in the backup tool, with in-app billing.
-* NOTICE For contributers: all libraries live now inside the SeriesGuide repository, no need to clone multiple repositories anymore.
-
-#### 7beta1 *(2013-07-10)*
-
-* TWEAK Use new navigation drawer that overlays content. Does not overlay tabs, not a bug!
-* TWEAK Use minimal activity stream to get trakt activity, apparently reducing download size up to 90%.
-
-Version 6.1x *(2013-06-29)*
-------------------------
-This was released for SeriesGuide X only.
-* FIX Crash when trying to open in-app upgrade activity.
-
-Version 6 *(2013-06-28)*
-------------------------
-
-* Unlock X features through 'X Upgrade' in-app purchase (see Settings, Services). Purchased SeriesGuide X already? Install it to unlock the purchase.
-* Beam shows to another device from the shows overview page (Android 4+).
-* Activity stream displays 30 days into the future/past. Option for 'Infinite activity'. List widget is always infinite.
-* Updates are handled in the background by Android (see the SeriesGuide Sync account in Android settings).
-* Navigation drawer only opens if swiping from the edge.
-* Added setting to disable Auto-Backup.
-* Toned down default dark design.
-
-#### 6 *(2013-06-28)*
-
-* TWEAK Always sync if manually updating via any update action menu items. Previously this was dependent on global and automatic sync being on.
-* TWEAK Reduce minimum update interval on opening the app from 30min to 20min. Checked in episodes should now show up as watched as expected.
-* TWEAK Add trakt page button to shows, episodes and movies.
-* FIX Play store reported crashes: auto-backup disk full, check-in failure dialog after leaving app and it was destroyed for resources.
-* FIX Flagging whole season watched now correctly sets the last watched episode to the last of that season.
-* NOTICE Latest translations from crowdin.
-
-#### 6beta4 *(2013-06-16)*
-
-* TWEAK Change up some colors, remove some accent color, added light separators to make the app look more clean.
-* FIX Crash after running the 'Load posters' task due to missing success string resource.
-* FIX Crash when filtering in activity results in no more items shown.
-
-#### 6beta3 *(2013-06-08)*
-
-* FEATURE Support unlocking X features through new 'X Upgrade' in-app purchase (see Settings, Services). If you have already purchased SeriesGuide X, just install it side-by-side to unlock the purchase.
-* TWEAK Display confirmation toasts when triggering manual updates, show descriptive error messages. For now Auto Update needs to be turned on to manually update.
-* TWEAK Syncs triggered through the app (not the regular periodic sync) now only run on WiFi if the user asked so.
-* TWEAK New export tool shows exact progress. Removed warning from old tool.
-* TWEAK Revamp service links below each episode and show.
-* TWEAK Change 'Air date' to the more general 'Release date', this better includes non-TV shows. Not having an air time or date is now not displayed as something wrong.
-* FIX Fix crash when new show got added from trakt activity screen if the updater did run in the background.
-
-#### 6beta2 *(2013-05-24)*
-
-* New! Beam your shows to a friends device from the shows overview page (Android 4+).
-* Updates are now handled in the background by Android (see the SeriesGuide Sync accounts in Android settings). As a side-effect update progress notifications are gone, but those did only distract anyway.
-* The action bar shows the new navigation drawer icon. The drawer does now only open if swiping from the edge.
-* Increased transparency of background posters to increase readability.
-* Remove split action bar in Overview, use inline buttons. All this new space!
-* Move rate actions to overflow menu, inline rating is much easier.
-* Add context menu buttons to movie and show items.
-* Latest translations from crowdin.
-
-#### 6beta1 *(2013-05-14)*
-
-* Activity stream now by default shows 30 days of activity into the future/into the past. Added option to show 'Infinite activity' to display all activity. List widget displays infinite activity again.
-* Redesigned menu to be more in line with other apps. Looks like there will be a Google Pattern at I/O, so it will probably change again, soon.
-* Android 3.0+ tablets now use a multi-pane overview layout which also displays show information.
-* Support different location of numbers for season and episode strings. Translations pending.
-* Design tweaks for action bar and tabs featuring less prominent text.
-* Design tweaks for movie section to fit more items on screen, less prominent text.
-* Added setting to disable Auto-Backup.
-* Fixed crash in movies section when movies did not have a proper release date set.
-* Latest translations from crowdin.
-
-Version 5.2 *(2013-05-16)*
---------------------------
-
-* FIX Crash in movie section if movie did not have a release date.
-
-Version 5.1 *(2013-05-01)*
---------------------------
-
-* FIX Disable trakt offline support for now, causes crashes on too many devices.
-* FIX 'Manage lists' dialog would hide OK button when too many lists were shown.
-* TWEAK Temporarily increase Activity stream limits to 90 days in each direction until we can make it unlimited again.
-* NOTICE Latest translations from crowdin.
-
-Version 5 *(2013-04-27)*
---------------------------
-
-* FEATURE Integrate the trakt movie watchlist.
-* TWEAK Redesigned Overview, now displays seasons and show info in tabs.
-* TWEAK Episodes in Activity are now grouped by day, check-in by touching and holding.
-* TWEAK Better support for rating on trakt.
-* TWEAK Episode notifications will queue up until 12 hours have passed or they are dismissed (Android 3+ only). Notifications will only be sent out if there are actually new episodes to notify about.
-* NOTICE The old backup system will go away with v6. Restore your old backups and export them with the new backup tool.
-* FEATURE A new JSON backup tool.
-* TWEAK Collect entire seasons or shows. Display collected flags in episode lists.
-* NOTICE Bump minimum supported version to Android 2.2 (from 2.1).
-
-#### 5beta6 *(2013-04-23)*
-
-* TWEAK Episode notifications will queue up until 12 hours have passed or they are dismissed. Notifications will only be sent out if there are actually new episodes to notify about.
-
-#### 5beta5 *(2013-04-17)*
-
-* TWEAK Episodes in Activity are now grouped by day. This is highly untested and might eat you alive. Just so you know.
-* FIX Upcoming widgets and the DashClock extension were broken. Now they are not. Or are they?
-* FIX Crash when rotating your device in Overview. Fixed courtesy of best bug report evar: #242.
-
-#### 5beta4 *(2013-04-16)*
-
-* FEATURE Integrate the trakt movie watchlist, support removing and adding movies by touching and holding.
-* TWEAK Finally display a seasons tab right next to the overview on phones. Bonus: display a show tab to the left, too.
-* TWEAK Correct air times for British (e.g. Doctor Who 2005) and German (e.g. heute-show) television using information from trakt.tv.
-* TWEAK Display a check-in button on episodes in Upcoming/Recent on larger screens.
-* TWEAK Check-in from Upcoming/Recent by touching and holding episodes.
-* TWEAK Don't display ticker text for auto-update notification in overview.
-* TWEAK Reduce font-sizes on 7 inch devices.
-* TWEAK Use Roboto Light in more places (like descriptions, action bar titles).
-* TWEAK Activity only shows episodes at most one month into the future/past.
-* TWEAK More prominently display own trakt ratings, updates immediately upon rating.
-* TWEAK IMDb button for movies.
-* TWEAK Accumulate episode notifications only for episodes of the last 12 hours.
-* FIX Crashed when going up from new backup tool.
-* FIX Restore UI state on rotating the device while backup/import is running in new backup tool.
-* FIX Broken search layout on legacy Android versions.
-* NOTICE Latest translations from crowdin.
-
-#### 5beta3 *(2013-04-05)*
-
-* FIX Collecting whole seasons and shows was broken, as well as flagging seen all previously aired episodes.
-
-#### 5beta2 *(2013-04-05)*
-
-* NOTICE The old backup system will go away with v6. Restore your old backups and export them with the new backup tool.
-* FEATURE The old backup assistant is now deprecated in favor of a new JSON exporter. Backups will take a little longer, but will be completely compatible between devices and less prone to version issues. Also you can easily edit or reuse the JSON files yourself. New (auto-)backups will for now be stored in your Downloads folder. Auto-Backups will dump a minimal export which does not include descriptions, actors, ratings, etc. These will get filled in on your next update after restoring.
-* FEATURE Flagging watched and collected now works offline when connected to a trakt account. Once you open the app with a working connection your last actions will be sent to trakt. Also if you set SeriesGuide to use Wi-Fi only that will apply to those trakt actions now, too. Once you have an allowed connection you can force sending by manually updating.
-* TWEAK Collect entire seasons or shows. Display collected flags in episode lists.
-* TWEAK Episodes in notifications will now persist until you either clear the notification (Android 3.0+), watch the episode or more than 24 hours have passed since it aired.
-* TWEAK List items have a 'Manage lists' context menu option.
-* FIX Shows in lists now always update their next episode.
-* FIX Auto backup did not work correctly, now, it does. Once a week.
-* FIX List items only display stars for favorited shows.
-* FIX Remove list item from correct list when having more than one list.
-* FIX Really prevent shows from getting removed when they are added to a list.
-
-#### 5beta1 *(2013-03-29)*
-
-* FEATURE Support Quick-Check-In action from single episode notifications.
-* FEATURE Add episodes within setting to DashClock extension.
-* FEATURE Trakt comments for movies.
-* TWEAK Trakt comments now link to their page on trakt.tv.
-* TWEAK Display show link in episode details in activity tablet layout.
-* TWEAK New search results layout, use Search view on Android 3+.
-* FIX Support canceling movie check-ins.
-* NOTICE Bump minimum supported version to Android 2.2 (from 2.1).
-* NOTICE Latest translations from crowdin.
-
-Version 4.1 *(2013-03-22)*
---------------------------
-
-* FIX Properly register DashClock extension for stable versions.
-* FIX Remove wrong parent activity tags.
-* NOTICE Latest translations from crowdin.
-
-Version 4 *(2013-03-21)*
---------------------------
-
-### Notable changes:
-
-* FEATURE Add statistics.
-* FEATURE New next episode algorithm: remembers what you last watched and offers later episodes as next. Improves watching older seasons.
-* FEATURE Supply extension for Roman Nurik's DashClock.
-* TWEAK Change widget settings from new widget settings shortcut.
-* TWEAK Rate on trakt by just tapping on the rating values.
-* TWEAK Make favorite stars touchable.
-* TWEAK Text in detail views is mostly selectable (Android 3.0+). Easily copy actor names or descriptions.
-* NOTICE Database upgraded to version 31. Starting SeriesGuide the first time after installing the update may take a little longer than usual.
-
-### Detailed changes:
-
-#### 4beta4 *(2013-03-21)*
-
-* FIX Remove decor view background to reduce overdraw due to android-menudrawer usage, should very slightly improve performance.
-* NOTICE Latest translations from crowdin.
-
-#### 4beta3 *(2013-03-14)*
-
-* FEATURE Add statistics.
-* TWEAK Use new improved swipe menu library (MenuDrawer from SimonVT).
-* TWEAK Change widget settings from new widget settings shortcut.
-* TWEAK Show title in activity activity.
-* FIX Spinner on Gingerbread (Android 2.3) and below was not readable (reverted to platform style).
-* TWEAK Increase line height for description text for easier reading.
-* TWEAK Rate on trakt by just tapping on the rating values.
-* TWEAK Overall design tweaks (removals, text size improvements, layout changes).
-* TWEAK Add favorite button in overview.
-* TWEAK Make favorite stars in the show list touchable.
-* TWEAK Improve TVDb reliability by removing www from TVDB API url.
-* TWEAK Displays your own trakt ratings in brackets.
-
-#### 4beta2 *(2013-02-22)*
-
-* FEATURE New next episode algorithm: remembers what you last watched and offers later episodes as next. Improves watching older seasons.
-* FEATURE Allow setting the widget opacity level, for X only.
-* FEATURE Started movie details pages, adds description and a trailer button.
-* TWEAK Display the online help page inline, revamped the online help page.
-* TWEAK Overview updates on new information (e.g. a picture).
-* TWEAK Load movies playing now for empty search query.
-* FIX Restore correct text styles for season watch count.
-* NOTICE Database upgraded to version 31. Starting SeriesGuide the first time after installing the update may take a little longer than usual.
-
-#### 4beta1 *(2013-02-12)*
-
-* FEATURE Supply extension for Roman Nurik's DashClock.
-* TWEAK Text in detail views is mostly selectable (Android 3.0+). Easily copy actor names or descriptions.
-* TWEAK New screen animations.
-* TWEAK New side-attached large-screen layout for activity screen.
-* TWEAK Link to app settings from Android network manager tool (Android 4.0+).
-* TWEAK Smoother transition after pressing swipe-menu item.
-* TWEAK Display show poster in show info, other tweaks for more prettiness.
-* TWEAK Display type of list item if it is an episode or a season.
-* FIX Full screen swipe opens menu if first episode detail page is shown.
-* FIX Very long network names wrap correctly in show list.
-* FIX Crash with list widget.
-* NOTICE Latest translations from crowdin.
-
-Version 3 *(2013-01-29)*
-------------------------
-
-* FEATURE Swipe anywhere to show the new menu drawer for quick navigation within the app. Swipe from the left margin in view pagers.
-* FEATURE Add Movies menu item to allow searching for and checking into movies.
-* FEATURE Choose when notifications should appear from a hand full of options (one hour until on air).
-* TWEAK New trakt connect wizard. Helpful empty messages.
-
-### Detailed changes:
-
-#### 3beta4 *(2013-01-29)*
-
-* FIX Crash when flagging episodes watched in lists.
-* FIX Crash when checking trying to check into a movie, then navigating away.
-* NOTICE Updated Google Analytics Android SDK to 2.0beta4, reduces power consumption.
-
-#### 3beta3 *(2013-01-27)*
-
-* TWEAK New trakt connect wizard.
-* TWEAK Link to community and uservoice page from settings.
-* TWEAK Fix visible but useless divider in movie check in dialog.
-* TWEAK Fix movies grid view size and overlap issues.
-* TWEAK Open search UI after pressing search button in slide menu.
-* TWEAK Add custom empty message for trakt add tabs.
-* TWEAK Add visible, easier discoverable context menu buttons for seasons and episodes in lists.
-* TWEAK Enable enter key for movie search (GTV support).
-* TWEAK Add contributing file, update credits with links to licences.
-* TWEAK Clarified manual trakt sync description.
-* TWEAK Show delete progress dialog through the whole removal process again.
-* TWEAK Prevent auto-updater running on first launch.
-* TWEAK Enable up-button for check-in activity.
-* TWEAK Always display shouts in their own activity. No xlarge screen layouts, yet.
-* FIX Avoid crash when rotating in first run fragment.
-* FIX Fix crash due to remaining merge tag in episode details activity.
-* FIX Hopefully finally fix the crash in add fragment by setting the click listener on eac
-* FIX Layout weight should be float (fixed for episode pager).
-* FIX Fix poster download task crash.
-* NOTICE Latest translations from crowdin.
-
-#### 3beta2 *(2013-01-13)*
-
-* FEATURE Add Movies menu item to allow searching for and checking into movies.
-* FEATURE Add absolute episode number for episodes to database, parse it on updating.
-* TWEAK Hide the guest star and DVD number label for episodes if there is no data.
-* TWEAK Only show DVD number if it is different to episode number.
-* TWEAK Navigation improvements, setting up proper back stacks. Add up navigation for seasons and episodes. Fix some existing ups.
-* TWEAK Add check in and search action back to home activity.
-* TWEAK Launch to show list from app icon in list widget.
-* TWEAK Add check-in button to all top shows activities, remove it from global menu.
-* TWEAK Add custom cancel drawables.
-* TWEAK Informative empty views for show list.
-* FIX Fix enabling full-screen swiping in activity activity.
-* FIX Remove Android Beam until we can resolve pre-GB compatibility.
-* NOTICE Latest translations from crowdin.
-
-#### 3beta1 *(2012-12-25)*
-
-* FEATURE Swipe anywhere to show the new menu drawer for quick navigation within the app. Swipe from the left margin in view pagers.
-* FEATURE Just for fun: beam a show to another device from its overview page.
-* FEATURE Choose when notifications should appear from a hand full of options (one hour until on air).
-* TWEAK Lists have there own page now.
-* TWEAK Proper episode deep linking, now uses dual-pane layout on tablets.
-* TWEAK Add icons for some menu actions.
-* TWEAK Fix search tab in 'Add show' to second position.
-* TWEAK Check in confirmation message for trakt is now localized and uses custom numbering schema.
-* FIX Flagging a whole show now properly updates the screen.
-* FIX Never notify about an episode twice, except others start airing shortly after.
-* NOTICE Updated credits.
-
-Version 2.11 *(2012-12-08)*
---------------------------------
-
-* FEATURE 'Fix GetGlue check in' in check in dialog for shows without or with wrongly mapped IMDb ids.
-* FEATURE Automatically add new shows from your trakt activity stream. Can be disabled in settings.
-* FEATURE Experimenting with Google Play and Amazon search links below each episode.
-* TWEAK Make episode in overview clickable, new layout.
-* NOTICE Database upgraded to version 29. Starting SeriesGuide the first time after installing the update may take a little longer than usual.
-
-### Detailed changes:
-
-#### 2.11.5beta *(2012-12-03)*
-
-* TWEAK Make episode in overview clickable, new layout.
-* TWEAK Also search with show title in overview (Google Play, Amazon buttons).
-* TWEAK Remember sync unseen episode preference. Closes #195.
-* FIX Enable home button in Fix GetGlue activity, but not as up affordance.
-* FIX Correctly color borderless buttons text, and regular buttons text for v11+.
-* FIX Handle a requested downgrade by reinitializing the database instead of crashing.
-* FIX Prevent adding new trakt shows multiple times. Closes #197.
-* FIX Update lists content provider upon updating next episode. Closes #193.
-* FIX Prevent removing shows which are in any list. Closes #198.
-
-#### 2.11.4beta *(2012-11-28)*
-
-* FEATURE Automatically add new shows from your trakt activity stream. Can be disabled in settings.
-* FEATURE Experimenting with Google Play and Amazon search links below each episode.
-* TWEAK Use custom drawables for most of the UI on Android 2.3 and lower when using one of the two SeriesGuide themes.
-* TWEAK Updated list widget preview image.
-* TWEAK Updated first run layout.
-* TWEAK Dismiss first run fragment if forwarding to add screen.
-* TWEAK Enable home button in FixGetGlueCheckInActivity.
-* TWEAK Remove episode remove button, SeriesGuide is cleaning up orphaned episodes by itself.
-* TWEAK Postpone launching notifications service on boot for a minute.
-* FIX Shouts now use the selected theme.
-
-#### 2.11.3beta *(2012-11-25)*
-
-* FEATURE 'Fix GetGlue check in' in check in dialog for shows without or with wrongly mapped IMDb ids.
-* NOTICE Database upgraded to version 29. Starting SeriesGuide the first time after installing the update may take a little longer than usual.
-* FIX Icons overlap in check in dialog.
-* FIX Never select non-existing activity tab. Fixes #187.
-* TWEAK Trakt add tabs use higher resolution images on high-res tablets (e.g. Nexus 10).
-* TWEAK Add custom button disabled drawable.
-* TWEAK Refresh check box and edit text drawables with more acurate color, higher resolution variants.
-* TWEAK Better exception tracking so problems are easier to pinpoint.
-
-Version 2.10.2 *(2012-11-14)*
---------------------------------
-
-* FEATURE Android 4.2 lock screen widget support.
-* FIX Adding a list widget on Android 4.2 crashes SeriesGuide.
-* FIX Could not interact with trakt on Android 4.2 as password could not be decrypted.
-
-### Detailed changes:
-
-#### 2.11.2beta (2012-11-14)
-
-* FIX Adding a list widget on Android 4.2 crashes SeriesGuide.
-* FIX Could not interact with trakt as password could not be decrypted.
-
-#### 2.11.1beta (2012-11-13)
-
-* FEATURE Lock screen widget support.
-* TWEAK Episode images and button bar tweaks.
-* NOTE Now with Chinese translation! And latest translations from crowdin.
-
-Version 2.10.1 and 2.10.4beta *(2012-11-10)*
---------------------------------
-
-* TWEAK Add high resolution launcher icon for upcoming Nexus devices.
-* NOTE Latest translations from crowdin.
-* NOTE Fixed Google Analytics.
-
-Version 2.10 *(2012-11-05)*
---------------------------------
-
-* FEATURE Light theme, can be enabled in advanced settings.
-* FEATURE trakt watchlist in add screen.
-* FEATURE Episodes are sortable by rating.
-* TWEAK Some love to the list widget, increased font-sizes on Nexus 7-like screens.
-* NOTE Latest translations from crowdin.
-
-### Detailed changes:
-
-#### 2.10.3beta (2012-11-05)
-
-* FEATURE trakt watchlist in add screen.
-* TWEAK Display empty message instead of progress indicator in add screens.
-* FIX Broken placeholders in Arabic strings.
-* FIX Fast scrolling in add screen crashed the app.
-* NOTE Latest translations from crowdin.
-
-#### 2.10.2beta (2012-10-16)
-
-* FEATURE Episodes are sortable by rating.
-* TWEAK Use episode title as default check in comment to avoid confusion about what is actually checked in.
-* TWEAK Change first list name to 'First list' to avoid confusion with Favorites.
-* TWEAK Move recommended and library tabs right next to trending if connected to a trakt account.
-* TWEAK Lists: shows display next episode, episodes display number and air date.
-* TWEAK Show which items list associations are manipulated.
-* TWEAK Dropped rarely used reverse alphabetical sorting.
-* FIX Light theme for all languages.
-* FIX Recommended tab text was cut off on small screens.
-* NOTE Latest translations from crowdin.
-
-#### 2.10.1beta (2012-10-16)
-
-* FEATURE Light theme, can be enabled in advanced settings.
-* FEATURE Add all button for trakt library.
-* TWEAK Some love to the list widget, increased font-sizes on Nexus 7-like screens.
-* TWEAK Custom selected color (seen when navigating with D-PAD).
-* FIX Action items sometimes invisible on tablets.
-* FIX Shouts dialog resizing properly, only showing on large or xlarge screens.
-* FIX Do not create auto-backup on first launch, at earliest after a week.
-
-Version 2.9.3 *(2012-10-18)*
---------------------------------
-
-* FEATURE Setting to display notifications for all shows, not just favorites.
-* FEATURE Remember last used activity tab.
-* NOTICE Use ActionBarSherlock 4.2.0: notably, the menu buttons are gone on Android 2.3 and lower.
-* NOTICE The content provider URI for SeriesGuide (free, not beta or X) has changed to com.battlelancer.seriesguide.provider (appended .provider).
-
-### Detailed changes:
-
-#### 2.9.9beta (2012-10-18)
-
-* FEATURE Remember last used activity tab.
-* TWEAK Remove RECEIVE_BOOT_COMPLETED permission in free version (only needed for notifications in X version).
-* FIX Action bar items sometimes disappear in show list.
-* FIX Crash on leaving overview while still determining remaining episodes.
-* FIX Correctly use episode time if adding a calendar event from overview.
-
-#### 2.9.8beta (2012-10-10)
-
-* TWEAK Let update task wait on failure before trying again.
-* FEATURE Setting to display notifications for all shows, not just favorites.
-* TWEAK Display 'Shows updated.' instead of generic 'Update successful.'.
-* NOTICE Use ActionBarSherlock 4.2.0: notably, the menu buttons are gone on Android 2.3 and lower.
-* NOTICE The content provider URI for SeriesGuide (free, not beta or X) has changed to com.battlelancer.seriesguide.provider (appended .provider).
-
-Version 2.9.2/2.9.7beta *(2012-10-08)*
---------------------------------
-
-* TWEAK Enabled fast scrolling for season and episode lists.
-* FIX Episode images sometimes did not download successfully due to size constraints: increased the maximum size.
-* TWEAK Revert back to the regular GetGlue OAuth URL.
-* TWEAK Display info toasts for watched, collected and calendar buttons on long click.
-
-Version 2.9.1/2.9.6beta *(2012-10-01)*
---------------------------------
-
-* TWEAK Speed up overview, displaying show and seasons link right away.
-* FIX Next episode algorithm will show episodes before 1970.
-* FIX Action bar items sometimes disappear.
-
-### Detailed changes:
-
-#### 2.9.6beta (2012-10-01)
-
-* TWEAK Speed up overview by using loaders, displaying show and seasons link right away.
-* TWEAK Update season counters starting with latest season (previously oldest).
-* FIX Next episode algorithm will show episodes before 1970.
-* FIX Action bar items sometimes disappear.
-* INFO Latest translations from crowdin.
-
-Version 2.9 *(2012-09-27)*
---------------------------------
-
-* FEATURE Basic lists, add shows, seasons or episodes to them. No syncing with trakt.tv, yet.
-* FEATURE Submit flagging whole seasons, shows and previously aired episodes to trakt.tv.
-* FEATURE Automatically back up show database every week on starting the app. File is named seriesdatabase_auto.db and stored in the backup folder (See Backup/Restore in settings).
-* TWEAK Refined UI design with more custom elements, layout unification.
-* TWEAK Sharing an episode now includes its IMDb page link, falls back to the show IMDb page if it does not exist.
-* FIX Multiple fixes for crashes reported via the Play store.
-
-### Detailed changes:
-
-#### 2.9.5beta (2012-09-26)
-
-* TWEAK Use faster and light weight HttpURLConnection for data connections.
-* TWEAK Set smaller timeouts on connections.
-* TWEAK Simplified first run information.
-* FIX Updater was supposed to always update year old TVDb episodes, but did update everything. Now works as expected, therefore finishes updating faster.
-* FIX GetGlue check in comments now allow all characters, previously non-A-to-Z chars failed the check in.
-* FIX Crash when trying to load posters in lists view, also freshened up the progress layout for that a bit.
-* FIX Crash when flagging episodes and moving to different screen before update was done.
-* FIX Multiple fixes for crashes reported via the Play store.
-* FIX Respect theme setting in new UI, widget config screen.
-
-#### 2.9.4beta (2012-09-25)
-
-* TWEAK Display which show got checked in on GetGlue.
-* TWEAK More subtle app logo.
-* TWEAK Dual pane upcoming layout only on larger screens to avoid text cut off.
-* TWEAK Remove episodes deleted from TVDb, hide empty seasons.
-* FIX Show list layout bleeding out.
-* FIX Better show info layout.
-* NOTICE Latest translations from crowdin. 
-
-#### 2.9.3beta (2012-09-23)
-
-* FEATURE Basic lists, add shows, seasons or episodes to them. No syncing with trakt.tv, yet.
-* TWEAK More UI tweaks, e.g. nicer wide layouts on large tablets and it should look nicer on the Nexus 7.
-* TWEAK When sorting by alphabet, ignore case.
-* TWEAK GetGlue authentication in internal WebView instead of launching browser. Check if this works on Google TV!
-* TWEAK Remove text from progress indicators as suggested by the ADG.
-* TWEAK Added 'Check in' to shows long-press menus.
-* TWEAK More values for Time Offset.
-* FIX Assume correct default disabled 'Update only via Wi-Fi' in overview.
-* FIX Hide episodes airing later than in an hour from check in screen.
-* FIX Episodes did not get flagged when flagging whole season watched.
-* FIX Always update the TVDb rating, allow to update everything when changing the content language.
-* FIX Do not notify about specials if the user chose to hide them.
-* FIX Next episode algorithm will show all specials again if the user did not hide them.
-* FIX Display correct collected flag state in overview.
-* FIX Jelly Bean: Up in activity screen always returns to the show list.
-* NOTICE Latest translations from crowdin.
-
-#### 2.9.2beta (2012-09-16)
-
-* TWEAK Refined UI design with more custom elements, layout unification.
-* TWEAK Improved trakt.tv credentials dialog behavior, set up instructions.
-* TWEAK Name list widget according to app version. Yay, no more guesswork!
-* NOTICE Updated ViewPagerIndicator to 2.4.1.
-
-#### 2.9.1beta (2012-08-19)
-
-* NOTICE Database upgraded to version 27. Starting SeriesGuide the first time after installing the update may take a little longer than usual.
-* FEATURE Display IMDb pages for episodes (IMDb app or website).
-* TWEAK Sharing an episode now includes its IMDb page link, falls back to the show IMDb page if it does not exist.
-* TWEAK Episode and show detail screens display time of last edit on theTVDb.com.
-* TWEAK Download images in add screen and shout screen one-by-one.
-* TWEAK Run GetGlue check in on thread pool, it should not be blocked by other background activity anymore.
-* TWEAK Only update episode information if it actually changed according to theTVDB.com leading to slightly faster udpates.
-* NOTICE Updated Gson to 2.2.2. Possibly faster interaction with trakt.tv.
-
-#### 2.9beta (2012-08-16)
-
-* FEATURE Fetch collected flags when adding a show from trakt.tv.
-* FEATURE Submit flagging whole seasons, shows and previously aired episodes to trakt.tv.
-* FEATURE Automatically back up show database every week on starting the app. File is named seriesdatabase_auto.db and stored in the backup folder (See Backup/Restore in settings).
-* FIX Add low resolution first started background, fix scaling of existing one.
-* FIX Up in activity screen always returns back to show list.
-
-Version 2.8 *(2012-08-15)*
---------------------------------
-
-* FEATURE Quickly add shows by tapping a + button.
-* FEATURE Use the new expandable notifications on Android 4.1 Jelly Bean to display more content.
-* TWEAK Calculate next episodes differently: display the next highest (season and number) episode regarding all watched episodes.
-* TWEAK New layouts for 10 inch tablets.
-* TWEAK Update single shows more often if their overview screen is used.
-* TWEAK 'Update only via WiFi' setting respected by episode image and ratings downloads.
-* TWEAK Relayouted list widget, updated widget backgrounds.
-
-### Detailed changes:
-
-#### 2.8.6beta (2012-08-05)
-
-* FEATURE Quickly add shows by tapping a + button.
-* TWEAK Display text for and hide certain action items.
-* TWEAK Tweaked add show screen, larger layout for large tablets. This does not work great with D-PADs (Google TV), yet.
-* TWEAK Run more tasks in parallel, if possible.
-* TWEAK Refined first run experience. Trending shows tab is now first.
-* TWEAK New settings screen.
-* TWEAK Clear images on large tablets, schedule re-downloading to get hihger resolution thumbnails.
-* TWEAK Revert to old show list layout on 7inch tablets.
-
-#### 2.8.5beta (2012-08-03)
-
-* TWEAK Shows appear to delete significantly faster.
-* TWEAK 'Update only via WiFi' setting respected by episode image and ratings downloads.
-* TWEAK Disable 'Update only via WiFi' setting by default.
-* TWEAK Display current values for list settings as their summary.
-* TWEAK Allow new large-size show list layout on devices with smallest width of 600dp, e.g. a 7in tablet (600x1024 mdpi).
-* TWEAK Optimize screen tracking.
-* TWEAK Initialize app settings on first run.
-* FIX Empty message for check in screen.
-* FIX Apply app theme immediately after changing the setting.
-* FIX Expanded notification shows correct amount of shows.
-
-#### 2.8.4beta (2012-07-25)
-
-* TWEAK New show list layout for 10 inch tablets.
-* TWEAK Pre-fill check in message, again.
-* FIX Connecting to a trakt account using your email address instead of your user name now works.
-
-#### 2.8.3beta (2012-07-20)
-
-* TWEAK Calculate next episodes differently: display the next highest (season and number) episode regarding all watched episodes.
-* TWEAK Cache images using a LRU cache as recommended by Google devs.
-* TWEAK Added 'now' and 'today' to upcoming shows limit setting.
-* FIX Display 'Recent' on list widget, if appropiate, again.
-* FIX Crash on selecting notification for deleted show.
-* MISC Use preview version (2.0beta2) of Google Analytics v2.
-* MISC Use latest support library release (r9).
-
-#### 2.8.2beta (2012-07-04)
-
-* FIX Run the notification service in time for notifications, again.
-
-#### 2.8.1beta (2012-06-28)
-
-* FEATURE Use the new expandable notifications on Android 4.1 Jelly Bean to display more content.
-* TWEAK Relayouted list widget, updated widget backgrounds.
-
-#### 2.8beta (2012-06-27)
-
-* TWEAK Update single shows more often if their overview screen is used.
-
-Version 2.7 *(2012-06-27)*
---------------------------------
-
-* FEATURE Quickly check into shows from the main screen.
-* FEATURE Add notification settings for vibrating (thus requiring new VIBRATE permission) and ringtone selection.
-* FEATURE Configuration for list widgets: choose between upcoming or recent episodes (only SeriesGuide X), hide watched episodes.
-* FEATURE More filter options for activity screen (hide watched, special episodes)
-* TWEAK Auto-update when launching any part of the app.
-
-### Detailed changes:
-
-#### 2.6.15beta (2012-06-25)
-
-* FIX Crash on pre-3.0 devices in overview screen on small screen devices.
-
-#### 2.6.14beta (2012-06-24)
-
-* FEATURE Display remaining unseen episodes in overview in portrait mode.
-* TWEAK Auto-update when launching any part of the app.
-* TWEAK Hide episodes with no air date from Recent.
-* FIX Do not display hidden shows on check in screen.
-
-#### 2.6.13beta (2012-06-09)
-
-* NOTICE Please re-add your list widgets!
-* FEATURE Quickly check into shows from the main screen.
-* FEATURE More filter options for activity screen (hide watched, special episodes)
-* TWEAK Let most of the AsyncTasks run in parallel to speed up response times.
-* FIX List widget configuration used layout ids which resulted in crashes on new releases.
-* FIX List widgets do not crash the app on an invalid configuration anymore.
-
-#### 2.6.12beta (2012-06-02)
-
-* FEATURE Configuration for widgets: choose between upcoming or recent episodes (only SeriesGuide X), hide watched episodes.
-* TWEAK Remove sorting preferences from settings screen (still available in seasons and episode lists).
-* TWEAK Remove Paypal link.
-* FIX New website url in About dialog.
-
-#### 2.6.11beta (2012-05-27)
-
-* FEATURE Add notification settings for vibrating (thus requiring new VIBRATE permission) and ringtone selection.
-* TWEAK Nicer loading behavior in shows overview screens.
-* TWEAK No initial notification toast when auto-updating.
-* TWEAK A lot of code cleanup and restructuring, see commit logs.
-* FIX Updated to ActionBarSherlock 4.1
-* FIX Updated to ViewPagerIndicator 2.3.1
-
-Version 2.6.1 *(2012-05-04)*
---------------------------------
-
-* FEATURE New theme. Old ICS Base theme accessible via settings.
-* FEATURE Support for trakt advanced 10-heart ratings.
-
-### Detailed changes:
-
-#### 2.6.10beta (2012-05-04)
-
-* New trakt 10-heart rating system. No visual feedback on buttons, no auto-detection if user uses basic or advanced ratings (defaults to advanced).
-* Honor theme setting through restarts (thanks Roman).
-
-#### 2.6.9beta (2012-04-27)
-
-* Darker watched and collected icons.
-* Brought back ICS default theme via settings switch.
-
-#### 2.6.8beta (2012-04-12)
-
-* I found my fancy color pen and redrew some lines. Lame.
-
-Version 2.6 *(2012-04-06)*
---------------------------------
-
-* Exclusive SeriesGuide X feature: Notifications for favorite/starred shows.
-* Trakt.tv shouts: episode airing right now? Open Shouts and discuss it with other people.
-* One button to rule, ahem, check into trakt.tv and GetGlue.
-* Want to watch, but do not have the episode, yet? Mark episodes as 'collected' to keep track of your library.
-* With a trakt account marking single episodes as seen/collected is submitted to trakt. Other devices will sync automagically.
-* Search through a show's episodes inside its Overview screen.
-* Fixes, improvements and design refinements.
-
-### Detailed changes:
-
-#### 2.6.7beta (2012-04-06)
-
-* Update fetches recently collected episodes.
-* Shouts refresh automatically every 60 seconds. May the next Game of Thrones come :)
-* Some animations.
-
-#### 2.6.6beta (2012-04-04)
-
-* Marking single episodes as seen/collected is submitted to trakt if you setup your trakt account.
-* Sort search results by show, season and episode.
-
-#### 2.6.5beta (2012-03-30)
-
-* Searching from overview lists only episodes of the displayed show (suggestions are still for all shows).
-* Design refinements.
-* Better log output.
-
-#### 2.6.4beta (2012-03-26)
-
-* Rate and share shows.
-* Unified check in dialog.
-* New 'collected' property for episodes. Only on detail pages for now. (Database upgrade!)
-* Inline button bar.
-* Fix Auto-Update not working until first manual update.
-* Crash fixes, other minor improvements and changes.
-* Better error log output.
-* Icon updates.
-
-#### 2.6.2beta/2.6.3beta (2012-03-20)
-
-* Support for trakt.tv shouts.
-* Display ratings (Loves) from trakt.tv.
-* Content language chooser in welcome dialog.
-* Crash fixes, other minor improvements and changes.
-* Better offline handling.
-* Quick fix for jean-luc.
-
-#### 2.6.1beta (2012-03-15)
-
-* Notifications should now work correctly, are restored on reboot
-* Mark episodes seen immediately when marking seen on trakt
-* Some minor improvements.
-
-#### 2.6beta (2012-03-11)
-
-* Greatly improved time zone and summer time handling: update your shows!
-* Notifications about upcoming favorite shows, enabled by default
-
-Version 2.5.1 *(2012-03-28)*
---------------------------------
-
-* Display correct time for non-US users, fix summer time issues. (All shows will update as a result of this).
-* Content language chooser in welcome dialog.
-
-Version 2.5 *(2012-03-08)*
---------------------------------
-
-* Database upgrade for better time representation. It may take a few seconds for the database to upgrade.
-* Hide individual shows.
-* 'Only favorites' option for Upcoming/Recent, also respected by widgets.
-* 'Watched all previously aired' option when long-tapping an episode.
-* Unified interface across all devices thanks to ActionBarSherlock 4.0.
-* Removed middle and large widget on Android 3.0+ devices. Use the new list widget!
-
-### Detailed changes:
-
-#### 2.5.6beta (2012-03-08)
-
-* Modify design to be closer to Android Design guidelines.
-* Highlight selected item in multi-pane episode view.
-* UI for custom upcoming interval (currently 24 hours).
-* Posters and no already added shows in Add Show (not for the search screen).
-* When adding a show get seen episodes from trakt.
-* Download half the data when syncing from trakt via Settings.
-* Bigger sized list widget items on xlarge devices. Smaller minimum list widget size, therefore smaller on GoogleTV.
-* Fixed stuck progress dialog when checking in with trakt.
-* Some other minor improvements.
-
-#### 2.5.5beta (2012-02-20):
-
-* Fix for crash when marking episodes watched.
-* Always show the 'Add to calendar' button, if room.
-* Fix #53 for episodes list.
-
-#### 2.5.4beta (2012-02-17):
-
-* Hide legacy widgets except small size on Android 3.0+ devices.
-* Fix incorrect next episodes if two air the same day. The lower numbered one is now assumed to be aired first (though still at the same time).
-* Fix sorting and filtering if shows have older episodes listed under next.
-* Reduced auto-update interval to at least every 15min.
-* New notification icon (finally!).
-* Layout tweaks in Upcoming and episode details.
-* Hide 'Add to calendar' button if it is useless.
-* Use ActionBarSherlock 4.0.
-* Display search term, title and search soft button in `SearchActivity`.
-* Enabled home button (app icon in the ActionBar) everywhere.
-* New welcome and beta dialog.
-
-#### 2.5.3beta (2012-01-29)
-
-* Updated design towards ICS styles.
-* Fix for crash when trying to create a trakt account.
-* Use user-specified episode numbers in Upcoming/Recent.
-* Fix GetGlue comment box text not wrapping.
-* Latest translations from crowdin. Thanks everyone for the big effort!
-
-#### 2.5.2beta (2012-01-28):
-
-* Better internal representation for time. It may take a while until your shows appear (the database is upgrading in the background). YOU MAY NEED to update all of your shows afterwards. Episodes move now correctly from Upcoming to Recent 1 hour after they aired.
-
-* Hide shows, they will disappear from everywhere except the new 'Hidden' show filter.
-* Swipe between episodes on xlarge screens (10 inch tablets) or in landscape, too.
-* 'Only favorites' option for Upcoming/Recent, also respected by widget.
-* Add menu button to quickly share with last used sharing option.
-* Use progress indicators in `AddActivity`.
-* Friends layout more similar to Upcoming.
-* Use ViewPagerIndicator 2.2.2 release.
-* Fixes for the updater.
-* Fixes for market reported crashes.
-* Cleaner welcome dialog.
-* Improvements for descriptions and text everywhere.
-* Hide friends tab in Activity if trakt account is not set up.
-* Don't use beta icon for stable release (only devices with extra high resolution displays were affected).
-* Hide text of some action bar buttons.
-* Support for 'Daily' air day.
-* Latest translations from crowdin, now with Arabic by mohd55 and Hungarian by devilinside.
-
-#### 2.5beta/2.5.1beta (2012-01-13):
- 
-* Add 'Watched all previously aired' option to episode list of a season.
-* Add show posters in Upcoming and Recent.
-* Fix to display correct episode title.
-
-Version 2.4.2/2.4.3beta *(2012-01-11)*
--------------------------------
-
-* Fix for a crash while updating and fetching trakt activity.
-* Fix for wrong show poster displaying in list widget.
-* Latest translations from crowdin.
-
-Version 2.4.1 *(2012-01-07)*
--------------------------------
-
-* New list widget for Android 3.0+.
-* Remade all widgets sticking to design guidelines, this means they now display 1 (small), 3 (middle) or 7 (large) items and have correct padding.
-* Latest translations from crowdin.
-
-### Detailed changes:
-
-#### 2.4.2beta (2012-01-07)
-
-* Tapping list widget items takes you to the respective episode page.
-* Tweaked list widget layout a little.
-* Made widget backgrounds more transparent.
-
-#### 2.4.1beta (2012-01-06)
-
-* Resizable list widget for Android 3.0+. Uses an alarm to refresh (this needs testing) every 5 mins if the device is awake.
-* Remade all widgets sticking to design guidelines, this means they now display 1 (small), 3 (middle) or 7 (large) items and have correct padding.
-* Latest translations from crowdin.
-
-
-Version 2.4 *(2011-12-25)*
---------------------------------
-
-* Check into a show on trakt. After checking in, trakt will automatically display it as watching then switch over to watched status once the runtime of the show has elapsed.
-* Recently watched episodes are fetched from trakt on each update: allows easy syncing of devices. After adding a show the initial fetch of watched episodes should still be done via `Settings` >> `Sync with trakt` >> `Sync to SeriesGuide`.
-* `Upcoming` renamed `Activity`.
-
-### Detailed changes:
-
-#### 2.3.9beta (2011-12-21):
-
-* Check into a show on trakt. After checking in, trakt will automatically display it as watching then switch over to watched status once the runtime of the show has elapsed.
-* Recently watched episodes are fetched from trakt on each update: allows easy syncing of devices. After adding a show the initial fetch of watched episodes should still be done via `Settings` >> `Sync with trakt` >> `Sync to SeriesGuide`. Enabled by default on new installations.
-* `Integrate with trakt.tv` now controls the former behaviour. The eye icon does not automatically mark episodes as seen on trakt anymore. Use the check in functionality.
-* Auto update enabled by default on new installations (only over WiFi, only on opening the show list, once a day).
-* `Upcoming` renamed `Activity`, now includes the latest activity of friends on trakt.
-* Optimized for Android 4.0.
-* TVDb button in `Overview`.
-* Make the backup screen a little more informative.
-* Add a welcome dialog to get users started.
-* Set auto-update limit to 12 hours (down from 23 hours).
-* Use ActionBarSherlock 3.5.0.
-
-#### 2.4beta (2011-12-24):
-
-* Fix text color for notification on Android 2.2 and below.
-* Display failed shows in update error message.
-* Latest translations from crowdin.net.
-
-Version 2.3 *(2011-11-26)*
---------------------------------
-
-* Revamped updater: shows get outdated after 7 days and get included in the next update
-* AutoUpdate: presses the update button on opening the app for you
-* Updating now only works on Wi-Fi, this can be disabled in settings
-* Revamped adding of shows (incl. more trakt integration)
-* Episode pager on phones/small screens
-* TVDb buttons
-
-### Detailed changes:
-
-#### 2.3.2beta *(2011-11-22)*
-
-* Thrown the TVDb updater out the airlock (so soon): now SeriesGuide will update your show if it has not been for more than a week when pressing the update button.
-* AutoUpdate (finally...): as updating now happens truly in the background (sorry, manual abort is gone for now, just drop your connection...) enabling this will press the update button for you at most once a day. You have to open the app though.
-* The thresholds (7 days for updating, 11 hours before next auto-update) are subject to discussion.
-* 'Update on Wi-Fi only' (enabled by default) will prevent the updater from doing anything if you don't have a Wi-Fi connection to the internet.
-
-#### 2.3.1beta *(2011-11-19)*
-
-* Two more air time parsing schemas (e.g. '9:00PM' and '9PM' instead of quasi-standard '9:00 PM'), let me know if there are errors!
-* Major cleanup, report any issues/broken features!
-* Latest translations from crowdin.net. Now with Bulgarian thanks to Martin. Italian and Slovenian included for now despite low translation level.
-* TVDb buttons on show info and episode page
-* Editing of trakt credentials in settings
-* Fixed broken background in episode pager
-
-#### 2.3beta *(2011-11-06)*
-
-* You might need to clear your trakt.tv credentials if you encounter problems
-* Revamped adding of shows (better trakt.tv integration, recommended and library only for logged in trakt users)
-* Episode details shown in swipeable pager (only in non-dual-pane layout, yes, the background is broken)
-* Shows will get updated by the incremental updater after at least every 7 days
-* Fix crash when adding shows on certain HTC devices (Desire HD, Mytouch 4G, ...)
-* Layout/Design fixes
-
-Version 2.2.2 *(2011-11-01)*
---------------------------------
-
-* Fix crash when adding shows on certain HTC devices (Desire HD, Mytouch 4G, ...)
-
-Version 2.2.1 *(2011-10-31)*
---------------------------------
-
-* Fix layouts on small tablet (large screen) devices
-* Validate trakt.tv credentials
-* Secure the trakt.tv password even better (you will have to reenter it again, sorry)
-* Don't rebuild the search table if nothing was updated
-* Latest translations from crowdin. Now with Hungarian thanks to devilinside and uw11!
-
-Version 2.2.3beta *(2011-10-30)*
---------------------------------
-
-* Clear old trakt credentials correctly
-
-Version 2.2.2beta *(2011-10-30)*
---------------------------------
-
-* Fix layouts on small tablet (large) devices
-* Validate trakt.tv credentials
-* Secure the trakt.tv password even better (you will have to reenter it again, sorry)
-* Don’t rebuild the search table if nothing was updated
-
-Version 2.2.1beta *(2011-10-18)*
---------------------------------
-
-* Relayout widget as suggested by Allen
-* Some bug fixes
-
-Version 2.2 *(2011-10-18)*
---------------------------------
-
-* Desire HD users: please try updating your phone to the latest firmware
-* Filter options for show list (replaces 'Hide watched shows' setting)
-* Layout improvements all over the app (spot the differences!), esp. on tablet/Google TV (large+) devices
-* Dual pane layout for Upcoming on large+ devices
-* Display which show is currently getting updated
-* New number format brought to you by dqdb via GitHub
-* Latest translations from crowdin
-* Many bug fixes, optimizations
-* Thanks to everyone who sent in bug reports, suggested improvements or helps translate!
-
-Version 2.2beta *(2011-10-16)*
---------------------------------
-
-* Tell which show is currently getting updated
-* Dual pane layout for Upcoming on large+ devices
-* New number format brought to you by dqdb via GitHub
-* Small tweaks everywhere
-* Layout improvements all over the app (spot the differences!), esp. on tablet/Google TV (large+) devices
-* Display correct time stamps for US Central users
-* Latest translations from crowdin (Danish now in again)
-
-Version 2.1.5beta *(2011-10-02)*
---------------------------------
-
-* Don't reload the show list on config changes (e.g. orientation changes): scrolling state is remembered again
-* Image loader now checks faster for existing images and only downloads images up to 100KB in size (most are around 30K)
-* Display confirmation message when adding show instantly after pressing the 'Add Show' button
-* Latest translations (mlucas beefed up Dutch)
-
-Version 2.1.2 *(2011-10-01)*
---------------------------------
-
-* Use new trakt library release (better error handling)
-* New show sorting: favorites by next episode
-* Clean up images when deleting a show
-* Show first episode of season when using dual-pane layout
-* Bugfixes, Improvements
-
-Version 2.1.4beta *(2011-10-01)*
---------------------------------
-
-* Filter options for show list (replaces 'Hide watched shows' setting).
-* Rearranged show list menu items to make room for filter.
-* Latest translations from crowdin.
-* Bug fixes and improvements.
-
-Version 2.1.3beta *(2011-09-11)*
---------------------------------
-
-* Use new trakt library release (better error handling)
-* New show sorting: favorites by next episode
-* Clean up images when deleting a show
-* Store images in correct folder for beta users (you have to redownload them, sorry)
-* Show first episode of season when using dual-pane layout
-* Bugfixes, Improvements
-
-Version 2.1.1 (04.09.2011)
-------------------------
-
-* Better user communication when doing delta and full update (now called 'Update All')
-* Use TVDB id instead of IMDb id to mark episodes as seen on trakt
-* Don't require a touchscreen to use SeriesGuide (upcoming Google TV support)
-* Always use a GridLayout for the show list.
-* Tidy up settings.
-* Change URLs to new website.
-* Improvements for DeltaUpdate.
-* Latest translations.
-
-Version 2.1.2beta *(2011-09-04)*
---------------------------------
-
-* Please do an 'Update All' because of: Revert some time calc code that accidentially slipped into the last beta
-* Better user communication when doing delta and full update (now called 'Update All')
-* Use TVDB id instead of IMDb id to mark episodes as seen on trakt
-* Don't require a touchscreen to use SeriesGuide (upcoming Google TV support)
-
-Version 2.1.1beta *(2011-08-27)*
---------------------------------
-
-* Always use a GridLayout for the show list.
-* Tidy up settings.
-* Change URLs to new webiste.
-* Improvements for DeltaUpdate.
-* Latest translations.
-
-Version 2.1 (13.08.2011)
-------------------------
-
-* Design updates (incl. usage of ActionBarSherlock)
-* Delta-Updates (Full update option remains available)
-* Experimental syncing with trakt.tv
-* 'Hide watched shows' and 'No special episodes' options brought to you by Jake Wharton (big thanks!)
-* Progress bars in season list
-* Show trending or your shows on trakt.tv when adding shows
-* New 'Favorites first' show sorting, ability to add shows to favorites
-* Many other small improvements
-* Thanks to all the beta channel users!
-
-
-Version 2.0.6 (24.07.2011)
---------------------------------
-
-* Fix calculation of air time and day when using time offset (and in general it is now done right)
-* Fixes for some crashes reported by Android Market
-* If your device is set to GMT-5:00 (US Central) SeriesGuide automagically corrects airtimes by 1 hour
-
-
-Version 2.0.5 (08.07.2011)
---------------------------------
-
-* using trakt does not require an API key anymore
-* Removed languages with little translation (due to user requests)
-* Reworded some strings (English only)
-
-
-Version 2.0.4 (17.06.2011)
---------------------------------
-
-* Fix: Various rare crashes
-* Now with two variants of Portuguese
-
-
-Version 2.0.3 (16.06.2011)
---------------------------------
-
-* Fix: Crash when updating a show failed.
-* trakt.tv rating via the share button.
-* Latest translations from crowdin.
-* Some other rare crash fixes.
-
-
-Version 2.0.2 (15.06.2011)
---------------------------------
-
-* Fix: Crashes while database ops were running in parallel
-* Latest translations from crowdin.
-
-
-Version 2.0.1 (14.06.2011)
---------------------------------
-
-* Fix: German whats new was missing.
-
-
-Version 2.0 (14.06.2011)
---------------------------------
-
-* Redesign of UI and backend (try using it in landscape, or on Android 3.0+!).
-* New time offset setting.
-* Remove single episodes.
-* Long-clicking on Back takes you to the show list.
-* Dropped support for Android 1.6
-* Much more... (see the source changes)
+See [CHANGELOG-K.md](CHANGELOG-K.md).
