@@ -65,7 +65,6 @@
     <string name="share_movie">Podijelite film</string>
     <string name="addtocalendar">Dodaj u kalendar</string>
     <string name="addtocalendar_failed">Ne mogu stvoriti događaj u kalendaru.</string>
-    <string name="links">Poveznice</string>
     <!-- Comments -->
     <string name="comments">Komentari</string>
     <string name="shout_hint">Upišite komentar (engleski, 5 + riječi)</string>
@@ -102,7 +101,6 @@
     <string name="show_status_pilot">Pilot</string>
     <string name="show_status_canceled">Canceled</string>
     <string name="no_translation">Nema prevedenog opisa za %1$s dostupnoh na %2$s.</string>
-    <string name="no_translation_title">Nije prevedeno</string>
     <string name="no_spoilers">Neki detalji su skriveni kako bi se spriječili spojleri. Ovo možete isključiti u postavkama.</string>
     <string name="format_source">Izvor: %s</string>
     <string name="last_updated">Last updated</string>
@@ -291,6 +289,7 @@
     <string name="action_movies_sort_release">Datum emitiranja</string>
     <string name="title_similar_movies">Similar movies</string>
     <string name="title_release_dates">Release dates</string>
+    <string name="error_movie_not_found">Movie removed from TMDB. Remove it from lists, set it not watched. Using Trakt? On their website, search for its TMDB ID and remove it from history and lists.</string>
     <!-- Statistics -->
     <string name="statistics_failed">Nije moguće izračunati statistike.</string>
     <string name="shows_finished">%s finished watching</string>
@@ -348,7 +347,8 @@
     <string name="trakt_error_credentials">Nešto je pošlo po zlu. Provjerite svoje podatke i pokušajte ponovno.</string>
     <string name="trakt_error_not_exists">Nije dostupno na trakt (još). Pokušajte ponovno kasnije.</string>
     <string name="trakt_notice_not_exists">Nije moguće povezivanje sa trakt-om (još).</string>
-    <string name="trakt_error_limit_exceeded">Watchlist is full, remove something first.</string>
+    <string name="trakt_error_limit_exceeded_add">Can\'t add, Trakt account limit reached.</string>
+    <string name="trakt_error_limit_exceeded_upload">Can\'t upload, Trakt account limit reached.</string>
     <!-- Connect trakt -->
     <string name="trakt_required">To use this, connect to Trakt</string>
     <string name="connect_trakt">Poveži trakt</string>
@@ -360,6 +360,7 @@
     <string name="show_library">Add shows from Trakt</string>
     <string name="about_trakt">Trakt vam pomaže pratiti koje serije i filmove gledate.</string>
     <string name="support_trakt">Support Trakt with VIP</string>
+    <string name="action_trakt_view_limits">View account limits</string>
     <!-- trakt ratings -->
     <string name="action_rate">Ocijeni</string>
     <string name="ack_rated">Rating sent</string>

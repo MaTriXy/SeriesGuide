@@ -8,6 +8,51 @@
 Releases marked with 🧪 (or previously with the "beta" suffix) were released on
 [the preview program](https://www.seriesgui.de/help/how-to/basics/preview) only.
 
+## Version 2025.2
+
+### 2025.2.1 - 2025-04-11 🧪
+
+* 🔨 Widget: immediately update after syncing.
+* 🔧 Discover: for consistency with movies, move search button back to app bar.
+* 🔧 Movie details: for consistency with shows, display links and metacritic search as buttons.
+* 🔧 Movie details: increase title on all, increase poster size on phone screens; display date and
+  length in app bar.
+* 🔧 Dialogs: highlight primary button in some dialogs for improved usability, in remove dialog
+  make removing the secondary action.
+* 🔧 Shows: display indicator on tab icon if a general or a stream and purchase filter is active.
+* 🔧 Widget: update preview to include more items, remove old settings button.
+* 🔧 Update message when there is no description to reflect that there can also be no details at
+  all, not just a missing translation.
+* 📝 Import latest user interface translations.
+
+### 2025.2.0 - 2025-03-27 🧪
+
+* 🔨 Movies: when connecting Cloud or Trakt, movies might not have been added if downloading them
+  failed. Any missing movies will be added on the next sync.
+* 🔨 Movies: prefer translated title when viewing details.
+* 🔧 Movies: at least display a more helpful error message when updating a movie fails because it
+  was removed from TMDB.
+* 📝 Devices running Android 5.0 and 5.1 will receive no more updates in the future.
+* 📝 Import latest user interface translations.
+
+## Version 2025.1
+
+* 🔧 Trakt: improved error messages when an account limit is reached.
+* 🔧 Trakt: add shortcut to view account limits to Connect Trakt screen.
+* 📝 Add Latin Serbian user interface translation, thanks to kesaa89!
+
+### 2025.1.1 - 2025-03-13
+
+* 📝 Imported latest user interface translations.
+
+### 2025.1.0 - 2025-02-27 🧪
+
+* 🔧 Trakt: more general error message when the maximum number of something is reached.
+* 🔧 Trakt: display error when uploading notes fails because the account limit of notes is reached.
+* 🔧 Trakt: add shortcut to view account limits to Connect Trakt screen.
+* 📝 Add Latin Serbian user interface translation, thanks to kesaa89!
+* 📝 Imported latest user interface translations.
+
 ## Version 2024.5
 
 * 🌟 Shows: add a note to a show, synced with SeriesGuide Cloud or Trakt (VIP only).

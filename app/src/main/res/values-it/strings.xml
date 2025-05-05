@@ -65,7 +65,6 @@
     <string name="share_movie">Condivi film</string>
     <string name="addtocalendar">Aggiungi al calendario</string>
     <string name="addtocalendar_failed">Impossibile creare un evento nel calendario.</string>
-    <string name="links">Collegamenti</string>
     <!-- Comments -->
     <string name="comments">Commenti</string>
     <string name="shout_hint">Scrivi un commento (in inglese, almeno 5 parole)</string>
@@ -101,7 +100,6 @@
     <string name="show_status_pilot">Pilota</string>
     <string name="show_status_canceled">Cancellata</string>
     <string name="no_translation">Non c\'è nessuna descrizione tradotta in %1$s disponibile su %2$s.</string>
-    <string name="no_translation_title">Non tradotto</string>
     <string name="no_spoilers">Alcuni dettagli sono nascosti per evitare spoiler. Per disattivare questa funzione vai su Impostazioni.</string>
     <string name="format_source">Fonte: %s</string>
     <string name="last_updated">Ultimo aggiornato</string>
@@ -284,6 +282,7 @@
     <string name="action_movies_sort_release">Data di uscita</string>
     <string name="title_similar_movies">Film simili</string>
     <string name="title_release_dates">Date di uscita</string>
+    <string name="error_movie_not_found">Film rimosso da TMDB. Rimuovilo dagli elenchi, impostalo come non guardato. Utilizzi Trakt? Sul loro sito web, cerca il suo ID TMDB e rimuovilo dalla cronologia e dagli elenchi.</string>
     <!-- Statistics -->
     <string name="statistics_failed">Impossibile calcolare le statistiche</string>
     <string name="shows_finished">%s visti completamente</string>
@@ -338,7 +337,8 @@
     <string name="trakt_error_credentials">Qualcosa è andato storto. Per favore verifica le credenziali e riprova.</string>
     <string name="trakt_error_not_exists">Non (ancora) disponibile su trakt. Riprova più tardi.</string>
     <string name="trakt_notice_not_exists">Non è (ancora) possibile monitorarlo con trakt.</string>
-    <string name="trakt_error_limit_exceeded">La lista è piena, prima rimuovi qualcosa.</string>
+    <string name="trakt_error_limit_exceeded_add">Impossibile aggiungere, raggiunto il limite dell\'account Trakt.</string>
+    <string name="trakt_error_limit_exceeded_upload">Impossibile caricare, raggiunto il limite dell\'account Trakt.</string>
     <!-- Connect trakt -->
     <string name="trakt_required">Per usare questo, connettiti a Trakt</string>
     <string name="connect_trakt">Collegati a trakt</string>
@@ -350,6 +350,7 @@
     <string name="show_library">Aggiungi serie da Trakt</string>
     <string name="about_trakt">Trakt ti aiuta a tenere traccia delle serie TV e dei film che guardi.</string>
     <string name="support_trakt">Supporta Trakt con VIP</string>
+    <string name="action_trakt_view_limits">Visualizza limiti account</string>
     <!-- trakt ratings -->
     <string name="action_rate">Vota</string>
     <string name="ack_rated">Valutazione inviata</string>

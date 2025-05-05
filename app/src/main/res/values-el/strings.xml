@@ -39,7 +39,7 @@
     <string name="action_stream_settings">Ρυθμίσεις streaming ή αγορών</string>
     <string name="action_select_region">Επιλογή περιοχής</string>
     <string name="action_reset">Επαναφορά</string>
-    <string name="action_save">Save</string>
+    <string name="action_save">Αποθήκευση</string>
     <!-- Search -->
     <string name="clear_search_history">Εκκαθάριση ιστορικού αναζήτησης</string>
     <string name="search_hint">Αναζήτηση επεισοδίων</string>
@@ -65,7 +65,6 @@
     <string name="share_movie">Κοινοποίηση ταινίας</string>
     <string name="addtocalendar">Προσθήκη στο ημερολόγιο</string>
     <string name="addtocalendar_failed">Δεν είναι δυνατόν να δημιουργηθεί γεγονός ημερολογίου.</string>
-    <string name="links">Σύνδεσμοι</string>
     <!-- Comments -->
     <string name="comments">Σχόλια</string>
     <string name="shout_hint">Πληκτρολογίστε ένα σχόλιο (Αγγλικά, 5+ λέξεις)</string>
@@ -101,7 +100,6 @@
     <string name="show_status_pilot">Πιλότος</string>
     <string name="show_status_canceled">Ακυρώθηκε</string>
     <string name="no_translation">Δεν υπάρχει περιγραφή μεταφρασμένη στα %1$s διαθέσιμη στο %2$s.</string>
-    <string name="no_translation_title">Χωρίς μετάφραση</string>
     <string name="no_spoilers">Κάποιες λεπτομέρειες είναι μη ορατές ώστε να μην αποκαλυφθούν πληροφορίες για την υπόθεση. Για να το απενεργοποιήσετε πηγαίνετε στις Ρυθμίσεις.</string>
     <string name="format_source">Πηγή: %s</string>
     <string name="last_updated">Τελευταία ενημέρωση</string>
@@ -149,8 +147,8 @@
     <string name="hidden">Κρυφή σειρα </string>
     <string name="unhidden">μη-κρυφή σειρά</string>
     <string name="action_shows_add">Προσθήκη Σειράς</string>
-    <string name="action_filter_and_sort">Filter and sort</string>
-    <string name="title_filter_general">General</string>
+    <string name="action_filter_and_sort">Φιλτράρισμα και ταξινόμηση</string>
+    <string name="title_filter_general">Γενικά</string>
     <string name="empty_filter">Κατάργηση όλων των φίλτρων</string>
     <string name="action_shows_filter_favorites">Αγαπημένα</string>
     <string name="action_shows_filter_unwatched">Δεν έχουν παρακολουθηθεί</string>
@@ -172,8 +170,8 @@
     <string name="context_marknext">Το επόμενο επεισόδιο έχει παρακολουθηθεί</string>
     <string name="action_episodes_switch_view">Αλλαγή προβολής</string>
     <string name="next_to_watch">Επόμενο για προβολή</string>
-    <string name="title_notes">Notes</string>
-    <string name="action_edit_note">Edit note</string>
+    <string name="title_notes">Σημειώσεις</string>
+    <string name="action_edit_note">Επεξεργασία σημείωσης</string>
     <!-- History -->
     <string name="user_stream">Ιστορικό</string>
     <string name="recently_watched">Παρακολουθήσατε πρόσφατα</string>
@@ -242,7 +240,7 @@
     <!-- Discover -->
     <string name="title_discover">Ανακαλύψτε</string>
     <string name="title_popular">Δημοφιλείς</string>
-    <string name="action_filter">Filter</string>
+    <string name="action_filter">Φιλτράρισμα</string>
     <string name="filter_year">Έτος</string>
     <string name="filter_year_current">Τρέχον έτος</string>
     <string name="filter_language">Γλώσσα</string>
@@ -284,6 +282,7 @@
     <string name="action_movies_sort_release">Ημερομηνία προβολής</string>
     <string name="title_similar_movies">Παρόμοιες ταινίες</string>
     <string name="title_release_dates">Ημερομηνίες κυκλοφορίας</string>
+    <string name="error_movie_not_found">Movie removed from TMDB. Remove it from lists, set it not watched. Using Trakt? On their website, search for its TMDB ID and remove it from history and lists.</string>
     <!-- Statistics -->
     <string name="statistics_failed">Δε μπορέσαμε να υπολογίσουμε στατιστικά.</string>
     <string name="shows_finished">%s τελείωσε την προβολή</string>
@@ -338,7 +337,8 @@
     <string name="trakt_error_credentials">Κάτι πήγε στραβά. Παρακαλώ ελέγξτε τα στοιχεία σας και προσπαθήστε ξανά.</string>
     <string name="trakt_error_not_exists">Δεν είναι (ακόμα) διαθέσιμο στο trakt. Ξαναδοκιμάστε αργότερα.</string>
     <string name="trakt_notice_not_exists">Δεν είναι δυνατή (ακόμα) η παρακολούθηση με το trakt.</string>
-    <string name="trakt_error_limit_exceeded">Η λίστα παρακολούθησης είναι πλήρης, αφαιρέστε κάτι πρώτα.</string>
+    <string name="trakt_error_limit_exceeded_add">Δεν είναι δυνατή η προσθήκη, έχετε φτάσει το όριο του λογαριασμού Trakt.</string>
+    <string name="trakt_error_limit_exceeded_upload">Δεν είναι δυνατή η μεταφόρτωση, έχετε φτάσει το όριο του λογαριασμού Trakt.</string>
     <!-- Connect trakt -->
     <string name="trakt_required">Για να το χρησιμοποιήσετε αυτό, συνδεθείτε στο Trakt</string>
     <string name="connect_trakt">Σύνδεση trakt</string>
@@ -350,6 +350,7 @@
     <string name="show_library">Προσθήκη σειρών από Trakt</string>
     <string name="about_trakt">Το Trakt βοηθά να καταγράψετε τα τηλεοπτικά προγράμματα και τις ταινίες που βλέπετε.</string>
     <string name="support_trakt">Υποστήριξη Trakt με VIP</string>
+    <string name="action_trakt_view_limits">Προβολή ορίων λογαριασμού</string>
     <!-- trakt ratings -->
     <string name="action_rate">Αξιολόγηση</string>
     <string name="ack_rated">Η βαθμολογία απεστάλη</string>

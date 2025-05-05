@@ -65,7 +65,6 @@
     <string name="share_movie">Поділитися фільмом</string>
     <string name="addtocalendar">Додати до календаря</string>
     <string name="addtocalendar_failed">Не можливо створити календарну подію.</string>
-    <string name="links">Посилання</string>
     <!-- Comments -->
     <string name="comments">Коментарі</string>
     <string name="shout_hint">Введіть свій коментар (англійською, більше 5 слів)</string>
@@ -103,7 +102,6 @@
     <string name="show_status_pilot">Пілот</string>
     <string name="show_status_canceled">Скасовано</string>
     <string name="no_translation">Переклад опису з %1$s недоступний для %2$s.</string>
-    <string name="no_translation_title">Не перекладено</string>
     <string name="no_spoilers">Деякі деталі приховані для запобігання спойлерам. Щоб вимкнути це використовуйте Налаштування.</string>
     <string name="format_source">Джерело: %s</string>
     <string name="last_updated">Востаннє оновлено</string>
@@ -298,6 +296,7 @@
     <string name="action_movies_sort_release">Датою виходу</string>
     <string name="title_similar_movies">Схожі фільми</string>
     <string name="title_release_dates">Дати випусків</string>
+    <string name="error_movie_not_found">Стрічку було видалено з TMDB. Приберіть його зі списків, позначте не переглянутим. Користуєтесь Trakt? На їхньому вебсайті знайдіть його ідентифікатор TMDB і вилучіть його з історії та списків.</string>
     <!-- Statistics -->
     <string name="statistics_failed">Не вдалося підрахувати статистику</string>
     <string name="shows_finished">%s завершених переглядів</string>
@@ -358,7 +357,8 @@
     <string name="trakt_error_credentials">Щось пішло не так. Перевірте ваші облікові дані та повторіть спробу.</string>
     <string name="trakt_error_not_exists">Не доступно (поки що) на trakt. Спробуйте пізніше.</string>
     <string name="trakt_notice_not_exists">Не можна (поки що) відслідкувати на trakt.</string>
-    <string name="trakt_error_limit_exceeded">Список перегляду переповнений, спочатку щось видаліть.</string>
+    <string name="trakt_error_limit_exceeded_add">Неможливо додати, вичерпано ліміт облікового запису Trakt.</string>
+    <string name="trakt_error_limit_exceeded_upload">Неможливо завантажити, вичерпано ліміт облікового запису Trakt.</string>
     <!-- Connect trakt -->
     <string name="trakt_required">Щоб це використовувати, спершу під\'єднайтеся до Trakt</string>
     <string name="connect_trakt">Підключитись до trakt</string>
@@ -370,6 +370,7 @@
     <string name="show_library">Додати серіали чи фільми з Trakt</string>
     <string name="about_trakt">Trakt допомагає зберігати запис про те які телесеріали та фільми ви дивитеся.</string>
     <string name="support_trakt">Підтримати Trakt з VIP</string>
+    <string name="action_trakt_view_limits">Переглянути обмеження облікового запису</string>
     <!-- trakt ratings -->
     <string name="action_rate">Рейтинг</string>
     <string name="ack_rated">Рейтинг відправлено</string>

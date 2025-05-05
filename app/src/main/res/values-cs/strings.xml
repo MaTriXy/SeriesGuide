@@ -65,7 +65,6 @@
     <string name="share_movie">Sdílet film</string>
     <string name="addtocalendar">Přidat do kalendáře</string>
     <string name="addtocalendar_failed">V kalendáři nelze založit událost.</string>
-    <string name="links">Odkazy</string>
     <!-- Comments -->
     <string name="comments">Komentáře</string>
     <string name="shout_hint">Napište komentář (anglicky, alespoň 5 slov)</string>
@@ -103,7 +102,6 @@
     <string name="show_status_pilot">Pilot</string>
     <string name="show_status_canceled">Zrušeno</string>
     <string name="no_translation">Pro jazyk %1$s není na %2$s dostupný žádný popis.</string>
-    <string name="no_translation_title">Nepřeloženo</string>
     <string name="no_spoilers">Některé detaily jsou skryty, aby se zabránilo spoilerům. Toto můžete vypnout v nastavení.</string>
     <string name="format_source">Zdroj: %s</string>
     <string name="last_updated">Poslední aktualizace</string>
@@ -298,6 +296,7 @@
     <string name="action_movies_sort_release">Datum vysílání</string>
     <string name="title_similar_movies">Podobné filmy</string>
     <string name="title_release_dates">Release dates</string>
+    <string name="error_movie_not_found">Movie removed from TMDB. Remove it from lists, set it not watched. Using Trakt? On their website, search for its TMDB ID and remove it from history and lists.</string>
     <!-- Statistics -->
     <string name="statistics_failed">Nelze přepočítat statistiky.</string>
     <string name="shows_finished">%s dokončených zhlédnutí</string>
@@ -358,7 +357,8 @@
     <string name="trakt_error_credentials">Nastala chyba. Zkontrolujte vaše přihlašovací údaje pro Trakt a zkuste to znovu.</string>
     <string name="trakt_error_not_exists">Na Traktu není (zatím) k dispozici. Zkuste to později.</string>
     <string name="trakt_notice_not_exists">Nelze (zatím) synchronizovat s traktem.</string>
-    <string name="trakt_error_limit_exceeded">Seznam Chci vidět je plný, nejdříve něco odeberte.</string>
+    <string name="trakt_error_limit_exceeded_add">Can\'t add, Trakt account limit reached.</string>
+    <string name="trakt_error_limit_exceeded_upload">Can\'t upload, Trakt account limit reached.</string>
     <!-- Connect trakt -->
     <string name="trakt_required">Chcete-li toto použít, připojte se k Trakt</string>
     <string name="connect_trakt">Připojit trakt.tv</string>
@@ -370,6 +370,7 @@
     <string name="show_library">Přidat seriály z Trakt</string>
     <string name="about_trakt">Trakt pomáhá uchovávat záznamy o televizních seriálech a filmech, které sledujete.</string>
     <string name="support_trakt">Podpořte Trakt pomocí VIP</string>
+    <string name="action_trakt_view_limits">View account limits</string>
     <!-- trakt ratings -->
     <string name="action_rate">Ohodnotit</string>
     <string name="ack_rated">Hodnocení odesláno</string>

@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright 2014-2024 Uwe Trottmann
+// Copyright 2014-2025 Uwe Trottmann
 
 package com.battlelancer.seriesguide.traktapi
 
 import android.content.Context
 import com.battlelancer.seriesguide.BuildConfig
+import com.battlelancer.seriesguide.traktapi.TraktTools4.TraktErrorResponse
+import com.battlelancer.seriesguide.traktapi.TraktTools4.TraktNonNullResponse
+import com.battlelancer.seriesguide.traktapi.TraktTools4.TraktResponse
 import com.battlelancer.seriesguide.util.Errors
 import com.uwetrottmann.trakt5.TraktV2
 import okhttp3.OkHttpClient
@@ -40,6 +43,36 @@ class SgTrakt(
         return TraktComments(context, this)
     }
 
+    /**
+     * Performs a [TraktTools4] [call]. On [TraktErrorResponse.IsUnauthorized] will
+     * [TraktCredentials.setCredentialsInvalid].
+     *
+     * Note: not handling in [TraktTools4.awaitTraktCall] to not require [Context] or other Android
+     * APIs for it.
+     */
+    suspend fun <T> awaitAndHandleAuthError(
+        call: suspend () -> TraktResponse<T>
+    ): TraktResponse<T> {
+        val response = call()
+        if (response is TraktErrorResponse.IsUnauthorized) {
+            TraktCredentials.get(context).setCredentialsInvalid()
+        }
+        return response
+    }
+
+    /**
+     * Like [awaitAndHandleAuthError], but for non-null responses.
+     */
+    suspend fun <T> awaitAndHandleAuthErrorNonNull(
+        call: suspend () -> TraktNonNullResponse<T>
+    ): TraktNonNullResponse<T> {
+        val response = call()
+        if (response is TraktErrorResponse.IsUnauthorized) {
+            TraktCredentials.get(context).setCredentialsInvalid()
+        }
+        return response
+    }
+
     companion object {
 
         /**
@@ -55,6 +88,30 @@ class SgTrakt(
             } else {
                 return false
             }
+        }
+
+        /**
+         * Returns if the response code is 420, which indicates an account limit would be exceeded.
+         * These limits [can be higher for VIP users](https://trakt.docs.apiary.io/#introduction/vip-methods).
+         */
+        fun isAccountLimitExceeded(response: Response<*>): Boolean {
+            return response.code() == 420
+        }
+
+        /**
+         * Returns if the response code is 429, which indicates the rate limit was exceeded.
+         *
+         * [Trakt rate limiting info](https://trakt.docs.apiary.io/#introduction/rate-limiting)
+         */
+        fun isRateLimitExceeded(response: Response<*>): Boolean {
+            return response.code() == 429
+        }
+
+        /**
+         * Returns if the response code is 500 or greater, which indicates a server error.
+         */
+        fun isServerError(response: Response<*>): Boolean {
+            return response.code() >= 500
         }
 
         fun checkForTraktError(trakt: TraktV2, response: Response<*>): String? {

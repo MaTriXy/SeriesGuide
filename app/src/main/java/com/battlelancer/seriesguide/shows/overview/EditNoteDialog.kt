@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright 2024 Uwe Trottmann
+// Copyright 2024-2025 Uwe Trottmann
 
 package com.battlelancer.seriesguide.shows.overview
 
@@ -47,8 +47,9 @@ class EditNoteDialog() : AppCompatDialogFragment() {
             .also { this.binding = it }
 
         // Text field
-        binding.textFieldEditNote.counterMaxLength = SgShow2.MAX_USER_NOTE_LENGTH
-        val editText = binding.textFieldEditNote.editText!!
+        val noteTextField = binding.textFieldEditNote
+        noteTextField.counterMaxLength = SgShow2.MAX_USER_NOTE_LENGTH
+        val editText = noteTextField.editText!!
         // Disable save button if text is too long to save
         editText.doAfterTextChanged { text ->
             setSaveEnabled(model.uiState.value.isEditingEnabled, text.textHasNoError())
@@ -57,14 +58,14 @@ class EditNoteDialog() : AppCompatDialogFragment() {
         // Buttons
         // Can not use dialog buttons as they dismiss the dialog right away,
         // but need to keep it visible if saving fails.
-        binding.buttonPositive.apply {
+        binding.buttonDialogEditNoteSave.apply {
             setText(R.string.action_save)
             setOnClickListener {
                 model.updateNote(editText.text?.toString())
                 model.saveNote()
             }
         }
-        binding.buttonNegative.apply {
+        binding.buttonDialogEditNoteCancel.apply {
             setText(android.R.string.cancel)
             setOnClickListener { dismiss() }
         }
@@ -75,6 +76,7 @@ class EditNoteDialog() : AppCompatDialogFragment() {
                 model.uiState.collect { state ->
                     Timber.d("Display note")
                     editText.setText(state.noteText)
+                    noteTextField.error = state.errorText
                     setViewsEnabled(state.isEditingEnabled, editText.text.textHasNoError())
                     if (state.isNoteSaved) {
                         dismiss()
@@ -102,7 +104,7 @@ class EditNoteDialog() : AppCompatDialogFragment() {
     }
 
     private fun setSaveEnabled(isEditingEnabled: Boolean, hasNoError: Boolean) {
-        binding?.buttonPositive?.isEnabled = isEditingEnabled && hasNoError
+        binding?.buttonDialogEditNoteSave?.isEnabled = isEditingEnabled && hasNoError
     }
 
     override fun onPause() {

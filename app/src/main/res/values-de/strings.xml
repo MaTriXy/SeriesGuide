@@ -65,7 +65,6 @@
     <string name="share_movie">Film teilen</string>
     <string name="addtocalendar">Termin erstellen</string>
     <string name="addtocalendar_failed">Kalender-Termin kann nicht erstellt werden</string>
-    <string name="links">Links</string>
     <!-- Comments -->
     <string name="comments">Kommentare</string>
     <string name="shout_hint">Schreiben Sie einen Kommentar (Englisch, 5+ Wörter)</string>
@@ -100,8 +99,7 @@
     <string name="show_status_in_production">In Produktion</string>
     <string name="show_status_pilot">Pilot</string>
     <string name="show_status_canceled">Eingestellt</string>
-    <string name="no_translation">Es ist keine auf %1$s übersetzte Beschreibung bei %2$s verfügbar.</string>
-    <string name="no_translation_title">Nicht übersetzt</string>
+    <string name="no_translation">Keine Details auf %1$s verfügbar, ziehe in Betracht sie auf %2$s hinzuzufügen. Oder versuche die Sprache zu ändern.</string>
     <string name="no_spoilers">Einige Details werden ausgeblendet um Spoiler zu vermeiden. Dies kann in den Einstellungen ausgeschaltet werden.</string>
     <string name="format_source">Quelle: %s</string>
     <string name="last_updated">Zuletzt aktualisiert</string>
@@ -284,6 +282,7 @@
     <string name="action_movies_sort_release">Erscheinungsdatum</string>
     <string name="title_similar_movies">Ähnliche Filme</string>
     <string name="title_release_dates">Veröffentlichungen</string>
+    <string name="error_movie_not_found">Film aus TMDB entfernt. Entferne ihn von Listen und markiere ihn als nicht angesehen. Trakt verbunden? Suche auf deren Website nach der TMDB ID und entfernen ihn aus Verlauf und Listen.</string>
     <!-- Statistics -->
     <string name="statistics_failed">Statistik konnte nicht berechnet werden</string>
     <string name="shows_finished">%s komplett angesehen</string>
@@ -338,7 +337,8 @@
     <string name="trakt_error_credentials">Etwas lief schief. Bitte prüfen Sie Ihre Trakt-Zugangsdaten und versuchen Sie es erneut.</string>
     <string name="trakt_error_not_exists">(Noch) nicht bei Trakt verfügbar. Versuchen Sie es später erneut.</string>
     <string name="trakt_notice_not_exists">Kann (noch) nicht mit Trakt verwaltet werden</string>
-    <string name="trakt_error_limit_exceeded">Merkliste ist voll, entferne Sie zuerst etwas.</string>
+    <string name="trakt_error_limit_exceeded_add">Kann nicht hinzugefügt werden, Trakt Kontolimit erreicht.</string>
+    <string name="trakt_error_limit_exceeded_upload">Kann nicht hochgeladen werden, Trakt Kontolimit erreicht.</string>
     <!-- Connect trakt -->
     <string name="trakt_required">Um dies zu nutzen, mit Trakt verbinden</string>
     <string name="connect_trakt">Mit Trakt verbinden</string>
@@ -350,6 +350,7 @@
     <string name="show_library">Serien von Trakt hinzufügen</string>
     <string name="about_trakt">Trakt hilft TV-Sendungen und Filme zu speichern, die Sie angesehen haben.</string>
     <string name="support_trakt">Unterstütze Trakt mit VIP</string>
+    <string name="action_trakt_view_limits">Kontolimits anzeigen</string>
     <!-- trakt ratings -->
     <string name="action_rate">Bewerten</string>
     <string name="ack_rated">Bewertung übermittelt</string>

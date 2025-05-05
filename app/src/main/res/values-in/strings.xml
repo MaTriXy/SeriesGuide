@@ -65,7 +65,6 @@
     <string name="share_movie">Bagikan film</string>
     <string name="addtocalendar">Tambah ke kalender</string>
     <string name="addtocalendar_failed">Tidak dapat membuat acara kalender.</string>
-    <string name="links">Tautan</string>
     <!-- Comments -->
     <string name="comments">Komentar</string>
     <string name="shout_hint">Ketik sebuah komentar (Bahasa Inggris, 5+ kata)</string>
@@ -100,7 +99,6 @@
     <string name="show_status_pilot">Pilot</string>
     <string name="show_status_canceled">Dibatalkan</string>
     <string name="no_translation">Tidak ada deskripsi yang diterjemahkan ke %1$s tersedia di %2$s.</string>
-    <string name="no_translation_title">Belum diterjemahkan</string>
     <string name="no_spoilers">Beberapa detail telah disembunyikan untuk mencegah bocoran. Untuk menonaktikan ini pergi ke pengaturan.</string>
     <string name="format_source">Sumber: %s</string>
     <string name="last_updated">Last updated</string>
@@ -277,6 +275,7 @@
     <string name="action_movies_sort_release">Tanggal rilis</string>
     <string name="title_similar_movies">Similar movies</string>
     <string name="title_release_dates">Release dates</string>
+    <string name="error_movie_not_found">Movie removed from TMDB. Remove it from lists, set it not watched. Using Trakt? On their website, search for its TMDB ID and remove it from history and lists.</string>
     <!-- Statistics -->
     <string name="statistics_failed">Tidak dapat menghitung statistik.</string>
     <string name="shows_finished">%s selesai ditonton</string>
@@ -328,7 +327,8 @@
     <string name="trakt_error_credentials">Sesuatu tidak beres. Periksa kredensial trakt anda dan coba lagi.</string>
     <string name="trakt_error_not_exists">Tidak (belum) tersedia pada trakt. Coba lagi nanti.</string>
     <string name="trakt_notice_not_exists">Tidak bisa (Belum) dilacak dengan trakt.</string>
-    <string name="trakt_error_limit_exceeded">Watchlist is full, remove something first.</string>
+    <string name="trakt_error_limit_exceeded_add">Can\'t add, Trakt account limit reached.</string>
+    <string name="trakt_error_limit_exceeded_upload">Can\'t upload, Trakt account limit reached.</string>
     <!-- Connect trakt -->
     <string name="trakt_required">To use this, connect to Trakt</string>
     <string name="connect_trakt">Sambungkan trakt</string>
@@ -340,6 +340,7 @@
     <string name="show_library">Add shows from Trakt</string>
     <string name="about_trakt">Trakt membantu menyimpan catatan acara TV dan film apa yang anda tonton.</string>
     <string name="support_trakt">Support Trakt with VIP</string>
+    <string name="action_trakt_view_limits">View account limits</string>
     <!-- trakt ratings -->
     <string name="action_rate">Beri nilai</string>
     <string name="ack_rated">Rating sent</string>

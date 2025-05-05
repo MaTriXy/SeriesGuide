@@ -65,7 +65,6 @@
     <string name="share_movie">Jaa elokuva</string>
     <string name="addtocalendar">Lisää kalenteriin</string>
     <string name="addtocalendar_failed">Kalenteritapahtumaa ei voi luoda</string>
-    <string name="links">Linkit</string>
     <!-- Comments -->
     <string name="comments">Kommentit</string>
     <string name="shout_hint">Kirjoita kommentti (englanniksi, 5+ sanaa)</string>
@@ -101,7 +100,6 @@
     <string name="show_status_pilot">Pilotti</string>
     <string name="show_status_canceled">Peruttu</string>
     <string name="no_translation">Kuvausta ei ole saatavilla kielellä %1$s palvelussa %2$s.</string>
-    <string name="no_translation_title">Ei käännetty</string>
     <string name="no_spoilers">Osa tiedoista on piilotettu juonipaljastuksien varalta. Voit poistaa tämän käytöstä asetuksista.</string>
     <string name="format_source">Lähde: %s</string>
     <string name="last_updated">Viimeksi päivitetty</string>
@@ -284,6 +282,7 @@
     <string name="action_movies_sort_release">Julkaisupäivä</string>
     <string name="title_similar_movies">Samankaltaisia elokuvia</string>
     <string name="title_release_dates">Julkaisupäivät</string>
+    <string name="error_movie_not_found">Elokuva poistettu TMDB:stä. Poista se listoilta ja aseta se ei-katsotuksi. Käytätkö Traktia? Hae elokuvan TMDB ID:tä heidän verkkosivustoiltaan ja poista se historiasta ja listoilta.</string>
     <!-- Statistics -->
     <string name="statistics_failed">Tilastojen laskeminen ei onnistunut.</string>
     <string name="shows_finished">%s katsottu loppuun</string>
@@ -338,7 +337,8 @@
     <string name="trakt_error_credentials">Jokin meni pieleen. Tarkista Trakt-tunnuksesi ja yritä uudelleen.</string>
     <string name="trakt_error_not_exists">Ei (vielä) saatavilla Traktissa. Yritä myöhemmin uudelleen.</string>
     <string name="trakt_notice_not_exists">Ei voida (vielä) seurata Traktissa</string>
-    <string name="trakt_error_limit_exceeded">Lista on täynnä, poista ensin jotakin.</string>
+    <string name="trakt_error_limit_exceeded_add">Ei voida lisätä, Trakt-tilin raja saavutettu.</string>
+    <string name="trakt_error_limit_exceeded_upload">Ei voida lähettää, Trakt-tilin raja saavutettu.</string>
     <!-- Connect trakt -->
     <string name="trakt_required">Käyttääksesi tätä, yhdistä Traktiin</string>
     <string name="connect_trakt">Yhdistä Traktiin</string>
@@ -350,6 +350,7 @@
     <string name="show_library">Lisää ohjelmat Traktista</string>
     <string name="about_trakt">Trakt auttaa sinua pysymään kärryillä katsomistasi ohjelmista ja elokuvista.</string>
     <string name="support_trakt">Tue Traktia VIP-tilauksella</string>
+    <string name="action_trakt_view_limits">Näytä tilin rajat</string>
     <!-- trakt ratings -->
     <string name="action_rate">Arvostele</string>
     <string name="ack_rated">Arvosana lähetettiin</string>
@@ -499,9 +500,9 @@
     <string name="pref_notifications_battery_settings">Akkuasetukset</string>
     <string name="pref_notifications_battery_settings_summary">Siirry kohtaan Akku-asetukset poistaaksesi käytöstä akkuoptimoinnit luotettavien ilmoitusten saamiseksi</string>
     <string name="notifications_allow">Salli ilmoitukset</string>
-    <string name="notifications_allow_reason">Jos haluat saada jakso- ja virheilmoituksia, siirry asetuksiin ja salli ne.</string>
+    <string name="notifications_allow_reason">Vastaanottaaksesi jakso- ja virheilmoituksia, siirry Asetuksiin ja salli ne</string>
     <string name="precise_notifications_allow">Salli tarkat ilmoitukset</string>
-    <string name="precise_notifications_allow_reason">Jos haluat saada tarkkoja jakso-ilmoituksia, siirry asetuksiin ja salli ne.</string>
+    <string name="precise_notifications_allow_reason">Saadaksesi ilmoitukset ajoissa, siirry Asetuksiin ja salli muistutusten lisääminen</string>
     <!-- List Widget -->
     <string name="hide_watched">Piilota katsotut jaksot</string>
     <string name="pref_widget_opacity">Widgetin tausta</string>

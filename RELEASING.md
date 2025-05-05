@@ -1,28 +1,74 @@
 # Release process
 
-- If it does not exist, create a `release-<minor-version>` branch
-- Merge latest changes from `dev`
-- Optional: Update translations
+- If it does not exist, create a release branch. If it exists, merge latest changes.
+
+  ```shell
+  git checkout -b release-2025.2
+  # or
+  git merge dev
+  ```
+
+- Optional: update translations (run script in PowerShell)
+
+  ```powershell
+  .\download-translations.ps1
+  git commit --all --message "Import latest translations"
+  ```
+
 - Change version code and name in [`build.gradle.kts`](/build.gradle.kts)
 - Update [`CHANGELOG.md`](/CHANGELOG.md)
-- Push to GitHub
-- If it does not exist, create a merge request against `main`
-- Check build succeeds, tests are green and lint output is as expected
+- Commit and push
+
+  ```shell
+  git commit --all --message "Prepare version 2025.2.0 (21250200)"
+  git push --set-upstream origin release-2025.2
+  ```
+
+- If it does not exist, [create a merge request](https://github.com/UweTrottmann/SeriesGuide/compare/main...) against `main`
+- [Check build succeeds](https://github.com/UweTrottmann/SeriesGuide/actions),
+  tests are green and lint output is as expected
 
 ## Play Store (testing + production)
 
 - `bundlePureRelease`
-- Publish to alpha channel, test.
 
-Published to beta channel:
+### Alpha
 
-- Tag like `v12.0.3`.
+- Publish to alpha channel
+- Test update on test device
+    
+### Beta
 
-Published to production:
+- Tag release commit
+  
+  ```shell
+  git tag v2025.2.0
+  git push origin v2025.2.0
+  git checkout dev
+  git merge release-2025.2
+  git push origin dev
+  ```
 
-- Download universal APK from Play Store and attach to GitHub tag.
+- Promote to beta channel
+- Create or update preview release post on forum
 
-## Amazon App Store (production only)
+### Production
 
 - `bundleAmazonRelease`
-- Test update on test device.
+- Merge release pull request to `main`
+- Download universal APK from Play Store
+- [Create GitHub release](https://github.com/UweTrottmann/SeriesGuide/releases/new)
+  - title like `SeriesGuide 2025.1.1`
+  - get release notes from [`CHANGELOG.md`](/CHANGELOG.md)
+  - attach APK
+- Prepare release post on forum
+- Promote to production
+- Publish to Amazon App Store
+- Publish release post on forum, post on Mastodon
+- Test Amazon update on test device
+- Merge changes to dev branch
+
+  ```shell
+  git checkout dev
+  git merge --no-ff release-2025.1
+  ```

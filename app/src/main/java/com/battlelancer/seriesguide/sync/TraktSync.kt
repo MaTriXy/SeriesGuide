@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright 2017-2024 Uwe Trottmann
+// Copyright 2017-2025 Uwe Trottmann
 
 package com.battlelancer.seriesguide.sync
 
@@ -10,10 +10,11 @@ import com.battlelancer.seriesguide.movies.tools.MovieTools
 import com.battlelancer.seriesguide.shows.tools.ShowTools2
 import com.battlelancer.seriesguide.traktapi.SgTrakt
 import com.battlelancer.seriesguide.traktapi.TraktSettings
-import com.battlelancer.seriesguide.traktapi.TraktTools2
+import com.battlelancer.seriesguide.traktapi.TraktTools3
 import com.battlelancer.seriesguide.util.Errors
 import com.github.michaelbull.result.getOrElse
 import com.uwetrottmann.androidutils.AndroidUtils
+import com.uwetrottmann.trakt5.TraktV2
 import com.uwetrottmann.trakt5.entities.LastActivityMore
 import retrofit2.Response
 import timber.log.Timber
@@ -47,7 +48,10 @@ class TraktSync(
     /**
      * To not conflict with Hexagon sync, can turn on [onlyRatings] so only
      * ratings are synced.
+     *
+     * Note: this calls [TraktNotesSync.syncForShows] which may throw [InterruptedException].
      */
+    @Throws(InterruptedException::class)
     fun sync(onlyRatings: Boolean): SgSyncAdapter.UpdateResult {
         progress.publish(SyncProgress.Step.TRAKT)
         // While responses might get returned from the disk cache,
@@ -57,7 +61,7 @@ class TraktSync(
         if (noConnection()) return SgSyncAdapter.UpdateResult.INCOMPLETE
 
         // Get last activity timestamps.
-        val lastActivity = TraktTools2.getLastActivity(context)
+        val lastActivity = TraktTools3.getLastActivity(context)
             .getOrElse {
                 progress.recordError()
                 Timber.e("performTraktSync: last activity download failed")
@@ -164,17 +168,16 @@ class TraktSync(
     }
 
     fun <T> handleUnsuccessfulResponse(response: Response<T>, action: String) {
-        // Handle auth error.
         if (SgTrakt.isUnauthorized(context, response)) {
             return // Do not report auth errors.
-        }
-        when (response.code()) {
-            420 -> progress.setImportantErrorIfNone(context.getString(R.string.trakt_error_limit_exceeded))
-            423 -> {
-                // Note: Even though uploading typically happens after signing in, which should
-                // detect locked accounts, it's possible an account becomes locked afterwards.
-                progress.setImportantErrorIfNone(context.getString(R.string.trakt_error_account_locked))
-            }
+        } else if (SgTrakt.isAccountLimitExceeded(response)) {
+            // Currently should only occur on initial sync when uploading items to watchlist or
+            // collection (notes upload has its own error handling).
+            progress.setImportantErrorIfNone(context.getString(R.string.trakt_error_limit_exceeded_upload))
+        } else if (TraktV2.isAccountLocked(response)) {
+            // Note: Even though uploading typically happens after signing in, which should
+            // detect locked accounts, it's possible an account becomes locked afterwards.
+            progress.setImportantErrorIfNone(context.getString(R.string.trakt_error_account_locked))
         }
         Errors.logAndReport(action, response)
     }

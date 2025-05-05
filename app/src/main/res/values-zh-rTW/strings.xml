@@ -65,7 +65,6 @@
     <string name="share_movie">分享電影</string>
     <string name="addtocalendar">新增至日曆</string>
     <string name="addtocalendar_failed">無法建立日曆活動</string>
-    <string name="links">連結</string>
     <!-- Comments -->
     <string name="comments">評論</string>
     <string name="shout_hint">輸入評論 (英文，至少五個單字)</string>
@@ -100,7 +99,6 @@
     <string name="show_status_pilot">試播集</string>
     <string name="show_status_canceled">已取消</string>
     <string name="no_translation">%2$s沒有%1$s的翻譯說明。</string>
-    <string name="no_translation_title">未翻譯</string>
     <string name="no_spoilers">一些細節已隱藏起來避免劇透，可前往設定關閉此功能。</string>
     <string name="format_source">來源：%s</string>
     <string name="last_updated">最後更新</string>
@@ -277,6 +275,7 @@
     <string name="action_movies_sort_release">播出日期</string>
     <string name="title_similar_movies">Similar movies</string>
     <string name="title_release_dates">Release dates</string>
+    <string name="error_movie_not_found">Movie removed from TMDB. Remove it from lists, set it not watched. Using Trakt? On their website, search for its TMDB ID and remove it from history and lists.</string>
     <!-- Statistics -->
     <string name="statistics_failed">無法統計資料。</string>
     <string name="shows_finished">看完了 %s 個節目</string>
@@ -328,7 +327,8 @@
     <string name="trakt_error_credentials">發生錯誤，請檢查您的trakt憑證並重試。</string>
     <string name="trakt_error_not_exists">Trakt 上沒有或尚未提供。請稍後再試。</string>
     <string name="trakt_notice_not_exists">無法或尚未能以 Trakt 追蹤</string>
-    <string name="trakt_error_limit_exceeded">列表已滿，請先移除某些內容。</string>
+    <string name="trakt_error_limit_exceeded_add">Can\'t add, Trakt account limit reached.</string>
+    <string name="trakt_error_limit_exceeded_upload">Can\'t upload, Trakt account limit reached.</string>
     <!-- Connect trakt -->
     <string name="trakt_required">To use this, connect to Trakt</string>
     <string name="connect_trakt">連接 trakt</string>
@@ -340,6 +340,7 @@
     <string name="show_library">從 Trakt 中新增節目</string>
     <string name="about_trakt">Trakt 能幫你紀錄看了哪些電視節目和電影。</string>
     <string name="support_trakt">加入 VIP 支持 Trakt</string>
+    <string name="action_trakt_view_limits">View account limits</string>
     <!-- trakt ratings -->
     <string name="action_rate">評分</string>
     <string name="ack_rated">Rating sent</string>
